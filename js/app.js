@@ -41,6 +41,11 @@ document.title = `${state.currentPage} | Your Dining Bucks Planner`;
 // Each HTML page starts its own Plain app; ordinary links load a new document.
 Plain.createApp({
   state,
+  // Warm shared component files early; mounting reuses the HTML and behavior loads.
+  preload: [
+    'navbar-component',
+    'footer-component',
+  ],
   settings: { // Shared configuration available as settings.navigation in components.
     navigation,
   },

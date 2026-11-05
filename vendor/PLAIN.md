@@ -1,4 +1,4 @@
-# Plain 0.1.0: guide for AI coding agents
+# Plain 0.1.1: guide for AI coding agents
 
 Read this before changing a Plain application. This reference describes the
 vendored runtime; application requirements and project instructions take precedence.
@@ -225,7 +225,10 @@ URL/user data into textContent, not interpolated HTML strings. Route mount hooks
 can return cleanup. History deep links require server fallback to the entry HTML;
 hash routes work without it. A client notFound view does not set HTTP status 404.
 
-CLI (Bun required): plain dev . serves with full refresh; plain preview . serves
+CLI (Bun required): plain update refreshes vendor/plain.js and vendor/PLAIN.md
+from the CDN release index (plainjs/versions.json). --version selects an indexed
+release. This does not update the global CLI; use npm install -g @tickerdev/plainjs@latest
+for that. plain dev . serves with full refresh; plain preview . serves
 without refresh; plain check . checks without generating files. plain init creates
 starters and allows .git/.DS_Store metadata but protects other existing files.
 

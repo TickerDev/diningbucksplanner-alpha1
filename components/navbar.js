@@ -1,4 +1,3 @@
-// This is a standard JavaScript module exporting a factory function.
 // Plain calls the factory for each <navbar-component> to get its configuration.
 export default () => ({
   props: { // Plain's props configuration describes values supplied by the parent page.

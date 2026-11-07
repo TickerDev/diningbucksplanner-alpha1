@@ -249,3 +249,51 @@ main {
   height: 100%;
   display: block;
 }
+
+.nutrition-card {
+  width: 100%;
+  max-width: 360px;
+  border: 1px solid #000000;
+  background-color: #ffffff;
+  margin-top: 20px;
+}
+
+.nutrition-header {
+  background-color: #D10000;
+  color: #ffffff;
+  font-size: 8px;
+  font-weight: bold;
+  text-transform: uppercase;
+  padding: 4px 8px;
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+
+.nutrition-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #000000;
+  font-size: 8px;
+  text-align: left;
+}
+
+.nutrition-table th {
+  background-color: #f00;
+  color: #ffffff;
+  font-weight: bold;
+  text-transform: uppercase;
+  padding: 5px 8px;
+  border: 1px solid #000000;
+}
+
+.nutrition-table td {
+  padding: 4px 8px;
+  background-color: dodgerblue;
+  border: 1px solid #000000;
+  background-color: #ffffff;
+}
+
+.nutrition-table tr:nth-child(even) td {
+  background-color: #fafafa;
+}
+

@@ -30,7 +30,7 @@
         <thead>
           <tr>
             <th onclick="sort(0, false)">Location <span class="sort-indicator">⇅</span></th>
-            <th onclick="sort(1, true)">Distance <span class="sort-indicator">⇅</span></th>
+            <th onclick="sort(1, true)">Average Wait Time <span class="sort-indicator">⇅</span></th>
             <th onclick="sort(2, true)">Price <span class="sort-indicator">⇅</span></th>
           </tr>
         </thead>
@@ -72,7 +72,50 @@
           </tr>
         </tbody>
       </table>
+      <div class="table-footer" style="outline: 1px solid black !important; background-color: skyblue;">
+        <a href="dining-info.html">
+          More Precise Dining Info Here!
+        </a>
+      </div>
     </div>
+    <br>
+
+    <!-- Nutrition Card -->
+<div class="nutrition-card-group" style="outline: 1px solid black !important;">      
+  <div class="nutrition-header" style="text-align: center; background-color: #f00; color:white">NUTRITION FACTS</div>
+     <table class="nutrition-table" style="border-collapse: collapse;">
+       <thead style="background-color:#f00; outline: 1px solid black !important;">
+         <tr>
+           <th>Nutrient</th>
+           <th>Amount</th>
+         </tr>
+       </thead>
+       <tbody>
+         <tr>
+           <td>Sodium</td>
+           <td>&lt; 2,300 mg</td>
+         </tr>
+         <tr>
+           <td>Potassium</td>
+           <td>4,700 mg</td>
+         </tr>
+         <tr>
+           <td>Calcium</td>
+           <td>1,300 mg</td>
+         </tr>
+         <tr>
+           <td>Protein</td>
+           <td>50–70 g</td>
+         </tr>
+         <tr>
+           <td>Added Sugars</td>
+           <td>&lt; 50 g</td>
+         </tr>
+       </tbody>
+     </table>
+    </div>
+</div>
+
   </section>
 
   <!-- RIGHT COLUMN: Place inputs, planners, or budgets here -->
@@ -84,7 +127,9 @@
         for="dining-budget" 
         style="background-color: #AAF2A5;"
       >
-        Budget
+          <a href="balance.html">
+            Budget
+          </a>
       </label>
       <input 
         type="number" 
@@ -101,7 +146,9 @@
         for="planned-spending" 
         style="background-color: #EC40EE;"
       >
-        Planned Spending Per Day 
+        <a href="planner.html">
+          Planned Spending Per Day 
+        </a>
       </label>
       <input 
         type="number" 
@@ -111,6 +158,7 @@
       />
     </div>
 
+    <!-- Chart Card -->
   <div class="chart-card">
   <div class="chart-header">Dining Bucks Projection</div>
   <div class="chart-svg-wrap">
@@ -165,7 +213,7 @@
 </div>
     
 <p>
-  <a href="dining-info.html">
+  <a href="planner.html" style="outline: 1px solid black !important; background-color: skyblue;">
     Click here to improve your graph!
   </a>
 </p>

@@ -45,72 +45,82 @@
             </div>
 
             <script>
-                const c1tx = document.getElementById('lastWeek').getContext('2d');
-                const lastWeek = new Chart(c1tx, {
-                    data: {
-                        datasets: [
-                                                        {
-                            type: "line",
-                            data: [10.5, 10.5, 10.5, 10.5, 10.5, 10.5, 10.5],
-                            borderColor: ["black"],
-                            pointRadius: [0, 0, 0, 0, 0, 0, 0],
-                            },
-                            {
-                            type: "bar",
-                            data: [8, 12, 9, 6.5, 15, 9, 9],
-                            backgroundColor: ["green", "red", "green", "green", "red", "green", "green"],
-                            }
+                                                                                                const c1tx = document.getElementById('lastWeek').getContext('2d');
+                                                                                                const lastWeek = new Chart(c1tx, {
+                                                                                                    data: {
+                                                                                                        datasets: [
+                                                                                                                                        {
+                                                                                                            type: "line",
+                                                                                                            data: [10.5, 10.5, 10.5, 10.5, 10.5, 10.5, 10.5],
+                                                                                                            borderColor: ["black"],
+                                                                                                            pointRadius: [0, 0, 0, 0, 0, 0, 0],
+                                                                                                            },
+                                                                                                            {
+                                                                                                            type: "bar",
+                                                                                                            data: [8, 12, 9, 6.5, 15, 9, 9],
+                                                                                                                backgroundColor: ["green", "red", "green", "green", "red", "green", "green"],
+                                                                                                            yAxisKey: "Dining Bucks"
+                                                                                                            }
 
-                        ],
-                         labels: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-                    },
-                                           
-                    options: {
-                        plugins: {
-                            legend: { display: false },
-                            title: {
-                                display: true,
-                                text: "Last Week: +5.00DB",
-                                font: { size: 32 }
-                            }
-                        }
-                    }
-                });
+                                                                                                        ],
+                                                                                                         labels: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+                                                                                                    },
 
-                const c2tx = document.getElementById('thisWeek').getContext('2d');
-                const thisWeek = new Chart(c2tx, {
-                    data: {
-                        datasets: [
-                                                        {
-                            type: "line",
-                            data: [10.5, 10.5, 10.5, 10.5, 10.5, 10.5, 10.5],
-                            borderColor: ["black"],
-                            pointRadius: [0, 0, 0, 0, 0, 0, 0],
-                            },
-                            {
-                            type: "bar",
-                            data: [11, 8, 6, 12, 15, 9, 9],
-                            backgroundColor: ["red", "green", "green", "red", "#d1d1d1", "#d1d1d1", "#d1d1d1"],
-                            }
+                                                                                                    options: {
+                                                                                                        plugins: {
+                                                                                                            legend: { display: false },
+                                                                                                            title: {
+                                                                                                                display: true,
+                                                                                                                text: "Last Week: +5.00DB",
+                                                                                                                font: { size: 32 }
+                                                                                                            }
+                                                                                                        }
+                                                                                                    }
+                                                                                                });
 
-                        ],
-                         labels: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-                    },
-                                           
-                    options: {
-                        plugins: {
-                            legend: { display: false },
-                            title: {
-                                display: true,
-                                text: "This Week: +3.50DB",
-                                font: { size: 32 }
-                            }
-                        }
-                    }
-                });
+                                                                                                const c2tx = document.getElementById('thisWeek').getContext('2d');
+                                                                                                const thisWeek = new Chart(c2tx, {
+                                                                                                    data: {
+                                                                                                        datasets: [
+                                                                                                                                        {
+                                                                                                            type: "line",
+                                                                                                            data: [10.5, 10.5, 10.5, 10.5, 10.5, 10.5, 10.5],
+                                                                                                            borderColor: ["black"],
+                                                                                                            pointRadius: [0, 0, 0, 0, 0, 0, 0],
+                                                                                                            },
+                                                                                                            {
+                                                                                                            type: "bar",
+                                                                                                            data: [11, 8, 6, 12, 15, 9, 9],
+                                                                                                                backgroundColor: ["red", "green", "green", "red", "#d1d1d1", "#d1d1d1", "#d1d1d1"],
+
+                                                                                                            }
+
+                                                                                                        ],
+                                                                                                         labels: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+                                                                                                    },
+
+                                                                                                    options: {
+                                                                                                        plugins: {
+                                                                                                            legend: { display: false },
+                                                                                                            title: {
+                                                                                                                display: true,
+                                                                                                                text: "This Week: +3.50DB",
+                                                                                                                font: { size: 32 }
+                                                                                                            }
+                                                                                                        }
+                                                                                                    }
+                                                                                                });
             </script>
             <hr />
             <h2 style="text-align: center;">Suggestions:</h2>
+            <img src="C:\Users\pikab\Downloads\HighGitter\diningbucksplanner-alpha1\assets\grilledcheese.jpg" alt="Grilled Cheese" width="25%" height="150px" style="float: left;" />
+            <img src="C:\Users\pikab\Downloads\HighGitter\diningbucksplanner-alpha1\assets\quesadilla.jpg" alt="Quesadilla" width="25%" height="150px" style="float: right" />
+            <img src="C:\Users\pikab\Downloads\HighGitter\diningbucksplanner-alpha1\assets\macandcheese.jpg" alt="Mac & Cheese" width="25%" height="150px" style="display: block; margin-left: auto; margin-right: auto;" />
+            <br />
+            <p style="text-align: left; display:inline-flex; width:35%">Grilled Cheese @ 23Sneed</p>
+            <p style="text-align: center; display: inline-flex; width:35%">Mac & Cheese @ The Commons</p>
+            <p style="text-align: right; display: inline-flex;">Quesadilla @ Sam's Place</p>
+
 
 
 

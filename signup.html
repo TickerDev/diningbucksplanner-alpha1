@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sign Up | Your Dining Bucks Planner</title>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+      :root {
+        font-family: Inter, Arial, sans-serif;
+        color-scheme: light;
+        color: #000000;
+        background: #ffffff;
+        line-height: 1.5;
+        --shell-black: #000000;
+        --shell-red: #f00;
+        --shell-white: #ffffff;
+        --shell-line: #d9d9d9;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100svh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      a {
+        color: inherit;
+        text-underline-offset: 4px;
+      }
+
+      a:focus-visible,
+      main:focus-visible {
+        outline: 2px solid var(--shell-red);
+        outline-offset: 5px;
+      }
+
+      ::selection {
+        color: var(--shell-white);
+        background: #a30000;
+      }
+
+      .shell-width {
+        width: min(100% - 64px, 1120px);
+        margin-inline: auto;
+      }
+
+      .skip-link {
+        position: fixed;
+        top: 8px;
+        left: 8px;
+        z-index: 10;
+        padding: 12px;
+        background: #ffffff;
+        transform: translateY(-150%);
+        transition: transform 0.2s ease;
+      }
+
+      .skip-link:focus {
+        transform: translateY(0);
+      }
+
+      /* Site Header & Navigation */
+      .site-header {
+        position: relative;
+        color: var(--shell-white);
+        background: var(--shell-black);
+      }
+
+      .site-header a:focus-visible {
+        outline-color: var(--shell-white);
+      }
+
+      .header-inner {
+        display: grid;
+        grid-template-columns: 1fr 44px;
+        grid-template-rows: auto auto;
+        gap: 12px 24px;
+        padding-block: 16px 15px;
+      }
+
+      .header-breadcrumb {
+        margin: 0;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+      }
+
+      .header-breadcrumb a {
+        text-decoration: none;
+      }
+
+      .header-breadcrumb a:hover {
+        text-decoration: underline;
+      }
+
+      .primary-nav {
+        grid-column: 1;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .nav-link {
+        min-width: 100px;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        padding: 10px 14px;
+        color: var(--shell-white);
+        background: var(--shell-red);
+        font-size: 14px;
+        text-decoration: none;
+        transition: background-color 0.15s ease;
+      }
+
+      .nav-link:hover {
+        background: #b80000;
+      }
+
+      .nav-link[aria-current='page'] {
+        text-decoration: underline;
+        text-decoration-thickness: 2px;
+      }
+
+      .profile-link {
+        grid-column: 2;
+        grid-row: 1 / 3;
+        align-self: center;
+        display: grid;
+        place-items: center;
+        min-width: 44px;
+        min-height: 44px;
+        border-radius: 50%;
+      }
+
+      .profile-link:hover {
+        outline: 1px solid var(--shell-white);
+      }
+
+      .profile-link svg,
+      .profile-link img {
+        display: block;
+      }
+
+      .header-divider {
+        height: 0;
+        margin: 0;
+        padding: 0;
+        border: 0;
+        border-top: 2px solid var(--shell-line);
+      }
+
+      /* Main Auth Page Layout */
+      main {
+        flex: 1;
+        width: min(100% - 64px, 1120px);
+        margin-inline: auto;
+        min-height: 360px;
+      }
+
+      #main-content.auth-main {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        padding: 44px 16px 64px;
+        max-width: 440px;
+      }
+
+      .auth-card {
+        width: 100%;
+        max-width: 315px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .auth-hero {
+        text-align: center;
+        margin-bottom: 24px;
+        width: 100%;
+      }
+
+      .auth-title {
+        margin: 0 0 6px;
+        font-size: 40px;
+        font-weight: 700;
+        line-height: 1.15;
+        color: #000000;
+        letter-spacing: -0.5px;
+      }
+
+      .auth-subtitle {
+        margin: 0;
+        font-size: 24px;
+        font-weight: 400;
+        line-height: 1.25;
+        color: #000000;
+      }
+
+      .auth-form {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .auth-field-group {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+        width: 100%;
+      }
+
+      .auth-label {
+        font-size: 11px;
+        font-weight: 400;
+        color: #000000;
+        line-height: 1.2;
+      }
+
+      .auth-input {
+        width: 100%;
+        height: 28px;
+        padding: 4px 8px;
+        background-color: #fafafa;
+        border: 1px solid #000000;
+        border-radius: 2px;
+        font-size: 11px;
+        font-family: inherit;
+        color: #000000;
+        outline: none;
+      }
+
+      .auth-input::placeholder {
+        color: #a2a2a2;
+      }
+
+      .auth-input:focus {
+        background-color: #ffffff;
+        outline: 2px solid var(--shell-red);
+        outline-offset: 1px;
+      }
+
+      .auth-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+        margin-top: 6px;
+      }
+
+      .auth-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        width: 100%;
+        height: 30px;
+        padding: 4px 12px;
+        background-color: #fafafa;
+        border: 1px solid #000000;
+        border-radius: 2px;
+        font-size: 12px;
+        font-family: inherit;
+        color: #000000;
+        text-decoration: none;
+        cursor: pointer;
+        transition: background-color 0.15s ease;
+      }
+
+      .auth-btn:hover {
+        background-color: #f0f0f0;
+      }
+
+      .auth-btn:focus-visible {
+        outline: 2px solid var(--shell-red);
+        outline-offset: 2px;
+      }
+
+      .auth-btn-eraider .eraider-logo {
+        width: 17px;
+        height: auto;
+        max-height: 20px;
+        object-fit: contain;
+        display: inline-block;
+        vertical-align: middle;
+      }
+
+      .auth-divider {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        margin: 10px 0;
+      }
+
+      .auth-divider::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 50%;
+        height: 1px;
+        background-color: #000000;
+      }
+
+      .auth-divider-text {
+        position: relative;
+        background-color: #ffffff;
+        padding: 0 10px;
+        font-size: 10px;
+        color: #000000;
+        line-height: 1;
+      }
+
+      /* Site Footer */
+      .site-footer {
+        margin-top: auto;
+        border-top: 1px solid var(--shell-line);
+        background: var(--shell-white);
+      }
+
+      .footer-inner {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px 24px;
+        padding-block: 24px 28px;
+      }
+
+      .footer-brand {
+        font-size: 14px;
+        text-decoration: none;
+        font-weight: 500;
+      }
+
+      .footer-brand:hover {
+        text-decoration: underline;
+      }
+
+      .footer-nav {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 16px;
+        font-size: 14px;
+      }
+
+      .footer-nav a {
+        text-decoration: none;
+        color: #333333;
+      }
+
+      .footer-nav a:hover {
+        text-decoration: underline;
+      }
+
+      .footer-nav a[aria-current='page'] {
+        font-weight: 600;
+        color: #000000;
+        text-decoration: underline;
+      }
+
+      /* Responsive adjustments */
+      @media (max-width: 640px) {
+        .shell-width,
+        main {
+          width: calc(100% - 32px);
+        }
+        .header-inner {
+          grid-template-columns: 1fr 44px;
+          gap: 12px 8px;
+        }
+        .header-breadcrumb {
+          font-size: 12px;
+          gap: 5px;
+        }
+        .profile-link {
+          grid-row: 1;
+        }
+        .primary-nav {
+          grid-column: 1 / -1;
+          display: grid;
+          grid-template-columns: repeat(5, minmax(0, 1fr));
+          gap: 6px;
+        }
+        .nav-link {
+          min-width: 0;
+          justify-content: center;
+          padding: 8px 4px;
+          font-size: 11px;
+        }
+        .footer-inner {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Skip to content link for accessibility -->
+    <a class="skip-link" href="#main-content">Skip to content</a>
+
+    <!-- Site Header & Navigation Bar -->
+    <header class="site-header" id="page-top">
+      <div class="shell-width header-inner">
+        <p class="header-breadcrumb">
+          <a href="index.html">Your Dining Bucks Planner</a>
+          <span aria-hidden="true">&gt;</span>
+          <span>Sign Up</span>
+        </p>
+
+        <nav class="primary-nav" aria-label="Main navigation">
+          <a class="nav-link" href="login.html" aria-current="page">Login</a>
+          <a class="nav-link" href="index.html">Home</a>
+          <a class="nav-link" href="balance.html">Balance</a>
+          <a class="nav-link" href="planner.html">Planner</a>
+          <a class="nav-link" href="dining-info.html">Dining Info</a>
+        </nav>
+
+        <a class="profile-link" href="login.html" aria-label="Go to login">
+          <svg preserveAspectRatio="none" overflow="visible" width="38" height="39" viewBox="0 0 38 39" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path id="Ellipse 1" d="M38 19.5C38 30.2696 29.4934 39 19 39C8.50659 39 0 30.2696 0 19.5C0 8.73045 8.50659 0 19 0C29.4934 0 38 8.73045 38 19.5Z" fill="#D9D9D9"/>
+          </svg>
+        </a>
+      </div>
+      <hr class="header-divider" aria-hidden="true" />
+    </header>
+
+    <!-- Main Content Area: Sign Up Card -->
+    <main id="main-content" class="auth-main" tabindex="-1">
+      <section class="auth-card" aria-labelledby="signup-title">
+        <header class="auth-hero">
+          <h1 id="signup-title" class="auth-title">Welcome</h1>
+          <p class="auth-subtitle">Let’s get you started...</p>
+        </header>
+
+        <form class="auth-form" method="post" action="#" data-on:submit.prevent="signUp" novalidate>
+          <div class="auth-field-group">
+            <label for="signup-email" class="auth-label">Email</label>
+            <input
+              type="email"
+              id="signup-email"
+              name="email"
+              class="auth-input"
+              placeholder="Email here..."
+              required
+              data-model="email"
+              autocomplete="email"
+            />
+          </div>
+
+          <div class="auth-field-group">
+            <label for="signup-password" class="auth-label">Password</label>
+            <input
+              type="password"
+              id="signup-password"
+              name="password"
+              class="auth-input"
+              placeholder="We won’t look, promise!"
+              required
+              data-model="password"
+              autocomplete="new-password"
+            />
+          </div>
+
+          <div class="auth-actions">
+            <button type="submit" class="auth-btn auth-btn-submit">
+              Sign Up
+            </button>
+
+            <button type="button" class="auth-btn auth-btn-eraider">
+              <img
+                src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAAD2CAYAAAAgYOBZAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAA4aADAAQAAAABAAAA9gAAAADKX41VAAARz0lEQVR4Ae2de4wV1R3HfzyUWmBZykNwV3EVQaEItbK7SDQgr4Co/FG7PmraYotoipCgYBpBKyWttQYoraWp2tQHlYr0D0VeJW1V0IVIEGQbLMrComhwWVggy2Nle8+Fe/fufc6dO48zcz6TkJ05cx6/3+c3X35nHndGhAUCEIAABCAAAQhAAAIQgAAEIAABCEAAAhCAAAQgAAEIQAACEIAABCAAAQhAAAIQgAAEIAABCEAAAhCAAAQgAAEIQAACEIAABCAAAQhAAAIQgAAEIBBmAu3cdO7Kfpe3uNk/fUPASQKf7Kt1VQ+ZbG2faQflEICANwQQoTecGQUCGQkgwoxo2AEBbwh09GaY1lFmzXm0dYM1CPhIYPFvfu3j6K1Du3oimu7CzJ7ava2jswYBnwicOnVaBg8c2GZ0vy7MeJ4J23jNBgR8IPD2O5uk8dhxH0ZOPyTnhOm5UBpSAts/3KmVABVmRBjSgw230hM48Nnn6Xf4WKrFdPRw6VAfETC0CQQaL+4gb0ydJmVlZdq5SybULiQY5DSBib3ay9j6Bqe7daw/ROgYSjrSkcCea7tKfcMRHU2L24QI4yhYCRsBJcC7az7T3i0tzgm1p4SBgSOgpqD1ARCgAksmDNzhhcG5CKwb2Uf7KWiiD4gwkQbrgSegBDiv+uNA+cF0NFDhwthsBMo7NopUR/4FbCETBixgmJueQFSA6XdpX4oItQ8RBuYi8MwNl+aqovV+pqNahwfjchGIZsAtu3JV03o/mVDr8GBcNgJBnoIm+oUIE2mwHhgCQZ+CJoJmOppIg3XtCagHsaPPgQZ8CpoImkyYSIN1rQnEBai1lfkbhwjzZ0YLnwjM6dndp5HdHTbw09GwnJznE+brBl4h23Z/mk+TwNetKh8s20I0BU0MSOBFmOiMCetbmotEdn0l5QZFLurz5jpZEVKfmY4GSLmPVl4dIGudMVVl/bAvIf2/JVxh69G9WJb27Sz939Xv/ShuklYCXBbJ+mFfEKHmEY4fiIeOaW6ps+b9s0d3KTJAgIoa01Fnjx1He/tZ5TVGZIJkaMsHlUjRl18nF4d2m0yoaWgXVAyQCe/q/2oGp/GpqXf/HWZlfUTo9FHkQH8qE/Tf9IUDPQWri6jfhglQRYjpqEbHqboXps6FTMsEKgSmClD5TiZUFDRZZkfuhZm6mPgfTyzWZMIYCR//qvOg6A1pH23wa2h17muq7zHmiDBGwqe/6hbEmkNnfRrd32GjF58MPPdNpo4Ik4l4uD35u4PkN1/p+3p2t1FMQIBRxIjQ7SMtQ/8qC8yvPmDU/bAYCnUByvQpaIyF+suFmUQaHqzHH0EzNAsoAZp8ASrdIYYI01FxseyFbp2kr4H3wmJIEWCMROtfpqOtLFxfU1OwvnuaXB9H1wHUPVC7i/pVfViXQGdCp37QO+WOKlfje3PHo1L50mZXxyi085mPzC20i4ztBw4cINe8skQ6b6jNWCfbjumDe4b6R8yBFaFTAlTBHzV6dLZjoKB948aMlrMv/Ep0z39ufcG2tOQSGTZ0iBx77Vk5Y4Nk2AWokARyOqo++hGEpahrF+nU6cIgmOqajUqAdhf1fUETXuMRuEwYzYAB+OiHyoAmC1D9B1RRPtyu/iRI3xe07eT5hoESoZNT0GzgZj04PdvunPtGjZsgkydNyFlP5wqFMthTu9e2e1EBav6Ja9vOpWkYmOloUKagaRhTlAeBoH3gMw/XMlYNRCYMyhQ0I2V2WCJgapy1z4ReTUEtHSVUco2AyXHWWoRMQV075rXqOEwfd7EDVtvpqKlTEztBDHKbaJxD+mZtq3HRMhOaPDWxGrig11OPoRHnc1HUToRMQYMur9z2KwGG9eMuub1PraHVdFQJcF71x6lWUhIaAgf7XyS3134pUm/uj5mTg6mNCDkHTA5N+LbVY2h315j3LtVckdRiOsoUNFeYwrF/xsET4XDEYS98z4T76w7IB5d9R6ZE/rGEl8AzJcPkxrH9fXWwuLjY1/EzDe6rCNeu3yjNzc2u/pQok+OUe0fgzbfWyfXX23+Y2ztL/RnJNxGqwLCEnwBxzh1jX84J9+03903TuUMSnhoNR46GxxkXPfE8Ey79wzIX3aFrXQj85cWX5fix47qYo7UdnotwydNPaQ0E45whsHD+PGc6MqAXX6ajBnDFRQhYJoAILaOiIgTcIYAI3eFKrxCwTKCd5Zo2Kr7/3nstNppZblJTUyMLn1yQUv+lFX9PKfOyoKhrVxk86GpXh3yvequj/Y+oaHsfz+n+8zX23qrvpzR55dW/pZQ5WVA5YoSreshkqy+DZjIm33Il8nvuvCulWSEvGUrpjALPCah7i+leNPXJvtpAH6+ZQHp+dTSTIZRDQN0/3vlRjXEgOCc0LuT6OmyiAFU0jMiEh0uH6nvkYZmoH/n+/ubxxj5DTCZEBL4SUN+aGGv4D3wRoa+HoNmDm/CxFysRRoRWKFHHcQJqCmrCx16sgEOEVihRx1ECTEHb4kSEbXmw5TIBpqCpgBFhKhNKXCLAFDQ9WCNuUaR3vbVUvQXs+IUXtBaw5gqBadtrXek36J0iwkgE/9Sxi/xn++5AxLKqfLDM3lwXqLdXx2w24650/ocR09H8mfnaQgkwaEsQbfaSMSL0knaBY21pLiqwB2+b9+heLEGz2VtC50ZDhH5Qz3NMNZ0L2sG8fFCJrDl0Nk9PzayOCAMQ96BN564beIX033EsAGT1MBER6hGHjFYELQOqrL1s11cZ/WFHKgGujqYy0aJkQcUAmbDpCy1ssWpE9D+MAF44suqfW/UQYYTsR3WRT3VlWaru/aH06dMnSw1nd914fK9ctnRtQZ3OfGRuQe3zadylaxe5/edPZ20S/SS24V/kzQTIeBGqL0LV5/gmohJgWVlZJoaOll/cu5cM3PqlNBXYq1f2lpZcIsOGDpHDWUSoBLgCAWaMqNEi1O2biJMnTYgGqmnrGxkDptOOmACz2RR9VhQBZkNk7jMMun0vPSbArNHSaOeQbw+SfpddmtGi2Cex+blSRkTxHUZmwmUjS0Wq7b9Q6ODBz+Wt1avjEJNXbpl8q9x26y3x4jNrXpbTGzfGt5NXOlzRT+R8Fkze58R2LnvVGPf95Kdthnr+uT+32U7e+MeqlclFbbbv7/xN+WT3p23K2EhPwDgRnpuC2hegwnjy5CnZue2D9EQjpWPGjpPevXrG9zedOCpNG/fHt5NXLvhGp+QiR7dz2XtusLYizOZfLuMm9mov9fv5LHYuTrH9Rt0n1G0KGgtCWP6qi1xRATYcCYtLnvhhRCZU5ycLSnqL7Gj0BKqpg8zLcZXZVC65/DZChNG3eRn+Rq9cB0Kh+5ll2CcYehGqV6ovfpYPk9o/RLK3PHXqtFRv2Qrj7Jiy7g31OSGfa84ae0d2KgE28kXegliGNhOuXb9RmpubC4JD4+wE3n5nEwLMjsjS3lCK8LH5T8jJppOWANip1NDQYKdZqNo88eQv+Sa9QxENpQhfffGvDuGhm0wEXn7h+Uy7KM+TQKjPCfNkQXUI+EIAEfqCnUEh0EoAEbayYA0CvhAI9DmhX98YT47Ulf0ub0kuC9t2WD9VrUOcyIQ6RAEbjCaACI0OP87rQAAR6hAFbDCaACI0Ovw4rwMBRKhDFLDBaAKI0Ojw47wOBBChDlHABqMJIEKjw4/zOhBAhDpEARuMJoAIjQ4/zutAABHqEAVsMJoAIjQ6/DivAwFEqEMUsMFoAojQ6PDjvA4EEKEOUcAGowkgQqPDj/M6EECEOkQBG4wmgAiNDj/O60AAEeoQBWwwmgAiNDr8OK8DAUSoQxSwwWgCiNDo8OO8DgQQoQ5RwAajCSBCo8OP8zoQQIQ6RAEbjCaACI0OP87rQAAR6hAFbDCaACI0Ovw4rwMBRKhDFLDBaAKI0Ojw47wOBBChDlHABqMJIEKjw4/zOhBAhDpEARuMJoAIjQ4/zutAABHqEAVsMJoAIjQ6/DivAwFEqEMUsMFoAojQ6PDjvA4EEKEOUcAGowkgQqPDj/M6EOiogxF+27Bk0aKWQmz43eIlhTQPRNtCGVVUVkrliBHtAuGsx0YiwghwE0RU6HFVKKOHZhVqQXjbMx0Nb2zxLCAEEGFAAoWZ4SWACMMbWzwLCAHOCdMEak/t3jSlZhUtfnZZQQ7PenB6Qe1NakwmNCna+KolAUSoZVgwyiQCiNCkaOOrlgQ4J7QQlsOlQy3UCm6VBRUD5IZpc2w7sP36b8mucVVSVlZmuw+TGyJCk6Mf8X1Lc5HIpi9sUyjv2CiyvVFmjrPdhfENmY4afAhUlQ8uyPt1I/sU1J7G5wiQCQ09EpQAZ2+us+39MzdcKiuqd9luT8NWAmTCVhbGrDkiwC0I0KkDhkzoFMmA9FOoAKcP7inbEKCj0SYTOopT784cEeDuT/V2MoDWkQldCFr7IcXS4bJelnvucJX7l/bvnDRG5n59ROSWqyzZdWb1/+L19lzbVWYcPCH1CDDOxMkVROgkzfN9dbrtZrnogcdd6Nlelz+45y7pXmz9Wc5Tp07LmdXD44NFBdgQETCLKwSYjrqCVZ9OR900MiLAbpYNUgLcsPFf8foTe7WXegQY5+HGCpnQDaoa9FnUtYtUlA+XTp0utGzN2vUbpbm5OVpf3QOcV/2xSIPl5lS0SYBMaBOc7s3yFWDDkaNxASrfogLU3cmQ2Ecm9CCQTX/8hTQtXOXBSOeGUM+CnrhyuJywOKK68T7iRzMs1qaa0wTIhE4T9bG/Ht2LZfmgEpmQx7Og6tnPFdz38zFqImRCX/E7N7gS4JpDZ0UOHbPcafTha8u1qegWATKhW2Q97ndp3855jaimoCx6ECAT6hEH21aoDKgE2H+H9Qyornzy8LVt5I43RISOI/WuQ9tT0OrIbwBZtCHAdFSbUORvSL5TUH7/lz9jL1ogQi8ouzCGugqa7xSUe38uBMKBLpmOOgCx0C5sXaWsiUwp84keU9BCw+RaezKha2itdcxVSmucwlwrn/9Lw8zBF9+iGZAb5b6w12lQMqFP0bA1BfXJVoZ1lwAidJdv2t65SpkWi7GFTEc9Dn00A3KRxGPqeg9HJvQwPuoHsiwQSCbAUZFMxKVt9Z4WfqHuEtyAd8t01IUAzth2UJ5L6Pf1blfL9sFNMqWwF14n9MhqmAggQgejGXslxKiEPvftr5Pi4mIZNXp0QimrEGglwHS0lUVBazEBJnaeBLjzo5rEItYhkEIAEaYgsVeQ/FwmArTH0cRWTEcdiHr0qmfCW8n+vWGdqH8sELBCgExohVKGOuqKJ+/lzACHYssEEKFlVKkVeTN1KhNK8ieACPNnFm1BBrQJjmYpBBBhCpLsBY0XdxD1eTBuvGfnxF7rBBChdVbRmnN6dpdtfJ0oT2pUz0YAEWajk7Qv+oFMBJhEhc1CCXCLwgJBNQUlA1oARRVbBMiEFrAtKOnNFNQCJ6rYI0AmzMFtf90BGTZhSuRfjoqG7+7Tp4/hBOy7jwizsFOfC9uxc5eUlbn/OessZoR215zZD7e8vnJl1L+nfvu0fO+OO9qF1tksjiHCDHASP5iZoQrFNgmsfO21lrkPPyLllRVSUloiXYuKpLS0VCZPnNTy5pq3jBMi54RpDiT18HXsi7VpdlNUIIGFTy6QispKWbXydal+vzr6t7GxUf5bUyNKoAV2H7jmZMI0IRtz001pSilyioAS3PIVr7a7u+rOlodmzZSaiPi2RMT446lTRWVI0xYyoWkR18Tfurq6aMa7ZtAgWbp4iTz2+Px2Bw4ciE5LNTHRMzMQoWeoGSiRwKrzF2S6devWbkYkGypRbli/XsaNH59YzYh1RGhEmPVyctuOD2XD+g0ydvy4qGFT77uv3QPT7hd1hVRlRL2sxRoIhJjA0aNHW5YsWtRi4sWYEIcV1yAAAQhAAAIQgAAEIAABCEAAAhCAAAQgAAEIQAACEIAABCAAAQhAAAIQgAAEIAABCEAAAhCAAAQgAAEIQAACEIAABCAAAQhAAAIQgAAEIAABCEAAAhCAAAQgAAEIQAACEIAABCAAAQhAAAIQgAAEIAABCEAAAhCAAASMJ/B/UbCW+/vYjn8AAAAASUVORK5CYII="
+                alt="Texas Tech Double-T Logo"
+                class="eraider-logo"
+                width="18"
+                height="20"
+              />
+              <span>Continue with eRaider</span>
+            </button>
+
+            <div class="auth-divider" role="separator" aria-label="Been here before?">
+              <span class="auth-divider-text">Been here before?</span>
+            </div>
+
+            <a href="login.html" class="auth-btn auth-btn-secondary">
+              Login
+            </a>
+          </div>
+        </form>
+      </section>
+    </main>
+
+    <!-- Site Footer -->
+    <footer class="site-footer">
+      <div class="shell-width footer-inner">
+        <a class="footer-brand" href="index.html">Your Dining Bucks Planner</a>
+        <nav class="footer-nav" aria-label="Footer navigation">
+          <a href="login.html" aria-current="page">Login</a>
+          <a href="index.html">Home</a>
+          <a href="balance.html">Balance</a>
+          <a href="planner.html">Planner</a>
+          <a href="dining-info.html">Dining Info</a>
+        </nav>
+      </div>
+    </footer>
+  </body>
+</html>

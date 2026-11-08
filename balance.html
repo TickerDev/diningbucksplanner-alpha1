@@ -10,7 +10,7 @@
     <!-- Starts Plain.createApp() and supplies shared state and navigation settings. -->
     <script src="js/app.js" defer></script>
     <!-- defer is standard HTML: these scripts run after parsing, in the order shown. -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- java graphing that i ripped off of w3-->
 
 </head>
@@ -30,70 +30,89 @@
         <div class="page-placeholder">
             <h1>{{currentPage}}</h1> <!-- Plain inserts currentPage as text and updates it when the value changes. -->
             <p>Page content goes here.</p>
-            <h1> Your Balance: XXX.XXDB</h1>
+            <h1 style="font-size : 64px; text-align: center;"> Your Balance: XXX.XXDB</h1>
             <h3>(10.5DB/Day)(73.50DB)</h3>
             <br />
             <br />
-            <canvas id="myChart" style="width:100%;max-width:400px;height"></canvas>
+
+            <div class="chart-container">
+                <div class="chart-box">
+                    <canvas id="lastWeek"></canvas>
+                </div>
+                <div class="chart-box">
+                    <canvas id="thisWeek"></canvas>
+                </div>
+            </div>
 
             <script>
-const xValues = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-const yValues = [8, 12, 9, 6.5, 15, 9, 9];
-const barColors = ["green", "red","green","green","red","green","green"];
+                const c1tx = document.getElementById('lastWeek').getContext('2d');
+                const lastWeek = new Chart(c1tx, {
+                    data: {
+                        datasets: [
+                                                        {
+                            type: "line",
+                            data: [10.5, 10.5, 10.5, 10.5, 10.5, 10.5, 10.5],
+                            borderColor: ["black"],
+                            pointRadius: [0, 0, 0, 0, 0, 0, 0],
+                            },
+                            {
+                            type: "bar",
+                            data: [8, 12, 9, 6.5, 15, 9, 9],
+                            backgroundColor: ["green", "red", "green", "green", "red", "green", "green"],
+                            }
 
-const ctx = document.getElementById('myChart');
+                        ],
+                         labels: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+                    },
+                                           
+                    options: {
+                        plugins: {
+                            legend: { display: false },
+                            title: {
+                                display: true,
+                                text: "Last Week: +5.00DB",
+                                font: { size: 32 }
+                            }
+                        }
+                    }
+                });
 
-new Chart(ctx, {
-                                  type: "bar",
-                                  data: {
-                                    labels: xValues,
-                                    datasets: [{
-                                      backgroundColor: barColors,
-                                      data: yValues
-                                    }]
-                                  },
-                                  options: {
-                                    plugins: {
-                                      legend: {display: false},
-                                      title: {
-                                        display: true,
-                                        text: "Last Week",
-                                        font: {size: 16}
-                                      }
-                                    }
-                                  }
-});
+                const c2tx = document.getElementById('thisWeek').getContext('2d');
+                const thisWeek = new Chart(c2tx, {
+                    data: {
+                        datasets: [
+                                                        {
+                            type: "line",
+                            data: [10.5, 10.5, 10.5, 10.5, 10.5, 10.5, 10.5],
+                            borderColor: ["black"],
+                            pointRadius: [0, 0, 0, 0, 0, 0, 0],
+                            },
+                            {
+                            type: "bar",
+                            data: [11, 8, 6, 12, 15, 9, 9],
+                            backgroundColor: ["red", "green", "green", "red", "#d1d1d1", "#d1d1d1", "#d1d1d1"],
+                            }
+
+                        ],
+                         labels: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+                    },
+                                           
+                    options: {
+                        plugins: {
+                            legend: { display: false },
+                            title: {
+                                display: true,
+                                text: "This Week: +3.50DB",
+                                font: { size: 32 }
+                            }
+                        }
+                    }
+                });
             </script>
-            <canvas id="myChart2" style="width:100%;max-width:400px;height"></canvas>
+            <hr />
+            <h2 style="text-align: center;">Suggestions:</h2>
 
-            <script>
-const xValues = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-const yValues = [8, 12, 9, 6.5, 15, 9, 9];
-const barColors = ["green", "red","green","green","red","green","green"];
 
-const ctx = document.getElementById('myChart2');
-
-new Chart(ctx, {
-                                  type: "bar",
-                                  data: {
-                                    labels: xValues,
-                                    datasets: [{
-                                      backgroundColor: barColors,
-                                      data: yValues
-                                    }]
-                                  },
-                                  options: {
-                                    plugins: {
-                                      legend: {display: false},
-                                      title: {
-                                        display: true,
-                                        text: "Last Week",
-                                        font: {size: 16}
-                                      }
-                                    }
-                                  }
-});
-            </script>
 
         </div>
     </main>

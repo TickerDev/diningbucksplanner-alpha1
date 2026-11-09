@@ -66,37 +66,6 @@
           }
         });
       </script>
-      <canvas id="myChart2" style="width:100%;max-width:400px;height"></canvas>
-
-      <script>
-        const xValues = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-        const yValues = [8, 12, 9, 6.5, 15, 9, 9];
-        const barColors = ["green", "red", "green", "green", "red", "green", "green"];
-
-        const ctx = document.getElementById('myChart2');
-
-        new Chart(ctx, {
-          type: "bar",
-          data: {
-            labels: xValues,
-            datasets: [{
-              backgroundColor: barColors,
-              data: yValues
-            }]
-          },
-          options: {
-            plugins: {
-              legend: { display: false },
-              title: {
-                display: true,
-                text: "Last Week",
-                font: { size: 16 }
-              }
-            }
-          }
-        });
-      </script>
-
     </div>
   </main>
   <!-- Loads components/footer.html and footer.js, passing the same current-page value. -->

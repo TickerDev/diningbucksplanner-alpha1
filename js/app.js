@@ -47,6 +47,10 @@ Plain.createApp({
     'footer-component',
   ],
   settings: { // Shared configuration available as settings.navigation in components.
+    dates: {
+      founded: 2022,
+      today: new Date().getFullYear()
+    },
     navigation,
   },
   base: new URL('../', document.currentScript.src).href, // Resolve component files from the project root.

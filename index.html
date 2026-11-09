@@ -171,21 +171,6 @@
   </a>
 </p>
   </section>
-
-
-
-=======
-      <div class="page-placeholder">
-        <h1>{{currentPage}}</h1> <!-- Plain inserts currentPage as text and updates it when the value changes. -->
-        <p>Page content goes here.</p>
-        <hr>
-        <template data-for="item in navigation">
-          <p>{{item.label}} ((if dates.today > dates.founded then
-            `${dates.founded}-${dates.today}`
-            else dates.today))</p>
-        </template>
-      </div>
->>>>>>> Stashed changes
     </main>
     <!-- Loads components/footer.html and footer.js, passing the same current-page value. -->
     <footer-component page="{{currentPage}}"></footer-component>

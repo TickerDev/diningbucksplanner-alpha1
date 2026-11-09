@@ -1,0 +1,25 @@
+<section class="login-content" aria-labelledby="login-heading">
+  <h1 id="login-heading">Welcome Back!</h1>
+  <p class="login-intro">Let’s get you started...</p>
+  <form class="login-form" data-on:submit.prevent="login">
+    <div class="login-field">
+      <label for="login-email">Email</label>
+      <input id="login-email" name="email" type="email" autocomplete="username" placeholder="Email here..." required />
+    </div>
+    <div class="login-field">
+      <label for="login-password">Password</label>
+      <input id="login-password" name="password" type="password" autocomplete="current-password" placeholder="We won’t look, promise!" data-ref="password" required />
+    </div>
+    <button class="login-button login-submit" type="submit">Login</button>
+    <button class="login-button eraider-button" type="button" data-on:click="continueWithEraider">
+      <img src="assets/login/eraider.png" width="17" height="20" alt="" />
+      <span>Continue with eRaider</span>
+    </button>
+  </form>
+  <div class="signup-divider">
+    <img src="assets/login/signup-divider.svg" alt="" aria-hidden="true" />
+    <span>New Here?</span>
+  </div>
+  <button class="login-button signup-button" type="button" data-on:click="signUp">Sign Up</button>
+  <p class="login-status" role="status" aria-live="polite">{{message}}</p>
+</section>

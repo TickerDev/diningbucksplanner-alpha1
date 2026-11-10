@@ -1,0 +1,322 @@
+/* Dining Info Page Styling — Follows Figma Class Oct. 5th frame 1:6 (Yajeeva) */
+
+.dining-page {
+  font-family: Inter, Arial, sans-serif;
+  color-scheme: light;
+  background-color: #ffffff;
+  color: #000000;
+}
+
+/* Page Main Container */
+.dining-main {
+  width: min(100% - 48px, 920px);
+  margin-inline: auto;
+  padding: 24px 0 48px;
+  min-height: 480px;
+}
+
+dining-info-component {
+  display: block;
+  width: 100%;
+}
+
+.dining-info {
+  width: 100%;
+}
+
+/* Two-column Layout */
+.dining-layout {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 32px;
+  width: 100%;
+}
+
+/* Left Column: Locations List */
+.dining-col-left {
+  flex: 1 1 55%;
+  max-width: 460px;
+  min-width: 0;
+}
+
+.dining-list-container {
+  display: flex;
+  align-items: stretch;
+  gap: 12px;
+  position: relative;
+}
+
+.dining-locations-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.dining-location-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Location Header Button (Pill Shape) */
+.dining-pill-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 34px;
+  background-color: #000000;
+  color: #ffffff;
+  border: 1px solid #000000;
+  border-radius: 17px;
+  padding: 4px 14px;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.dining-pill-btn:hover {
+  background-color: #1e1e1e;
+  border-color: #333333;
+}
+
+.dining-pill-btn:focus-visible {
+  outline: 2px solid #ff0000;
+  outline-offset: 2px;
+}
+
+.dining-pill-btn[aria-expanded="true"] {
+  background-color: #000000;
+  border-color: #ff0000;
+}
+
+.pill-arrow-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 10px;
+  height: 10px;
+  flex-shrink: 0;
+}
+
+.pill-arrow-icon {
+  display: block;
+}
+
+.pill-arrow-icon.arrow-down {
+  transform: rotate(180deg);
+}
+
+.pill-arrow-icon.arrow-right {
+  transform: rotate(90deg);
+}
+
+.pill-text-wrap {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+
+.pill-location-name {
+  font-size: 10px;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: 0.2px;
+}
+
+.pill-building-name {
+  font-size: 8px;
+  color: #bbbbbb;
+}
+
+/* Hours Card (Expanded Schedule) */
+.dining-hours-card {
+  background-color: #000000;
+  color: #ffffff;
+  border: 1px solid #000000;
+  border-radius: 16px;
+  padding: 10px 14px 12px;
+  margin-top: 2px;
+}
+
+.hours-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.hours-schedule-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 7.5px;
+  text-align: center;
+  color: #ffffff;
+}
+
+.hours-schedule-table th,
+.hours-schedule-table td {
+  padding: 4px 5px;
+  white-space: nowrap;
+}
+
+.hours-schedule-table thead tr {
+  border-bottom: 2px solid #ff0000;
+}
+
+.th-corner {
+  border-right: 2px solid #ff0000;
+  width: 42px;
+}
+
+.th-status {
+  border-right: 2px solid #ff0000;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 7px;
+  letter-spacing: 0.5px;
+  text-align: left;
+  padding-left: 2px;
+}
+
+.th-day {
+  font-weight: 600;
+  font-size: 7.5px;
+  color: #ffffff;
+}
+
+.td-time {
+  font-size: 7.5px;
+  color: #ffffff;
+}
+
+.tr-open td {
+  padding-top: 6px;
+}
+
+.tr-close td {
+  padding-bottom: 4px;
+}
+
+/* Figma Scrollbar Replica */
+.dining-scrollbar-track {
+  width: 5px;
+  background-color: #000000;
+  border-radius: 2px;
+  position: relative;
+  flex-shrink: 0;
+  min-height: 240px;
+}
+
+.dining-scrollbar-thumb {
+  width: 7px;
+  height: 25px;
+  background-color: #000000;
+  border: 1px solid #444444;
+  border-radius: 2px;
+  position: absolute;
+  top: 0;
+  left: -1px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  padding: 2px 0;
+}
+
+.scrollbar-ridge {
+  width: 5px;
+  height: 1px;
+  background-color: #757575;
+  display: block;
+}
+
+/* Right Column: Map and Texas Tech Emblem */
+.dining-col-right {
+  flex: 1 1 45%;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+}
+
+.dining-map-figure {
+  margin: 0;
+  width: 100%;
+  max-width: 220px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  border: 1px solid #d9d9d9;
+}
+
+.dining-map-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 161 / 134;
+  object-fit: cover;
+  border-radius: 16px;
+}
+
+.ttu-emblem-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 8px;
+}
+
+.ttu-double-t {
+  display: block;
+  width: 110px;
+  height: 100px;
+}
+
+/* Screen Reader Utility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 720px) {
+  .dining-layout {
+    gap: 20px;
+  }
+  .dining-main {
+    width: calc(100% - 24px);
+    padding: 16px 0 32px;
+  }
+}
+
+@media (max-width: 540px) {
+  .dining-layout {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .dining-col-left,
+  .dining-col-right {
+    max-width: 100%;
+  }
+  .dining-col-right {
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+  }
+  .dining-map-figure {
+    max-width: 180px;
+  }
+}

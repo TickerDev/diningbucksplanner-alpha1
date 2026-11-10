@@ -1,0 +1,116 @@
+<!--
+  Plain loads this template when it finds <dining-info-component> on the page.
+  By convention, it also loads components/dining-info.js for component state and actions.
+-->
+<link rel="stylesheet" href="css/dining-info.css" />
+
+<section class="dining-info" aria-labelledby="dining-heading">
+  <h1 id="dining-heading" class="sr-only">Campus Dining Locations & Operating Hours</h1>
+
+  <div class="dining-layout">
+    <!-- Left Column: Locations List and Operating Hours -->
+    <section class="dining-col-left" aria-label="Campus Dining Locations List">
+      <div class="dining-list-container">
+        <ul class="dining-locations-list" role="list">
+          <template data-for="location in locations" data-key="location.id">
+            <li class="dining-location-item">
+              <!-- Location Toggle Button (Pill Header) -->
+              <button
+                type="button"
+                class="dining-pill-btn"
+                data-bind:aria-expanded="location.id === selectedLocationId ? 'true' : 'false'"
+                data-on:click="toggleLocation(location.id)"
+              >
+                <span class="pill-arrow-wrap" aria-hidden="true">
+                  <template data-if="location.id === selectedLocationId">
+                    <img class="pill-arrow-icon arrow-down" data-bind:src="arrowDownSrc" width="5" height="4" alt="" />
+                  </template>
+                  <template data-else>
+                    <img class="pill-arrow-icon arrow-right" data-bind:src="arrowRightSrc" width="5" height="4" alt="" />
+                  </template>
+                </span>
+                <span class="pill-text-wrap">
+                  <span class="pill-location-name">{{location.name}}</span>
+                  <span class="pill-building-name">{{location.building}}</span>
+                </span>
+              </button>
+
+              <!-- Operating Hours Table (Shown when location is expanded) -->
+              <template data-if="location.id === selectedLocationId">
+                <article class="dining-hours-card" aria-label="Hours for {{location.name}}">
+                  <div class="hours-table-wrap">
+                    <table class="hours-schedule-table">
+                      <caption class="sr-only">Operating schedule for {{location.name}}</caption>
+                      <thead>
+                        <tr>
+                          <th scope="col" class="th-corner"><span class="sr-only">Status</span></th>
+                          <template data-for="day in daysOfWeek" data-key="day">
+                            <th scope="col" class="th-day">{{day}}</th>
+                          </template>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr class="tr-open">
+                          <th scope="row" class="th-status">OPEN</th>
+                          <template data-for="time, idx in location.openHours" data-key="idx">
+                            <td class="td-time"><time>{{time}}</time></td>
+                          </template>
+                        </tr>
+                        <tr class="tr-close">
+                          <th scope="row" class="th-status">CLOSE</th>
+                          <template data-for="time, idx in location.closeHours" data-key="idx">
+                            <td class="td-time"><time>{{time}}</time></td>
+                          </template>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </article>
+              </template>
+            </li>
+          </template>
+        </ul>
+
+        <!-- Visual Scrollbar indicator styled from Figma mock -->
+        <div class="dining-scrollbar-track" aria-hidden="true">
+          <div class="dining-scrollbar-thumb">
+            <span class="scrollbar-ridge"></span>
+            <span class="scrollbar-ridge"></span>
+            <span class="scrollbar-ridge"></span>
+            <span class="scrollbar-ridge"></span>
+            <span class="scrollbar-ridge"></span>
+            <span class="scrollbar-ridge"></span>
+            <span class="scrollbar-ridge"></span>
+            <span class="scrollbar-ridge"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Right Column: Interactive Campus Map & Texas Tech Double T Brand -->
+    <aside class="dining-col-right" aria-label="Dining Map and Texas Tech Branding">
+      <!-- Location Map Figure -->
+      <figure class="dining-map-figure">
+        <img
+          class="dining-map-img"
+          data-bind:src="selectedLocation.mapImage"
+          data-bind:alt="selectedLocation.mapAlt"
+          width="161"
+          height="134"
+        />
+        <figcaption class="sr-only">{{selectedLocation.mapCaption}}</figcaption>
+      </figure>
+
+      <!-- Texas Tech Double T Emblem -->
+      <div class="ttu-emblem-wrap" aria-label="Texas Tech University">
+        <img
+          src="assets/dining-info/double-t.svg"
+          class="ttu-double-t"
+          alt="Texas Tech Red Raiders Double T logo"
+          width="110"
+          height="100"
+        />
+      </div>
+    </aside>
+  </div>
+</section>

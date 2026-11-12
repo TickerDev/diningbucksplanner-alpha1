@@ -1,103 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Balance | Your Dining Bucks Planner</title>
-    <link rel="stylesheet" href="css/styles.css" />
-    <!-- Loads the Plain runtime, which exposes the global Plain object. -->
-    <script src="vendor/plain.js" defer></script>
-    <!-- Starts Plain.createApp() and supplies shared state and navigation settings. -->
-    <script src="js/app.js" defer></script>
-    <!-- defer is standard HTML: these scripts run after parsing, in the order shown. -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1"></script>
-    <!-- java graphing that i ripped off of w3-->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Balance | Your Dining Bucks Planner</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <!-- Loads the Plain runtime, which exposes the global Plain object. -->
+  <script src="vendor/plain.js" defer></script>
+  <!-- Starts Plain.createApp() and supplies shared state and navigation settings. -->
+  <script src="js/app.js" defer></script>
+  <!-- defer is standard HTML: these scripts run after parsing, in the order shown. -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1"></script>
+  <!-- java graphing that i ripped off of w3-->
 
 </head>
-  <body>
-    <a class="skip-link" href="#main-content">Skip to content</a>
-    <!--
+
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <!--
       Plain registers this tag using the native Web Components API,
       supported by all major modern browsers. The browser's connectedCallback()
       triggers initialization; Plain loads navbar.html and navbar.js, then
       inserts the HTML and connects its bindings. File loading and bindings
       are Plain features built on the browser standard.
     -->
-    <!-- The page attribute binds the app's currentPage value to the component's page prop. -->
-    <!-- Plain updates the prop automatically whenever currentPage changes. -->
-    <navbar-component page="{{currentPage}}"></navbar-component>
-    <main id="main-content" tabindex="-1">
-        <div class="page-placeholder">
-            <h1>{{currentPage}}</h1> <!-- Plain inserts currentPage as text and updates it when the value changes. -->
-            <p>Page content goes here.</p>
-            <h1> Your Balance: XXX.XXDB</h1>
-            <h3>(10.5DB/Day)(73.50DB)</h3>
-            <br />
-            <br />
-            <canvas id="myChart" style="width:100%;max-width:400px;height"></canvas>
+  <!-- The page attribute binds the app's currentPage value to the component's page prop. -->
+  <!-- Plain updates the prop automatically whenever currentPage changes. -->
+  <navbar-component page="{{currentPage}}"></navbar-component>
+  <main id="main-content" tabindex="-1">
+    <div class="page-placeholder">
+      <h1>{{currentPage}}</h1> <!-- Plain inserts currentPage as text and updates it when the value changes. -->
+      <p>Page content goes here.</p>
+      <h1> Your Balance: XXX.XXDB</h1>
+      <h3>(10.5DB/Day)(73.50DB)</h3>
+      <br />
+      <br />
+      <canvas id="myChart" style="width:100%;max-width:400px;height:100%"></canvas>
 
-            <script>
-const xValues = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-const yValues = [8, 12, 9, 6.5, 15, 9, 9];
-const barColors = ["green", "red","green","green","red","green","green"];
+      <script>
+        const xValues = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        const yValues = [8, 12, 9, 6.5, 15, 9, 9];
+        const barColors = ["green", "red", "green", "green", "red", "green", "green"];
 
-const ctx = document.getElementById('myChart');
+        const ctx = document.getElementById('myChart');
 
-new Chart(ctx, {
-                                  type: "bar",
-                                  data: {
-                                    labels: xValues,
-                                    datasets: [{
-                                      backgroundColor: barColors,
-                                      data: yValues
-                                    }]
-                                  },
-                                  options: {
-                                    plugins: {
-                                      legend: {display: false},
-                                      title: {
-                                        display: true,
-                                        text: "Last Week",
-                                        font: {size: 16}
-                                      }
-                                    }
-                                  }
-});
-            </script>
-            <canvas id="myChart2" style="width:100%;max-width:400px;height"></canvas>
+        new Chart(ctx, {
+          type: "bar",
+          data: {
+            labels: xValues,
+            datasets: [{
+              backgroundColor: barColors,
+              data: yValues
+            }]
+          },
+          options: {
+            plugins: {
+              legend: { display: false },
+              title: {
+                display: true,
+                text: "Last Week",
+                font: { size: 16 }
+              }
+            }
+          }
+        });
+      </script>
+    </div>
+  </main>
+  <!-- Loads components/footer.html and footer.js, passing the same current-page value. -->
+  <footer-component page="{{currentPage}}"></footer-component>
+</body>
 
-            <script>
-const xValues = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-const yValues = [8, 12, 9, 6.5, 15, 9, 9];
-const barColors = ["green", "red","green","green","red","green","green"];
-
-const ctx = document.getElementById('myChart2');
-
-new Chart(ctx, {
-                                  type: "bar",
-                                  data: {
-                                    labels: xValues,
-                                    datasets: [{
-                                      backgroundColor: barColors,
-                                      data: yValues
-                                    }]
-                                  },
-                                  options: {
-                                    plugins: {
-                                      legend: {display: false},
-                                      title: {
-                                        display: true,
-                                        text: "Last Week",
-                                        font: {size: 16}
-                                      }
-                                    }
-                                  }
-});
-            </script>
-
-        </div>
-    </main>
-    <!-- Loads components/footer.html and footer.js, passing the same current-page value. -->
-    <footer-component page="{{currentPage}}"></footer-component>
-  </body>
 </html>

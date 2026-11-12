@@ -3,15 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="View Texas Tech University campus dining locations, operating hours, and location map." />
     <title>Dining Info | Your Dining Bucks Planner</title>
     <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/dining-info.css" />
     <!-- Loads the Plain runtime, which exposes the global Plain object. -->
     <script src="vendor/plain.js" defer></script>
     <!-- Starts Plain.createApp() and supplies shared state and navigation settings. -->
     <script src="js/app.js" defer></script>
     <!-- defer is standard HTML: these scripts run after parsing, in the order shown. -->
   </head>
-  <body>
+  <body class="dining-info-page">
     <a class="skip-link" href="#main-content">Skip to content</a>
     <!--
       Plain registers this tag using the native Web Components API,
@@ -23,11 +25,8 @@
     <!-- The page attribute binds the app's currentPage value to the component's page prop. -->
     <!-- Plain updates the prop automatically whenever currentPage changes. -->
     <navbar-component page="{{currentPage}}"></navbar-component>
-    <main id="main-content" tabindex="-1">
-      <div class="page-placeholder">
-        <h1>{{currentPage}}</h1> <!-- Plain inserts currentPage as text and updates it when the value changes. -->
-        <p>Page content goes here.</p>
-      </div>
+    <main id="main-content" class="dining-info-main" tabindex="-1">
+      <dining-info-component></dining-info-component>
     </main>
     <!-- Loads components/footer.html and footer.js, passing the same current-page value. -->
     <footer-component page="{{currentPage}}"></footer-component>

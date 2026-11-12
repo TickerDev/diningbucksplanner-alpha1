@@ -1,0 +1,32 @@
+/* Figma frame 100:201, Dor/SignUp. Builds on css/login.css. */
+dining-signup-component {
+  display: block;
+}
+
+.signup-page .login-field input::placeholder {
+  color: #a2a2a2;
+}
+
+.signup-page .signup-login-link {
+  text-decoration: none;
+}
+
+@media (max-width: 480px) {
+  .signup-page .signup-content h1 {
+    transform: translateX(-5px);
+  }
+  .signup-page .login-intro {
+    transform: translateX(1px);
+  }
+  .signup-page .signup-login-link {
+    transform: translateX(-1px);
+  }
+}
+
+@media (max-width: 359px) {
+  .signup-page .signup-content h1,
+  .signup-page .login-intro,
+  .signup-page .signup-login-link {
+    transform: none;
+  }
+}

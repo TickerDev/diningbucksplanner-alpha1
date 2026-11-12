@@ -1,3 +1,4 @@
 {
-  "bindings": ["currentPage"]
+  "bindings": ["currentPage", "email", "password", "budget", "planLocation", "planSpend", "selectedMonth", "selectedYear"],
+  "actions": ["signUp", "login", "prevMonth", "nextMonth"]
 }

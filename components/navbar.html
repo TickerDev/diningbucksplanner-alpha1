@@ -23,7 +23,7 @@
         <a
           class="nav-link"
           data-bind:href="item.href"
-          data-bind:aria-current="props.page === item.label ? 'page' : null"
+          data-bind:aria-current="(props.page === item.label || (props.page === 'Sign Up' && item.id === 'login')) ? 'page' : null"
         >
           {{item.label}} <!-- Plain inserts the current item's label as text, rather than treating it as HTML. -->
         </a>

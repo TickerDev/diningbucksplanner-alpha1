@@ -8,7 +8,7 @@
       <template data-for="item in settings.navigation" data-key="item.id">
         <a
           data-bind:href="item.href"
-          data-bind:aria-current="props.page === item.label ? 'page' : null"
+          data-bind:aria-current="(props.page === item.label || (props.page === 'Sign Up' && item.id === 'login')) ? 'page' : null"
         >
           {{item.label}}
         </a>

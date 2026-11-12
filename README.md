@@ -110,10 +110,11 @@ Open <http://127.0.0.1:5173/>. Stop the server with `Ctrl+C`. No build step is n
 Alternatively, if the Bun-based Plain CLI and Bun are already installed, run this from the repository root:
 
 ```sh
-python3 -m http.server 5173
+plain dev . --port 5173
 ```
 
-Open http://localhost:5173/. No dependency installation or application build is required.
+Open <http://localhost:5173/>. The optional static checker runs separately:
+
 ```sh
 plain check .
 ```

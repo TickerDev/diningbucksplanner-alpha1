@@ -856,3 +856,11 @@ main {
   }
 }
 
+
+.budget-label {
+  background-color: #AAF2A5;
+}
+
+.planned-spending-label {
+  background-color: #EC40EE;
+}

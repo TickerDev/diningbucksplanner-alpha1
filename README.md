@@ -15,7 +15,7 @@ Statuses describe the current source code. Partially implemented pages have an i
 | Problem It Solves | Texas Tech students using Dining Bucks need to judge whether their spending pace will make their budget last through the semester. This application helps them explore spending scenarios and compare campus dining options while planning how to use their funds. |
 | Page 1 — Name & Description | **Home — [index.html](index.html). Implemented prototype:** users compare seven hardcoded dining locations by sorting location, walking time (labeled “Distance”), or price. Entering a budget and planned daily spending updates a semester spending projection. These are hypothetical inputs, not an imported account balance. |
 | Page 2 — Name & Description | **Balance — [balance.html](balance.html). Partially implemented:** displays placeholder balance text and a Chart.js bar chart of hardcoded daily spending for “Last Week.” Users can inspect values through Chart.js hover tooltips; account balance retrieval and transaction entry are not implemented. |
-| Page 3 — Name & Description | **Planner — [planner.html](planner.html). Placeholder:** contains shared navigation, a page heading, and “Page content goes here.” The filename and navigation establish a planned planner page, but its specific workflow and controls need team clarification. |
+| Page 3 — Name & Description | **Planner — [planner.html](planner.html). Implemented prototype:** uses the shared Plain navbar and footer with budget metrics, day selection, and in-memory spending entry. Its calendar layout and month handling remain a prototype; entries are not saved across page loads. |
 | Page 4 — Name & Description | **Dining Info — [dining-info.html](dining-info.html). Partially implemented:** users expand or collapse six campus dining entries to read hardcoded weekly hours. A static map image shows 23 at Sneed; expanding another entry does not update the map or provide routing. |
 | Page 5 — Name & Description | **Login — [login.html](login.html). Partially implemented:** users fill in email and password fields. Submitting a valid form clears the password and displays a message explaining that authentication is not connected. The eRaider and Sign Up buttons display similar unavailable-service messages. |
 | Page 6 — Name & Description (if applicable) | **Sign Up — [signup.html](signup.html). Partially implemented:** provides required email and password fields, Sign Up and eRaider buttons, and a working link back to Login. No registration handler or eRaider integration exists; submission uses the browser's default form behavior and does not create an account. |
@@ -75,13 +75,16 @@ Application and documentation files in the current checkout are shown below. Git
 │   ├── signup.css
 │   └── styles.css
 ├── js/
-│   └── app.js
+│   ├── app.js
+│   └── planner.js
 └── vendor/
     ├── LICENSE
     ├── PLAIN.md
     ├── THIRD_PARTY_NOTICES.md
     └── plain.js
 ```
+
+Every page loads the shared Plain runtime and app script and uses the navbar component. Home, Balance, Planner, and Dining Info also use the footer component; Login and Sign Up retain their existing compact layout. Planner-specific native controls live in [js/planner.js](js/planner.js), without duplicate Plain event bindings.
 
 Shared HTML components and optional sibling JavaScript modules live in `components/`. [js/app.js](js/app.js) initializes Plain, defines navigation, sorts the Home table, and updates the SVG projection. [plain.check.json](plain.check.json) supplies binding metadata for the Plain checker.
 
@@ -138,7 +141,7 @@ The repository does not contain a confirmed team roster or page assignment list.
 
 - **Implemented:** Home sorting and live spending scenarios, Dining Info expandable hours, shared navigation, and responsive styling.
 - **Partial:** Balance contains sample chart data and placeholder totals; Dining Info uses fixed hours and a static map; Login supplies feedback without authentication; Sign Up has a form without registration behavior.
-- **Unfinished / needing definition:** Planner content, team ownership, and intended account and personal-budget workflows. There is no saved budget or transaction history. Semester length is fixed at 112 days, and negative or invalid budget/spending inputs lack complete validation.
+- **Unfinished / needing definition:** Planner calendar/date handling, team ownership, and intended account and personal-budget workflows. There is no saved budget or transaction history. Semester length is fixed at 112 days, and negative or invalid budget/spending inputs lack complete validation.
 - **Navigation gaps:** Sign Up is absent from shared navigation, the Login Sign Up button only displays a message, and `js/app.js` falls back to “Home” for the Sign Up document title while its navbar explicitly selects Login.
 
 All 14 requested Table 1 fields are present, covering six existing pages and five specific interactions. The team still needs to confirm contributors and define the Planner page's intended capabilities. The assignment document itself is not included in the repository, so compliance beyond the supplied Table 1 requirements cannot be verified here. If Milestone 1 requires completed content on every proposed page or five fully functional application features, the placeholders and partial login feature require further work.

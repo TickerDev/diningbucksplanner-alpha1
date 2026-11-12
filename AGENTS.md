@@ -33,8 +33,8 @@ without modifying the runtime. Do not invent APIs to fill gaps.
   working university authentication service in this checkout.
 - `index.html`: dining comparison table and spending projection.
 - `balance.html`: sample balance display and weekly Chart.js visualization.
-- `planner.html`: standalone planner markup and browser JavaScript. Inspect this
-  page directly; it does not currently bootstrap Plain like the shared pages do.
+- `planner.html`: planner controls with page-specific behavior in `js/planner.js`;
+  the shared Plain app loads its navbar and footer components.
 - `dining-info.html`, `login.html`, `signup.html`: page entry documents using
   component templates. Account forms do not implement real authentication.
 - `js/app.js`: shared Plain startup, navigation, page metadata, and Home behavior.
@@ -110,8 +110,11 @@ and Linux. Detect the actual shell instead of assuming Bash or zsh.
   Do not run `plain update` as a routine fix; it changes the runtime version.
 - Keep app startup shared where it is already shared. Do not create a second
   Plain app on a document that already initializes one.
-- A standalone page must either remain deliberately standalone or be integrated
-  fully. Adding Plain attributes alone does not wire up its controls.
+- Every application page must load `vendor/plain.js` followed by `js/app.js`
+  using deferred scripts and reuse the existing Plain components for its shared
+  shell. Do not create standalone copies of the navbar or footer. Plain attributes
+  alone do not wire up controls; connect them to real actions or use one native
+  event system for page-specific behavior without duplicate Plain bindings.
 - Do not copy entire navigation/footer implementations into new pages when the
   existing shared components meet the need.
 

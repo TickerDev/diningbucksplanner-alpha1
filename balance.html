@@ -1,75 +1,131 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Balance | Your Dining Bucks Planner</title>
-  <link rel="stylesheet" href="css/styles.css" />
-  <!-- Loads the Plain runtime, which exposes the global Plain object. -->
-  <script src="vendor/plain.js" defer></script>
-  <!-- Starts Plain.createApp() and supplies shared state and navigation settings. -->
-  <script src="js/app.js" defer></script>
-  <!-- defer is standard HTML: these scripts run after parsing, in the order shown. -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1"></script>
-  <!-- java graphing that i ripped off of w3-->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Balance | Your Dining Bucks Planner</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <!-- Loads the Plain runtime, which exposes the global Plain object. -->
+    <script src="vendor/plain.js" defer></script>
+    <!-- Starts Plain.createApp() and supplies shared state and navigation settings. -->
+    <script src="js/app.js" defer></script>
+    <!-- defer is standard HTML: these scripts run after parsing, in the order shown. -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- java graphing that i ripped off of w3-->
 
 </head>
-
-<body>
-  <a class="skip-link" href="#main-content">Skip to content</a>
-  <!--
+  <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <!--
       Plain registers this tag using the native Web Components API,
       supported by all major modern browsers. The browser's connectedCallback()
       triggers initialization; Plain loads navbar.html and navbar.js, then
       inserts the HTML and connects its bindings. File loading and bindings
       are Plain features built on the browser standard.
     -->
-  <!-- The page attribute binds the app's currentPage value to the component's page prop. -->
-  <!-- Plain updates the prop automatically whenever currentPage changes. -->
-  <navbar-component page="{{currentPage}}"></navbar-component>
-  <main id="main-content" tabindex="-1">
-    <div class="page-placeholder">
-      <h1>{{currentPage}}</h1> <!-- Plain inserts currentPage as text and updates it when the value changes. -->
-      <p>Page content goes here.</p>
-      <h1> Your Balance: XXX.XXDB</h1>
-      <h3>(10.5DB/Day)(73.50DB)</h3>
-      <br />
-      <br />
-      <canvas id="myChart" style="width:100%;max-width:400px;height:100%"></canvas>
+    <!-- The page attribute binds the app's currentPage value to the component's page prop. -->
+    <!-- Plain updates the prop automatically whenever currentPage changes. -->
+    <navbar-component page="{{currentPage}}"></navbar-component>
+    <main id="main-content" tabindex="-1">
+        <div class="page-placeholder">
+            <h1>{{currentPage}}</h1> <!-- Plain inserts currentPage as text and updates it when the value changes. -->
+            <h1 style="font-size : 64px; text-align: center;"> Your Balance: XXX.XXDB</h1>
+            <h3>(10.5DB/Day)(73.50DB)</h3>
+            <br />
+            <br />
 
-      <script>
-        const xValues = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-        const yValues = [8, 12, 9, 6.5, 15, 9, 9];
-        const barColors = ["green", "red", "green", "green", "red", "green", "green"];
+            <div class="chart-container">
+                <div class="chart-box">
+                    <canvas id="lastWeek"></canvas>
+                </div>
+                <div class="chart-box">
+                    <canvas id="thisWeek"></canvas>
+                </div>
+            </div>
 
-        const ctx = document.getElementById('myChart');
+            <script>
+                                                                                                const c1tx = document.getElementById('lastWeek').getContext('2d');
+                                                                                                const lastWeek = new Chart(c1tx, {
+                                                                                                    data: {
+                                                                                                        datasets: [
+                                                                                                                                        {
+                                                                                                            type: "line",
+                                                                                                            data: [10.5, 10.5, 10.5, 10.5, 10.5, 10.5, 10.5],
+                                                                                                            borderColor: ["black"],
+                                                                                                            pointRadius: [0, 0, 0, 0, 0, 0, 0],
+                                                                                                            },
+                                                                                                            {
+                                                                                                            type: "bar",
+                                                                                                            data: [8, 12, 9, 6.5, 15, 9, 9],
+                                                                                                                backgroundColor: ["green", "red", "green", "green", "red", "green", "green"],
+                                                                                                            yAxisKey: "Dining Bucks"
+                                                                                                            }
 
-        new Chart(ctx, {
-          type: "bar",
-          data: {
-            labels: xValues,
-            datasets: [{
-              backgroundColor: barColors,
-              data: yValues
-            }]
-          },
-          options: {
-            plugins: {
-              legend: { display: false },
-              title: {
-                display: true,
-                text: "Last Week",
-                font: { size: 16 }
-              }
-            }
-          }
-        });
-      </script>
-    </div>
-  </main>
-  <!-- Loads components/footer.html and footer.js, passing the same current-page value. -->
-  <footer-component page="{{currentPage}}"></footer-component>
-</body>
+                                                                                                        ],
+                                                                                                         labels: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+                                                                                                    },
 
+                                                                                                    options: {
+                                                                                                        plugins: {
+                                                                                                            legend: { display: false },
+                                                                                                            title: {
+                                                                                                                display: true,
+                                                                                                                text: "Last Week: +5.00DB",
+                                                                                                                font: { size: 32 }
+                                                                                                            }
+                                                                                                        }
+                                                                                                    }
+                                                                                                });
+
+                                                                                                const c2tx = document.getElementById('thisWeek').getContext('2d');
+                                                                                                const thisWeek = new Chart(c2tx, {
+                                                                                                    data: {
+                                                                                                        datasets: [
+                                                                                                                                        {
+                                                                                                            type: "line",
+                                                                                                            data: [10.5, 10.5, 10.5, 10.5, 10.5, 10.5, 10.5],
+                                                                                                            borderColor: ["black"],
+                                                                                                            pointRadius: [0, 0, 0, 0, 0, 0, 0],
+                                                                                                            },
+                                                                                                            {
+                                                                                                            type: "bar",
+                                                                                                            data: [11, 8, 6, 12, 15, 9, 9],
+                                                                                                                backgroundColor: ["red", "green", "green", "red", "#d1d1d1", "#d1d1d1", "#d1d1d1"],
+
+                                                                                                            }
+
+                                                                                                        ],
+                                                                                                         labels: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+                                                                                                    },
+
+                                                                                                    options: {
+                                                                                                        plugins: {
+                                                                                                            legend: { display: false },
+                                                                                                            title: {
+                                                                                                                display: true,
+                                                                                                                text: "This Week: +3.50DB",
+                                                                                                                font: { size: 32 }
+                                                                                                            }
+                                                                                                        }
+                                                                                                    }
+                                                                                                });
+            </script>
+            <hr />
+            <h2 style="text-align: center;">Suggestions:</h2>
+            <img src="C:\Users\pikab\Downloads\HighGitter\diningbucksplanner-alpha1\assets\grilledcheese.jpg" alt="Grilled Cheese" width="25%" height="150px" style="float: left;" />
+            <img src="C:\Users\pikab\Downloads\HighGitter\diningbucksplanner-alpha1\assets\quesadilla.jpg" alt="Quesadilla" width="25%" height="150px" style="float: right" />
+            <img src="C:\Users\pikab\Downloads\HighGitter\diningbucksplanner-alpha1\assets\macandcheese.jpg" alt="Mac & Cheese" width="25%" height="150px" style="display: block; margin-left: auto; margin-right: auto;" />
+            <br />
+            <p style="text-align: left; display:inline-flex; width:35%">Grilled Cheese @ 23Sneed</p>
+            <p style="text-align: center; display: inline-flex; width:35%">Mac & Cheese @ The Commons</p>
+            <p style="text-align: right; display: inline-flex;">Quesadilla @ Sam's Place</p>
+
+
+
+
+        </div>
+    </main>
+    <!-- Loads components/footer.html and footer.js, passing the same current-page value. -->
+    <footer-component page="{{currentPage}}"></footer-component>
+  </body>
 </html>

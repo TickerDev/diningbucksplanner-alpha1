@@ -3,18 +3,33 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Log in to Your Dining Bucks Planner with your email or eRaider account." />
     <title>Login | Your Dining Bucks Planner</title>
     <link rel="stylesheet" href="css/styles.css" />
-    <link rel="stylesheet" href="css/login.css" />
+    <!-- Loads the Plain runtime, which exposes the global Plain object. -->
     <script src="vendor/plain.js" defer></script>
+    <!-- Starts Plain.createApp() and supplies shared state and navigation settings. -->
     <script src="js/app.js" defer></script>
+    <!-- defer is standard HTML: these scripts run after parsing, in the order shown. -->
   </head>
-  <body class="login-page">
+  <body>
     <a class="skip-link" href="#main-content">Skip to content</a>
+    <!--
+      Plain registers this tag using the native Web Components API,
+      supported by all major modern browsers. The browser's connectedCallback()
+      triggers initialization; Plain loads navbar.html and navbar.js, then
+      inserts the HTML and connects its bindings. File loading and bindings
+      are Plain features built on the browser standard.
+    -->
+    <!-- The page attribute binds the app's currentPage value to the component's page prop. -->
+    <!-- Plain updates the prop automatically whenever currentPage changes. -->
     <navbar-component page="{{currentPage}}"></navbar-component>
-    <main id="main-content" class="login-main" tabindex="-1">
-      <dining-login-component></dining-login-component>
+    <main id="main-content" tabindex="-1">
+      <div class="page-placeholder">
+        <h1>{{currentPage}}</h1> <!-- Plain inserts currentPage as text and updates it when the value changes. -->
+        <p>Page content goes here.</p>
+      </div>
     </main>
+    <!-- Loads components/footer.html and footer.js, passing the same current-page value. -->
+    <footer-component page="{{currentPage}}"></footer-component>
   </body>
 </html>

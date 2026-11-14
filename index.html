@@ -23,7 +23,6 @@
     <!-- Plain updates the prop automatically whenever currentPage changes. -->
     <navbar-component page="{{currentPage}}"></navbar-component>
     <main id="main-content" tabindex="-1">
-
 <section class="col-left">
     <div class="table-container">
       <table id="t" class="sortable-table">
@@ -123,9 +122,8 @@
     <!-- Budget Input -->
     <div class="figma-input-group">
       <label 
-        class="figma-input-label" 
-        for="dining-budget" 
-        style="background-color: #AAF2A5;"
+        class="figma-input-label budget-label"
+        for="dining-budget"
       >
           <a href="balance.html">
             Budget
@@ -142,9 +140,8 @@
     <!-- Planned Spending Input -->
     <div class="figma-input-group">
       <label 
-        class="figma-input-label" 
-        for="planned-spending" 
-        style="background-color: #EC40EE;"
+        class="figma-input-label planned-spending-label"
+        for="planned-spending"
       >
         <a href="planner.html">
           Planned Spending Per Day 
@@ -218,9 +215,6 @@
   </a>
 </p>
   </section>
-
-
-
     </main>
     <!-- Loads components/footer.html and footer.js, passing the same current-page value. -->
     <footer-component page="{{currentPage}}"></footer-component>

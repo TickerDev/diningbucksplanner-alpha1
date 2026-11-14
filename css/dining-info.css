@@ -1,0 +1,348 @@
+/* Figma node 1:6, Dining Info Page */
+
+.dining-info-page {
+  caret-color: var(--shell-black);
+}
+
+.dining-info-page .dining-info-main {
+  width: min(calc(100% - 32px), 920px);
+  max-width: 920px;
+  margin-inline: auto;
+  padding: 24px 16px 48px;
+  flex: 1;
+  display: block;
+}
+
+dining-info-component {
+  display: block;
+  width: 100%;
+}
+
+/* Two-column layout with center scroll/divider */
+.dining-info-layout {
+  display: grid;
+  grid-template-columns: minmax(260px, 360px) 16px minmax(220px, 340px);
+  justify-content: center;
+  align-items: start;
+  gap: 20px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* --- Left Column: Locations List --- */
+.dining-locations-col {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+/* Accordion cards */
+.dining-accordion {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.dining-accordion-summary {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: #000000;
+  color: #ffffff;
+  border-radius: 16px;
+  padding: 8px 14px;
+  cursor: pointer;
+  user-select: none;
+  list-style: none;
+  transition: background-color 0.15s ease;
+}
+
+.dining-accordion-summary::-webkit-details-marker {
+  display: none;
+}
+
+.dining-accordion-summary:hover {
+  background-color: #1a1a1a;
+}
+
+.dining-accordion-summary:focus-visible {
+  outline: 2px solid var(--shell-red);
+  outline-offset: 2px;
+}
+
+.accordion-arrow-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+}
+
+.accordion-arrow {
+  display: block;
+  width: 8px;
+  height: 8px;
+  object-fit: contain;
+  transition: transform 0.2s ease;
+}
+
+.dining-accordion:not([open]) .accordion-arrow {
+  transform: rotate(0deg);
+}
+
+.dining-accordion[open] .accordion-arrow {
+  transform: rotate(90deg);
+}
+
+.dining-location-header {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.dining-location-name {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.2;
+  color: #ffffff;
+}
+
+.dining-location-hall {
+  margin: 0;
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 1.2;
+  color: #d0d0d0;
+}
+
+/* Accordion expanded content */
+.dining-accordion-body {
+  padding-top: 6px;
+}
+
+/* Weekly Hours Card */
+.hours-card {
+  background-color: #000000;
+  border-radius: 16px;
+  padding: 10px 12px;
+  overflow-x: auto;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.hours-table {
+  width: 100%;
+  border-collapse: collapse;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 9px;
+  text-align: center;
+  line-height: 1.3;
+}
+
+/* Red vertical line separating status label from days (Figma node 106:204) */
+.hours-table th.th-label,
+.hours-table th.row-label {
+  border-right: 2px solid #FF0000;
+  padding: 4px 8px 4px 2px;
+  text-align: left;
+  font-weight: 700;
+  font-size: 8px;
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+/* Red horizontal line separating day names from time rows (Figma node 106:209) */
+.hours-table thead tr {
+  border-bottom: 2px solid #FF0000;
+}
+
+.hours-table th {
+  padding: 4px 5px;
+  font-weight: 600;
+  font-size: 8.5px;
+  color: #ffffff;
+}
+
+.hours-table td {
+  padding: 4px 5px;
+  font-size: 8px;
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+/* --- Center Divider / Scrollbar (Figma nodes 106:183 - 106:194) --- */
+.dining-vertical-divider {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  height: 100%;
+  min-height: 280px;
+}
+
+.scroll-track {
+  width: 5px;
+  background-color: #000000;
+  position: relative;
+  border-radius: 2.5px;
+  height: 100%;
+  min-height: 280px;
+}
+
+.scroll-thumb {
+  position: absolute;
+  top: 0;
+  left: -1px;
+  width: 7px;
+  height: 26px;
+  background-color: #000000;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  padding: 2px 0;
+  border-radius: 1px;
+}
+
+.thumb-tick {
+  width: 7px;
+  height: 1.5px;
+  background-color: #757575;
+  display: block;
+}
+
+/* --- Right Column: Map & TTU Double T --- */
+.dining-preview-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+}
+
+.dining-map-figure {
+  margin: 0;
+  border-radius: 16px;
+  overflow: hidden;
+  background-color: #eaeaea;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  width: 100%;
+  max-width: 320px;
+}
+
+.dining-map-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 161 / 134;
+  object-fit: cover;
+  border-radius: 16px;
+}
+
+.ttu-logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px 8px;
+  width: 100%;
+  max-width: 320px;
+}
+
+.ttu-double-t {
+  width: 110px;
+  height: 100px;
+  display: block;
+}
+
+/* Accessibility utility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 680px) {
+  .dining-info-layout {
+    grid-template-columns: minmax(0, 1fr) 10px minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .dining-accordion-summary {
+    padding: 6px 10px;
+    gap: 6px;
+    border-radius: 14px;
+  }
+
+  .dining-location-name {
+    font-size: 11px;
+  }
+
+  .dining-location-hall {
+    font-size: 8px;
+  }
+
+  .hours-card {
+    padding: 8px 6px;
+    border-radius: 14px;
+  }
+
+  .hours-table {
+    font-size: 7.5px;
+  }
+
+  .hours-table th,
+  .hours-table td {
+    padding: 3px 2px;
+    font-size: 7px;
+  }
+
+  .hours-table th.th-label,
+  .hours-table th.row-label {
+    font-size: 6.5px;
+    padding: 3px 4px 3px 1px;
+  }
+
+  .ttu-double-t {
+    width: 90px;
+    height: 82px;
+  }
+}
+
+@media (max-width: 440px) {
+  .dining-info-page .dining-info-main {
+    padding: 16px 8px 36px;
+    width: 100%;
+  }
+
+  .dining-info-layout {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .dining-vertical-divider {
+    display: none;
+  }
+
+  .dining-preview-col {
+    order: 2;
+    margin-top: 10px;
+  }
+
+  .dining-map-figure {
+    max-width: 260px;
+  }
+
+  .ttu-double-t {
+    width: 80px;
+    height: 72px;
+  }
+}

@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Balance | Your Dining Bucks Planner</title>
   <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/balance.css" />
   <!-- Loads the Plain runtime, which exposes the global Plain object. -->
   <script src="vendor/plain.js" defer></script>
   <!-- Starts Plain.createApp() and supplies shared state and navigation settings. -->
@@ -36,7 +37,7 @@
       <h3>(10.5DB/Day)(73.50DB)</h3>
       <br />
       <br />
-      <canvas id="myChart" style="width:100%;max-width:400px;height:100%"></canvas>
+      <canvas id="myChart" class="balance-chart"></canvas>
 
       <script>
         const xValues = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];

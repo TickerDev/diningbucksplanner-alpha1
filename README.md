@@ -123,25 +123,3 @@ plain check .
 ```
 
 Read [vendor/PLAIN.md](vendor/PLAIN.md) before changing the application. Edit original HTML, CSS, and JavaScript; keep the prebuilt runtime intact.
-
-## Team Contributions
-
-The repository does not contain a confirmed team roster or page assignment list. Comments in [css/login.css](css/login.css) and [css/signup.css](css/signup.css) label the design references “Dor/Login” and “Dor/SignUp”; these labels alone do not establish a full contributor name or assigned ownership.
-
-| Pages / responsibility | Contributor / assignment |
-| --- | --- |
-| Home | **[Team member name and role — to be confirmed]** |
-| Balance | **[Team member name and role — to be confirmed]** |
-| Planner | **[Team member name and role — to be confirmed]** |
-| Dining Info | **[Team member name and role — to be confirmed]** |
-| Login and Sign Up | **[Confirm contributor name, role, and whether “Dor” identifies the assigned owner]** |
-| Shared components, styling, and application setup | **[Team member name(s) and role(s) — to be confirmed]** |
-
-## Development Status
-
-- **Implemented:** Home sorting and live spending scenarios, Dining Info expandable hours, shared navigation, and responsive styling.
-- **Partial:** Balance contains sample chart data and placeholder totals; Dining Info uses fixed hours and a static map; Login supplies feedback without authentication; Sign Up has a form without registration behavior.
-- **Unfinished / needing definition:** Planner calendar/date handling, team ownership, and intended account and personal-budget workflows. There is no saved budget or transaction history. Semester length is fixed at 112 days, and negative or invalid budget/spending inputs lack complete validation.
-- **Navigation gaps:** Sign Up is absent from shared navigation, the Login Sign Up button only displays a message, and `js/app.js` falls back to “Home” for the Sign Up document title while its navbar explicitly selects Login.
-
-All 14 requested Table 1 fields are present, covering six existing pages and five specific interactions. The team still needs to confirm contributors and define the Planner page's intended capabilities. The assignment document itself is not included in the repository, so compliance beyond the supplied Table 1 requirements cannot be verified here. If Milestone 1 requires completed content on every proposed page or five fully functional application features, the placeholders and partial login feature require further work.

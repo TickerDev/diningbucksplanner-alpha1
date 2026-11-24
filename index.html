@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Home | Your Dining Bucks Planner</title>
     <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/index.css" />
     <!-- Loads the Plain runtime, which exposes the global Plain object. -->
     <script src="vendor/plain.js" defer></script>
     <!-- Starts Plain.createApp() and supplies shared state and navigation settings. -->
@@ -22,7 +23,7 @@
     <!-- The page attribute binds the app's currentPage value to the component's page prop. -->
     <!-- Plain updates the prop automatically whenever currentPage changes. -->
     <navbar-component page="{{currentPage}}"></navbar-component>
-    <main id="main-content" tabindex="-1">
+    <main id="main-content" class="home-dashboard" tabindex="-1">
 <section class="col-left">
     <div class="table-container">
       <table id="t" class="sortable-table">
@@ -71,7 +72,7 @@
           </tr>
         </tbody>
       </table>
-      <div class="table-footer" style="outline: 1px solid black !important; background-color: skyblue;">
+      <div class="table-footer">
         <a href="dining-info.html">
           More Precise Dining Info Here!
         </a>
@@ -80,10 +81,10 @@
     <br>
 
     <!-- Nutrition Card -->
-<div class="nutrition-card-group" style="outline: 1px solid black !important;">      
-  <div class="nutrition-header" style="text-align: center; background-color: #f00; color:white">NUTRITION FACTS</div>
-     <table class="nutrition-table" style="border-collapse: collapse;">
-       <thead style="background-color:#f00; outline: 1px solid black !important;">
+<div class="nutrition-card-group">
+  <div class="nutrition-header">NUTRITION FACTS</div>
+     <table class="nutrition-table">
+       <thead>
          <tr>
            <th>Nutrient</th>
            <th>Amount</th>
@@ -210,7 +211,7 @@
 </div>
     
 <p>
-  <a href="planner.html" style="outline: 1px solid black !important; background-color: skyblue;">
+  <a class="planner-link" href="planner.html">
     Click here to improve your graph!
   </a>
 </p>

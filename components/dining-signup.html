@@ -2,7 +2,7 @@
   <h1 id="signup-heading">Welcome</h1>
   <p class="login-intro">Account registration is unavailable in this demo.</p>
   <form class="login-form">
-    <div class="login-field">
+    <form-field-component class="login-field">
       <label for="signup-email">Email</label>
       <input
         id="signup-email"
@@ -12,8 +12,8 @@
         placeholder="Email here..."
         disabled
       />
-    </div>
-    <div class="login-field">
+    </form-field-component>
+    <form-field-component class="login-field">
       <label for="signup-password">Password</label>
       <input
         id="signup-password"
@@ -23,7 +23,7 @@
         placeholder="We won’t look, promise!"
         disabled
       />
-    </div>
+    </form-field-component>
     <button class="login-button login-submit button button-primary" type="submit" disabled>Sign Up</button>
     <button class="login-button eraider-button button" type="button" disabled>
       <img src="assets/login/eraider.png" width="17" height="20" alt="" />

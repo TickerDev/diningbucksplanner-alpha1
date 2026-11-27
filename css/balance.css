@@ -5,7 +5,7 @@
 .balance-chart canvas { max-width: 100%; }
 .balance-suggestions { grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); margin-block-start: var(--space-4); }
 .balance-suggestions figure { overflow: hidden; }
-.balance-suggestions figcaption { padding-block: var(--space-3); font-size: .875rem; }
+.balance-suggestions figcaption { padding-block: var(--space-2); font-size: .875rem; }
 .balance-suggestions img { width: 100%; aspect-ratio: 2 / 1; object-fit: cover; display: block; }
 .balance-suggestions a { font-weight: 700; }
 .balance-summary { display: flex; flex-wrap: wrap; gap: .25rem 1.5rem; margin-block: -1rem 1.75rem; color: var(--muted-strong); }

@@ -13,30 +13,32 @@
     <button class="button" type="button" data-on:click="retryDining">Retry dining locations</button>
   </template>
   <template data-if="rows.length">
-    <div class="table-scroll" role="region" aria-labelledby="comparison-heading" tabindex="0">
-      <table id="t" class="sortable-table">
-        <thead>
-          <tr>
-            <th scope="col" data-bind:aria-sort="sortColumn === 'name' ? sortDirection : null">
-              <button type="button" class="sort-button" data-on:click="sort('name')">Location <img class="icon" src="assets/lucide/arrow-up-down.svg" alt="" /></button>
-            </th>
-            <th scope="col">Scheduled availability</th>
-            <th scope="col" data-bind:aria-sort="sortColumn === 'price' ? sortDirection : null">
-              <button type="button" class="sort-button" data-on:click="sort('price')">Lowest listed item price <img class="icon" src="assets/lucide/arrow-up-down.svg" alt="" /></button>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <template data-for="row in rows" data-key="row.id">
+    <table-frame-component>
+      <div class="table-scroll" role="region" aria-labelledby="comparison-heading" tabindex="0">
+        <table id="t" class="sortable-table">
+          <thead>
             <tr>
-              <td><a data-bind:href="row.href">{{row.name}}</a><br><span class="location-building">{{row.building}}</span></td>
-              <td>{{row.status}}</td>
-              <td>{{row.price}}</td>
+              <th scope="col" data-bind:aria-sort="sortColumn === 'name' ? sortDirection : null">
+                <button type="button" class="sort-button" data-on:click="sort('name')">Location <img class="icon" src="assets/lucide/arrow-up-down.svg" alt="" /></button>
+              </th>
+              <th scope="col">Scheduled availability</th>
+              <th scope="col" data-bind:aria-sort="sortColumn === 'price' ? sortDirection : null">
+                <button type="button" class="sort-button" data-on:click="sort('price')">Lowest listed item price <img class="icon" src="assets/lucide/arrow-up-down.svg" alt="" /></button>
+              </th>
             </tr>
-          </template>
-        </tbody>
-      </table>
-    </div>
+          </thead>
+          <tbody>
+            <template data-for="row in rows" data-key="row.id">
+              <tr>
+                <td><a data-bind:href="row.href">{{row.name}}</a><br><span class="location-building">{{row.building}}</span></td>
+                <td>{{row.status}}</td>
+                <td>{{row.price}}</td>
+              </tr>
+            </template>
+          </tbody>
+        </table>
+      </div>
+    </table-frame-component>
   </template>
   <a class="table-footer" href="dining-info.html">Campus dining hours and menus <img class="icon" src="assets/lucide/arrow-up-right.svg" alt="" /></a>
 </section>

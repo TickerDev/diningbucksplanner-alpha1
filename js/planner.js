@@ -1,5 +1,5 @@
-// Page-specific planner controls; the shared Plain app owns the navbar and footer.
-(function() {
+// Initialize after Plain mounts the planner fields and calendar slots.
+app.ready().then(() => {
   let selectedDay = 7;
 
   // Blank by default; user enters their own budget & expenses
@@ -22,7 +22,6 @@
   const btnSaveDay = document.getElementById('btn-save-day');
   const btnClearDay = document.getElementById('btn-clear-day');
   const saveFeedback = document.getElementById('save-feedback');
-  const arrowPosition = document.getElementById('arrow-position');
 
   const overallSwatch = document.getElementById('overall-swatch');
   const overallStatusText = document.getElementById('overall-status-text');
@@ -31,16 +30,9 @@
   const calendarGrid = document.getElementById('calendar-grid');
   if (!budgetInput || !monthSelect || !yearSelect || !calendarGrid) return;
 
-  function getSuffix(d) {
-    const n = parseInt(d, 10);
-    if (n >= 11 && n <= 13) return 'th';
-    switch (n % 10) {
-      case 1: return 'st';
-      case 2: return 'nd';
-      case 3: return 'rd';
-      default: return 'th';
-    }
-  }
+  const longDate = new Intl.DateTimeFormat('en-US', { dateStyle: 'long' });
+  let currentDate;
+  let feedbackTimer;
 
   function readBudget() {
     const budget = budgetInput.valueAsNumber;
@@ -57,41 +49,24 @@
 
     let totalSpent = 0;
 
-    // Update day button colors and tooltips
+    // Keep visible cell information and its accessible name in sync.
     dayButtons.forEach(btn => {
-      const day = parseInt(btn.dataset.day, 10);
+      const day = Number(btn.dataset.day);
       const data = dayData[day];
-      const hasData = data && data.amount !== undefined && data.amount !== '' && !isNaN(parseFloat(data.amount));
+      const location = data?.location?.trim() ?? '';
+      const hasAmount = data && data.amount !== undefined && data.amount !== '' && !isNaN(parseFloat(data.amount));
+      const amount = hasAmount ? parseFloat(data.amount) : 0;
+      const over = hasAmount && amount > dailyAvg;
+      totalSpent += amount;
 
-      btn.classList.remove('day-on', 'day-over');
-
-      if (hasData) {
-        const amount = parseFloat(data.amount);
-        totalSpent += amount;
-
-        if (totalBudget > 0) {
-          // If spent > daily allowance -> RED; if spent <= daily allowance -> GREEN
-          if (amount > dailyAvg) {
-            btn.classList.add('day-over');
-            btn.setAttribute('aria-label', `${monthLabel} ${day}: $${amount.toFixed(2)} at ${data.location || 'Dining'} (Over Budget)`);
-          } else {
-            btn.classList.add('day-on');
-            btn.setAttribute('aria-label', `${monthLabel} ${day}: $${amount.toFixed(2)} at ${data.location || 'Dining'} (On Budget)`);
-          }
-        } else {
-          // Budget not set yet: any spending > 0 is over budget
-          if (amount > 0) {
-            btn.classList.add('day-over');
-            btn.setAttribute('aria-label', `${monthLabel} ${day}: $${amount.toFixed(2)} at ${data.location || 'Dining'} (Over Budget)`);
-          } else {
-            btn.classList.add('day-on');
-            btn.setAttribute('aria-label', `${monthLabel} ${day}: $0.00 (On Budget)`);
-          }
-        }
-      } else {
-        // Blank by default: unlogged days stay clean/neutral
-        btn.setAttribute('aria-label', `${monthLabel} ${day}: No spend logged`);
-      }
+      btn.classList.toggle('day-on', Boolean(hasAmount && !over));
+      btn.classList.toggle('day-over', Boolean(over));
+      btn.querySelector('.calendar-amount').textContent = hasAmount ? `$${amount.toFixed(2)}` : '—';
+      btn.querySelector('.calendar-location').textContent = location;
+      const name = hasAmount
+        ? `$${amount.toFixed(2)} at ${location || 'Dining'} (${over ? 'Over Budget' : 'On Budget'})`
+        : location ? `${location}, no spend logged` : 'No spend logged';
+      btn.setAttribute('aria-label', `${monthLabel} ${day}: ${name}`);
     });
 
     // Metrics Banner
@@ -140,11 +115,22 @@
 
     // Update detail card for currently selected day
     updateDetailCard(dailyAvg);
-    updateArrowPosition();
   }
 
   function updateDetailCard(dailyAvg) {
-    detailHeading.textContent = `For ${monthLabel} ${selectedDay}${getSuffix(selectedDay)}:`;
+    const date = new Date(Number(yearSelect.value), Number(monthSelect.value), selectedDay);
+    const label = longDate.format(date);
+    if (label !== currentDate) {
+      const time = document.createElement('time');
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      time.dateTime = `${date.getFullYear()}-${month}-${day}`;
+      time.textContent = label;
+      detailHeading.replaceChildren(time);
+      currentDate = label;
+      saveFeedback.classList.remove('visible');
+      clearTimeout(feedbackTimer);
+    }
 
     const totalBudget = readBudget();
     const data = dayData[selectedDay];
@@ -164,21 +150,6 @@
         dayStatusPill.classList.add('status-on');
         dayStatusPill.textContent = 'On Budget';
       }
-    }
-  }
-
-  // Move arrow vertically to align with the selected day's button
-  function updateArrowPosition() {
-    const selectedBtn = document.querySelector(`.calendar-day[data-day="${selectedDay}"]`);
-    const detailBox = document.querySelector('.day-detail-box');
-    if (selectedBtn && arrowPosition && detailBox && window.innerWidth > 820) {
-      const boxRect = detailBox.getBoundingClientRect();
-      const btnRect = selectedBtn.getBoundingClientRect();
-      const relativeY = (btnRect.top + btnRect.height / 2) - (boxRect.top + 36);
-      const clampedY = Math.max(-10, Math.min(relativeY, boxRect.height - 20));
-      arrowPosition.setAttribute('transform', `translate(0 ${clampedY})`);
-    } else if (arrowPosition) {
-      arrowPosition.removeAttribute('transform');
     }
   }
 
@@ -202,7 +173,6 @@
     const totalBudget = readBudget();
     const dailyAvg = totalBudget > 0 ? (totalBudget / daysInMonth) : 0;
     updateDetailCard(dailyAvg);
-    updateArrowPosition();
   }
 
   // Save spending for current day
@@ -223,12 +193,7 @@
 
     recalculate();
 
-    // Flash save feedback
-    if (saveFeedback) {
-      saveFeedback.textContent = 'Saved!';
-      saveFeedback.classList.add('visible');
-      setTimeout(() => saveFeedback.classList.remove('visible'), 1600);
-    }
+    showFeedback('Saved!');
   }
 
   // Clear spending for current day
@@ -239,11 +204,14 @@
 
     recalculate();
 
-    if (saveFeedback) {
-      saveFeedback.textContent = 'Cleared!';
-      saveFeedback.classList.add('visible');
-      setTimeout(() => saveFeedback.classList.remove('visible'), 1600);
-    }
+    showFeedback('Cleared!');
+  }
+
+  function showFeedback(message) {
+    clearTimeout(feedbackTimer);
+    saveFeedback.textContent = message;
+    saveFeedback.classList.add('visible');
+    feedbackTimer = setTimeout(() => saveFeedback.classList.remove('visible'), 1600);
   }
 
   if (budgetInput) {
@@ -260,6 +228,7 @@
         if (!dayData[selectedDay]) dayData[selectedDay] = { location: '', amount: '' };
         dayData[selectedDay].location = planLocationInput.value;
       }
+      recalculate();
     });
   }
 
@@ -319,7 +288,14 @@
       button.type = 'button';
       button.className = 'calendar-day';
       button.dataset.day = String(day);
-      button.textContent = String(day);
+      const number = document.createElement('span');
+      number.className = 'calendar-date';
+      number.textContent = String(day);
+      const amount = document.createElement('span');
+      amount.className = 'calendar-amount';
+      const location = document.createElement('span');
+      location.className = 'calendar-location';
+      button.append(number, amount, location);
       button.addEventListener('click', () => selectDay(day));
       dayButtons.push(button);
       cells.append(button);
@@ -346,6 +322,5 @@
   yearSelect.addEventListener('change', renderMonth);
   prevBtn.addEventListener('click', () => changeMonth(-1));
   nextBtn.addEventListener('click', () => changeMonth(1));
-  window.addEventListener('resize', updateArrowPosition);
   renderMonth();
-})();
+});

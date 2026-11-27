@@ -45,12 +45,16 @@
         <section class="balance-chart rule-section">
           <h2>Last Week</h2>
           <p id="last-week-summary"></p>
-          <canvas id="last-week" role="img" aria-labelledby="last-week-summary"></canvas>
+          <chart-frame-component>
+            <canvas id="last-week" role="img" aria-labelledby="last-week-summary"></canvas>
+          </chart-frame-component>
         </section>
         <section class="balance-chart rule-section">
           <h2>This Week</h2>
           <p id="this-week-summary"></p>
-          <canvas id="this-week" role="img" aria-labelledby="this-week-summary"></canvas>
+          <chart-frame-component>
+            <canvas id="this-week" role="img" aria-labelledby="this-week-summary"></canvas>
+          </chart-frame-component>
         </section>
       </div>
       <dining-suggestions-component></dining-suggestions-component>

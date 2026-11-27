@@ -27,55 +27,74 @@
     <!-- Plain updates the prop automatically whenever currentPage changes. -->
     <navbar-component page="{{currentPage}}"></navbar-component>
     <main id="main-content" class="home-dashboard" tabindex="-1">
-      <page-heading-component title="Dining Bucks overview" description="Compare campus dining and project spending over 112 days."></page-heading-component>
-      <div class="home-grid">
-        <section class="col-left" aria-label="Campus dining and nutrition">
-          <dining-comparison-component></dining-comparison-component>
-        </section>
-        <section class="col-right chart-card" aria-labelledby="projection-heading">
-          <h2 id="projection-heading">Dining Bucks Projection</h2>
+      <page-heading-component title="Dining Bucks overview"></page-heading-component>
+      <section class="chart-card" aria-labelledby="projection-heading">
+        <h2 id="projection-heading">Dining Bucks Projection</h2>
+        <div class="projection-layout">
           <div class="chart-field-grid">
-            <div class="figma-input-group">
-              <label class="figma-input-label budget-label" for="dining-budget">Budget</label>
-              <input type="number" id="dining-budget" class="control figma-input-field" placeholder="2200" min="0" step="0.01" />
-            </div>
-            <div class="figma-input-group">
-              <label class="figma-input-label planned-spending-label" for="planned-spending">Planned Spending Per Day</label>
-              <input type="number" id="planned-spending" class="control figma-input-field" placeholder="8" min="0" step="0.01" />
-            </div>
+            <form-field-component>
+              <label for="dining-budget">Budget ($)</label>
+              <input type="number" id="dining-budget" class="control" value="2200" placeholder="2200" min="0" step="0.01" />
+            </form-field-component>
+            <form-field-component>
+              <label for="planned-spending">Planned Spending Per Day ($)</label>
+              <input type="number" id="planned-spending" class="control" value="8" placeholder="0" min="0" step="0.01" />
+            </form-field-component>
           </div>
 
-          <div class="chart-svg-wrap">
-            <p class="chart-gauge-label">Balance <span id="label-max-budget">$2,200</span></p>
-            <svg id="spending-chart" viewBox="4 6 351 223" role="img" aria-labelledby="chart-title chart-description">
-              <title id="chart-title">Projected spending over 112 days</title>
-              <desc id="chart-description">Spending starts at zero. The dashed line represents the pace that uses the budget evenly over the semester. The gauge shows the share of the budget projected to be spent.</desc>
-              <line class="chart-grid-line" x1="55" y1="20" x2="330" y2="20" />
-              <line class="chart-grid-line" x1="55" y1="65" x2="330" y2="65" />
-              <line class="chart-grid-line" x1="55" y1="110" x2="330" y2="110" />
-              <line class="chart-grid-line" x1="55" y1="155" x2="330" y2="155" />
-              <rect class="chart-gauge" x="25" y="20" width="14" height="170" />
-              <rect id="gauge-spent-fill" x="25" y="190" width="14" height="0" />
-              <text x="32" y="206" text-anchor="middle">$0</text>
-              <line class="chart-axis" x1="55" y1="190" x2="330" y2="190" />
-              <line class="chart-axis" x1="55" y1="20" x2="55" y2="190" />
-              <line id="line-target" x1="55" y1="190" x2="330" y2="20" />
-              <line id="line-projected" x1="55" y1="190" x2="330" y2="190" />
-              <circle id="point-finish" cx="330" cy="190" r="4" />
-              <text x="55" y="207" text-anchor="start">Day 0</text>
-              <text x="192" y="207" text-anchor="middle">Day 56</text>
-              <text x="330" y="207" text-anchor="end" id="label-end-day">Day 112</text>
-              <text class="axis-label" x="192" y="224" text-anchor="middle">Semester Timeline (Days)</text>
-            </svg>
-            <div class="chart-legend"><span>Projected spending</span><span>Target pace</span></div>
+          <chart-frame-component class="projection-chart">
+            <figure class="projection-figure" aria-labelledby="chart-title" aria-describedby="chart-description status-tag-text">
+              <figcaption class="plot-caption">
+                <span id="chart-title">Cumulative spending ($)</span>
+                <span class="chart-gauge-label">Budget <strong id="label-max-budget">$2,200</strong></span>
+              </figcaption>
+              <p id="chart-description" class="sr-only">Projected spending over 112 days. The dashed line shows the pace that uses the budget evenly over the semester. The gauge shows the share of the budget projected to be spent.</p>
+              <div class="plot-grid" aria-hidden="true">
+                <div class="plot-y-axis">
+                  <span id="budget-axis-max">$2,200</span>
+                  <span id="budget-axis-mid">$1,100</span>
+                  <span>$0</span>
+                </div>
+                <svg id="spending-chart" viewBox="18 20 312 170" preserveAspectRatio="none">
+                  <line class="chart-grid-line" x1="55" y1="20" x2="330" y2="20" />
+                  <line class="chart-grid-line" x1="55" y1="62.5" x2="330" y2="62.5" />
+                  <line class="chart-grid-line" x1="55" y1="105" x2="330" y2="105" />
+                  <line class="chart-grid-line" x1="55" y1="147.5" x2="330" y2="147.5" />
+                  <rect class="chart-gauge" x="25" y="20" width="8" height="170" />
+                  <rect id="gauge-spent-fill" x="25" y="190" width="8" height="0" />
+                  <line class="chart-axis" x1="55" y1="190" x2="330" y2="190" />
+                  <line class="chart-axis" x1="55" y1="20" x2="55" y2="190" />
+                  <line id="line-target" x1="55" y1="190" x2="330" y2="20" />
+                  <line id="line-projected" x1="55" y1="190" x2="330" y2="190" />
+                  <line id="point-finish" x1="330" x2="330" y1="190" y2="190" />
+                </svg>
+                <div class="plot-x-axis">
+                  <span>Day 0</span>
+                  <span>Day 56</span>
+                  <span id="label-end-day">Day 112</span>
+                </div>
+                <p class="plot-x-title">Semester timeline (days)</p>
+              </div>
+              <div class="chart-legend">
+                <span class="legend-projected">Projected spending</span>
+                <span class="legend-target">Target pace</span>
+                <span class="legend-gauge">Budget used</span>
+              </div>
+            </figure>
+          </chart-frame-component>
+
+          <div class="projection-feedback">
+            <p id="status-tag-text" class="chart-status" role="status">Enter daily spend to project</p>
+            <div class="chart-actions">
+              <a class="planner-link button button-primary" href="planner.html">Open Planner</a>
+              <a class="planner-link button" href="balance.html">View Balance</a>
+            </div>
           </div>
-          <p id="status-tag-text" class="chart-status" role="status">Enter daily spend to project</p>
-          <div class="chart-actions">
-            <a class="planner-link button button-primary" href="planner.html"><img class="icon action-icon" src="assets/lucide/calendar-days.svg" alt="" />Open Planner</a>
-            <a class="planner-link button" href="balance.html">View Balance</a>
-          </div>
-        </section>
-      </div>
+        </div>
+      </section>
+      <section class="home-dining" aria-label="Campus dining and nutrition">
+        <dining-comparison-component></dining-comparison-component>
+      </section>
     </main>
     <!-- Loads components/footer.html and footer.js, passing the same current-page value. -->
     <footer-component page="{{currentPage}}"></footer-component>

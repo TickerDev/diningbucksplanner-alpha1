@@ -1,4 +1,4 @@
-{
+app.ready().then(() => {
   const theme = getComputedStyle(document.documentElement);
   const color = (token) => theme.getPropertyValue(token).trim();
   const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -60,4 +60,4 @@
       },
     });
   }
-}
+});

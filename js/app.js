@@ -45,16 +45,6 @@ function isSignedIn() {
   }
 }
 
-const loginForm = document.getElementById('login-form');
-loginForm?.addEventListener('submit', () => {
-  try {
-    document.cookie = `${signInCookie}; ${signInCookieOptions}`;
-  } catch {
-    // Let the form open Balance even when cookies are unavailable.
-  }
-  loginForm.reset();
-});
-
 // Plain keeps the page label available to reactive bindings and component props.
 const state = Plain.reactive({
   currentPage: activePage
@@ -89,10 +79,15 @@ window.addEventListener('pageshow', (event) => {
 document.title = `${state.currentPage} | Your Dining Bucks Planner`;
 
 // Each HTML page starts its own Plain app; ordinary links load a new document.
-Plain.createApp({
+const app = Plain.createApp({
   state,
   // Known modules can load directly without a discovery request.
   components: {
+    'form-field-component': { behavior: false },
+    'calendar-frame-component': { behavior: false },
+    'financial-statistics-component': { behavior: false },
+    'chart-frame-component': { behavior: false },
+    'table-frame-component': { behavior: false },
     'page-heading-component': { behavior: './page-heading.js' },
     'loading-skeleton-component': { behavior: false },
     'navbar-component': { behavior: './navbar.js' },
@@ -123,7 +118,7 @@ Plain.createApp({
 // --- Interactive Burn-Up Chart Engine ---
 let projectionFrame;
 
-function drawProjection(line, point, gauge, x, y, height, gaugeBottom) {
+function drawProjection(line, point, gauge, x, y, height, gaugeBottom, animate) {
   cancelAnimationFrame(projectionFrame);
   const start = [Number(line.getAttribute('x2')), Number(line.getAttribute('y2')),
     Number(gauge.getAttribute('height'))];
@@ -134,13 +129,15 @@ function drawProjection(line, point, gauge, x, y, height, gaugeBottom) {
       start[index] + (value - start[index]) * progress);
     line.setAttribute('x2', nextX);
     line.setAttribute('y2', nextY);
-    point.setAttribute('cx', nextX);
-    point.setAttribute('cy', nextY);
+    point.setAttribute('x1', nextX);
+    point.setAttribute('x2', nextX);
+    point.setAttribute('y1', nextY);
+    point.setAttribute('y2', nextY);
     gauge.setAttribute('y', gaugeBottom - nextHeight);
     gauge.setAttribute('height', nextHeight);
   }
 
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches || end.every((value, index) => value === start[index])) {
+  if (!animate || matchMedia('(prefers-reduced-motion: reduce)').matches || end.every((value, index) => value === start[index])) {
     draw(1);
     return;
   }
@@ -153,7 +150,26 @@ function drawProjection(line, point, gauge, x, y, height, gaugeBottom) {
   }
   projectionFrame = requestAnimationFrame(tick);
 }
-function updateSpendingGraph() {
+const projectionAxisMoney = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+  maximumFractionDigits: 2,
+  minimumFractionDigits: 0,
+});
+const projectionCompactMoney = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+  notation: 'compact',
+  maximumFractionDigits: 1,
+});
+
+function formatProjectionTick(amount) {
+  return amount >= 10000 && amount < 1e15
+    ? projectionCompactMoney.format(amount)
+    : amount >= 1e15 ? `$${amount.toExponential(1)}` : projectionAxisMoney.format(amount);
+}
+
+function updateSpendingGraph(animate = true) {
   const budgetInput = document.getElementById('dining-budget');
   const spendingInput = document.getElementById('planned-spending');
 
@@ -189,7 +205,9 @@ function updateSpendingGraph() {
     return;
   }
 
-  if (labelBudget) labelBudget.textContent = `$${budget.toLocaleString()}`;
+  if (labelBudget) labelBudget.textContent = projectionAxisMoney.format(budget);
+  document.getElementById('budget-axis-max').textContent = formatProjectionTick(budget);
+  document.getElementById('budget-axis-mid').textContent = formatProjectionTick(budget / 2);
 
   // 1. Calculate trajectory line and intersection
   let xTarget = xMax;
@@ -217,7 +235,7 @@ function updateSpendingGraph() {
   // The displayed trajectory, endpoint and gauge share one animation.
   const fillFraction = budget > 0 ? Math.min(1, projectedTotal / budget) : Number(dailySpend > 0);
   drawProjection(lineProj, pointFinish, gaugeFill, xTarget, yTarget,
-    gaugeTotalHeight * fillFraction, gaugeTop + gaugeTotalHeight);
+    gaugeTotalHeight * fillFraction, gaugeTop + gaugeTotalHeight, animate);
   chartCard.classList.toggle('is-over-budget', isOverBudget);
 
   if (dailySpend <= 0) {
@@ -235,13 +253,24 @@ function updateSpendingGraph() {
 }
 
 // Bind live events
-document.addEventListener('DOMContentLoaded', () => {
+app.ready().then(() => {
+  const loginForm = document.getElementById('login-form');
+  loginForm?.addEventListener('submit', () => {
+    try {
+      document.cookie = `${signInCookie}; ${signInCookieOptions}`;
+    } catch {
+      // Let the form open Balance even when cookies are unavailable.
+    }
+    loginForm.reset();
+  });
+
   const bInput = document.getElementById('dining-budget');
   const sInput = document.getElementById('planned-spending');
 
   if (bInput && sInput) {
-    bInput.addEventListener('input', updateSpendingGraph);
-    sInput.addEventListener('input', updateSpendingGraph);
-    updateSpendingGraph();
+    const updateFromInput = () => updateSpendingGraph();
+    bInput.addEventListener('input', updateFromInput);
+    sInput.addEventListener('input', updateFromInput);
+    updateSpendingGraph(false);
   }
 });

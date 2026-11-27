@@ -1,54 +1,63 @@
-<div class="table-container">
-  <p role="status">
+<section class="table-container panel" aria-labelledby="comparison-heading">
+  <h2 id="comparison-heading">Campus dining locations</h2>
+  <p class="resource-status" role="status">
     <template data-if="dining.initialPending">Loading campus dining…</template>
     <template data-if="dining.error">Campus dining could not load.</template>
     <template data-if="dining.value && dining.value.stale">Some dining information may be out of date.</template>
     <template data-if="dining.value && rows.length === 0">No dining locations are listed.</template>
   </p>
+  <template data-if="dining.initialPending">
+    <loading-skeleton-component></loading-skeleton-component>
+  </template>
   <template data-if="dining.error">
-    <button type="button" data-on:click="retryDining">Retry dining locations</button>
+    <button class="button" type="button" data-on:click="retryDining">Retry dining locations</button>
   </template>
   <template data-if="rows.length">
-    <table id="t" class="sortable-table">
-      <thead>
-        <tr>
-          <th scope="col" data-bind:aria-sort="sortColumn === 'name' ? sortDirection : null">
-            <button type="button" class="sort-button" data-on:click="sort('name')">Location</button>
-          </th>
-          <th scope="col">Scheduled availability</th>
-          <th scope="col" data-bind:aria-sort="sortColumn === 'price' ? sortDirection : null">
-            <button type="button" class="sort-button" data-on:click="sort('price')">Lowest listed item price</button>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <template data-for="row in rows" data-key="row.id">
+    <div class="table-scroll" role="region" aria-labelledby="comparison-heading" tabindex="0">
+      <table id="t" class="sortable-table">
+        <thead>
           <tr>
-            <td><a data-bind:href="row.href">{{row.name}}</a><br>{{row.building}}</td>
-            <td>{{row.status}}</td>
-            <td>{{row.price}}</td>
+            <th scope="col" data-bind:aria-sort="sortColumn === 'name' ? sortDirection : null">
+              <button type="button" class="sort-button" data-on:click="sort('name')">Location <img class="icon" src="assets/lucide/arrow-up-down.svg" alt="" /></button>
+            </th>
+            <th scope="col">Scheduled availability</th>
+            <th scope="col" data-bind:aria-sort="sortColumn === 'price' ? sortDirection : null">
+              <button type="button" class="sort-button" data-on:click="sort('price')">Lowest listed item price <img class="icon" src="assets/lucide/arrow-up-down.svg" alt="" /></button>
+            </th>
           </tr>
-        </template>
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          <template data-for="row in rows" data-key="row.id">
+            <tr>
+              <td><a data-bind:href="row.href">{{row.name}}</a><br><span class="location-building">{{row.building}}</span></td>
+              <td>{{row.status}}</td>
+              <td>{{row.price}}</td>
+            </tr>
+          </template>
+        </tbody>
+      </table>
+    </div>
   </template>
-  <a class="table-footer" href="dining-info.html">Campus dining hours and menus</a>
-</div>
+  <a class="table-footer" href="dining-info.html">Campus dining hours and menus <img class="icon" src="assets/lucide/arrow-up-right.svg" alt="" /></a>
+</section>
 
-<section id="campus-menu-nutrition" class="nutrition-card-group">
+<section id="campus-menu-nutrition" class="nutrition-card-group panel panel-inset">
   <h2 class="nutrition-header">Campus menu nutrition</h2>
-  <p role="status">
+  <p class="resource-status" role="status">
     <template data-if="nutrition.initialPending">Loading nutrition…</template>
     <template data-if="nutrition.error">Nutrition could not load.</template>
     <template data-if="nutrition.value && nutrition.value.stale">Some nutrition information may be out of date.</template>
     <template data-if="nutrition.value && nutritionOptions.length === 0">No nutrition records are listed.</template>
   </p>
+  <template data-if="nutrition.initialPending">
+    <loading-skeleton-component></loading-skeleton-component>
+  </template>
   <template data-if="nutrition.error">
-    <button type="button" data-on:click="retryNutrition">Retry nutrition</button>
+    <button class="button" type="button" data-on:click="retryNutrition">Retry nutrition</button>
   </template>
   <template data-if="nutritionOptions.length">
     <label for="dining-nutrition-item">Menu item</label>
-    <select id="dining-nutrition-item" data-model="nutritionId">
+    <select class="control" id="dining-nutrition-item" data-model="nutritionId">
       <option value="">Choose an item</option>
       <template data-for="item in nutritionOptions" data-key="item.key">
         <option data-bind:value="item.key">{{item.label}}</option>

@@ -1,4 +1,4 @@
-<section class="login-content signup-content" aria-labelledby="signup-heading">
+<section class="login-content panel signup-content" aria-labelledby="signup-heading">
   <h1 id="signup-heading">Welcome</h1>
   <p class="login-intro">Account registration is unavailable in this demo.</p>
   <form class="login-form">
@@ -7,7 +7,7 @@
       <input
         id="signup-email"
         name="email"
-        type="email"
+        class="control" type="email"
         autocomplete="email"
         placeholder="Email here..."
         disabled
@@ -18,14 +18,14 @@
       <input
         id="signup-password"
         name="password"
-        type="password"
+        class="control" type="password"
         autocomplete="new-password"
         placeholder="We won’t look, promise!"
         disabled
       />
     </div>
-    <button class="login-button login-submit" type="submit" disabled>Sign Up</button>
-    <button class="login-button eraider-button" type="button" disabled>
+    <button class="login-button login-submit button button-primary" type="submit" disabled>Sign Up</button>
+    <button class="login-button eraider-button button" type="button" disabled>
       <img src="assets/login/eraider.png" width="17" height="20" alt="" />
       <span>Continue with eRaider</span>
     </button>
@@ -34,5 +34,5 @@
     <img src="assets/signup/login-divider.svg" alt="" aria-hidden="true" />
     <span>Been here before?</span>
   </div>
-  <a class="login-button signup-login-link" href="login.html">Login</a>
+  <a class="login-button signup-login-link button" href="login.html">Login</a>
 </section>

@@ -93,6 +93,8 @@ Plain.createApp({
   state,
   // Known modules can load directly without a discovery request.
   components: {
+    'page-heading-component': { behavior: './page-heading.js' },
+    'loading-skeleton-component': { behavior: false },
     'navbar-component': { behavior: './navbar.js' },
     'footer-component': { behavior: './footer.js' },
     'dining-comparison-component': { behavior: './dining-comparison.js' },
@@ -119,6 +121,38 @@ Plain.createApp({
 });
 
 // --- Interactive Burn-Up Chart Engine ---
+let projectionFrame;
+
+function drawProjection(line, point, gauge, x, y, height, gaugeBottom) {
+  cancelAnimationFrame(projectionFrame);
+  const start = [Number(line.getAttribute('x2')), Number(line.getAttribute('y2')),
+    Number(gauge.getAttribute('height'))];
+  const end = [x, y, height];
+
+  function draw(progress) {
+    const [nextX, nextY, nextHeight] = end.map((value, index) =>
+      start[index] + (value - start[index]) * progress);
+    line.setAttribute('x2', nextX);
+    line.setAttribute('y2', nextY);
+    point.setAttribute('cx', nextX);
+    point.setAttribute('cy', nextY);
+    gauge.setAttribute('y', gaugeBottom - nextHeight);
+    gauge.setAttribute('height', nextHeight);
+  }
+
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches || end.every((value, index) => value === start[index])) {
+    draw(1);
+    return;
+  }
+
+  const started = performance.now();
+  function tick(now) {
+    const progress = Math.max(0, Math.min((now - started) / 190, 1));
+    draw(1 - (1 - progress) ** 3);
+    if (progress < 1) projectionFrame = requestAnimationFrame(tick);
+  }
+  projectionFrame = requestAnimationFrame(tick);
+}
 function updateSpendingGraph() {
   const budgetInput = document.getElementById('dining-budget');
   const spendingInput = document.getElementById('planned-spending');
@@ -128,9 +162,9 @@ function updateSpendingGraph() {
   const gaugeFill = document.getElementById('gauge-spent-fill');
   const labelBudget = document.getElementById('label-max-budget');
   const statusText = document.getElementById('status-tag-text');
-  const statusBg = document.getElementById('status-tag-bg');
+  const chartCard = statusText?.closest('.chart-card');
 
-  if (!budgetInput || !spendingInput || !lineProj) return;
+  if (!budgetInput || !spendingInput || !lineProj || !pointFinish || !gaugeFill || !chartCard) return;
 
   // Configuration Constants matching SVG ViewBox
   const totalDays = 112;      // 16 weeks * 7 days
@@ -150,6 +184,7 @@ function updateSpendingGraph() {
   const projectedTotal = dailySpend * totalDays;
   if (!budgetInput.validity.valid || !spendingInput.validity.valid ||
       !Number.isFinite(budget) || !Number.isFinite(projectedTotal)) {
+    statusText.dataset.state = 'invalid';
     statusText.textContent = 'Enter valid, nonnegative amounts';
     return;
   }
@@ -179,42 +214,23 @@ function updateSpendingGraph() {
     yTarget = yBase - (plotHeight * spendFraction);
   }
 
-  // Update line and terminal dot
-  lineProj.setAttribute('x1', xOrigin);
-  lineProj.setAttribute('y1', yBase);
-  lineProj.setAttribute('x2', xTarget);
-  lineProj.setAttribute('y2', yTarget);
-
-  pointFinish.setAttribute('cx', xTarget);
-  pointFinish.setAttribute('cy', yTarget);
-
-  const themeColor = isOverBudget ? '#D32F2F' : '#2E7D32';
-  lineProj.setAttribute('stroke', themeColor);
-  pointFinish.setAttribute('fill', themeColor);
-
-  // 2. Update Y-Axis Vertical Balance Bar
+  // The displayed trajectory, endpoint and gauge share one animation.
   const fillFraction = budget > 0 ? Math.min(1, projectedTotal / budget) : Number(dailySpend > 0);
-  const fillHeight = gaugeTotalHeight * fillFraction;
-  const fillY = (gaugeTop + gaugeTotalHeight) - fillHeight;
+  drawProjection(lineProj, pointFinish, gaugeFill, xTarget, yTarget,
+    gaugeTotalHeight * fillFraction, gaugeTop + gaugeTotalHeight);
+  chartCard.classList.toggle('is-over-budget', isOverBudget);
 
-  gaugeFill.setAttribute('y', fillY);
-  gaugeFill.setAttribute('height', fillHeight);
-  gaugeFill.setAttribute('fill', isOverBudget ? '#EF5350' : '#81C784');
-
-  // 3. Update Status Banner
-  if (statusText && statusBg) {
-    if (dailySpend <= 0) {
-      statusText.textContent = "Enter daily spend to project";
-      statusText.setAttribute('fill', '#555555');
-    } else if (isOverBudget) {
-      const daysLeft = Math.floor(budget / dailySpend);
-      statusText.textContent = `Alert: Budget empty on Day ${daysLeft}!`;
-      statusText.setAttribute('fill', '#D32F2F');
-    } else {
-      const surplus = budget - projectedTotal;
-      statusText.textContent = `On Track! +$${surplus.toFixed(0)} leftover`;
-      statusText.setAttribute('fill', '#2E7D32');
-    }
+  if (dailySpend <= 0) {
+    statusText.dataset.state = 'neutral';
+    statusText.textContent = 'Enter daily spend to project';
+  } else if (isOverBudget) {
+    const daysLeft = Math.floor(budget / dailySpend);
+    statusText.dataset.state = 'over';
+    statusText.textContent = `Alert: Budget empty on Day ${daysLeft}!`;
+  } else {
+    const surplus = budget - projectedTotal;
+    statusText.dataset.state = 'on';
+    statusText.textContent = `On Track! +$${surplus.toFixed(0)} leftover`;
   }
 }
 

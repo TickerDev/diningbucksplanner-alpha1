@@ -1,17 +1,20 @@
 <section>
   <h2>Dining Suggestions</h2>
-  <p role="status">
+  <p class="resource-status" role="status">
     <template data-if="dining.initialPending">Loading published menu items…</template>
     <template data-if="dining.error">Dining suggestions could not load.</template>
     <template data-if="dining.value && dining.value.stale">Some menu prices may be out of date.</template>
     <template data-if="dining.value && suggestions.length === 0">No priced menu items are listed.</template>
   </p>
+  <template data-if="dining.initialPending">
+    <loading-skeleton-component></loading-skeleton-component>
+  </template>
   <template data-if="dining.error">
-    <button type="button" data-on:click="retry">Retry dining suggestions</button>
+    <button class="button" type="button" data-on:click="retry">Retry dining suggestions</button>
   </template>
   <div class="balance-suggestions">
     <template data-for="suggestion in suggestions" data-key="suggestion.id">
-      <figure>
+      <figure class="panel">
         <template data-if="suggestion.image">
           <img data-bind:src="suggestion.image" alt="" loading="lazy" />
         </template>

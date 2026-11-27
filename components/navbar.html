@@ -5,11 +5,11 @@
 -->
 <header class="site-header" id="page-top">
   <div class="shell-width header-inner">
-    <p class="header-breadcrumb">
-      <a href="index.html">Your Dining Bucks Planner</a>
-      <span aria-hidden="true">&gt;</span>
-      <span>{{props.page}}</span> <!-- Plain inserts the page prop as text and updates it when the prop changes. -->
-    </p>
+    <nav class="header-breadcrumb" aria-label="Breadcrumb">
+      <a href="index.html"><img class="icon brand-icon" src="assets/lucide/wallet.svg" alt="" />Your Dining Bucks Planner</a>
+      <img class="icon" src="assets/lucide/chevron-right.svg" alt="" />
+      <span aria-current="page">{{props.page}}</span> <!-- Plain inserts the page prop as text and updates it when the prop changes. -->
+    </nav>
     <nav class="primary-nav" aria-label="Main navigation">
       <!-- settings.navigation is the shared list of links supplied in js/app.js. -->
       <!-- data-for repeats this template once for each link, naming the current link "item". -->
@@ -33,7 +33,7 @@
           <img src="assets/pfp.jpeg" width="38" height="38" alt="" />
         </summary>
         <div class="profile-menu-panel">
-          <button type="button" data-log-out>Log out</button>
+          <button class="button" type="button" data-log-out>Log out</button>
         </div>
       </details>
     </template>

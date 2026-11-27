@@ -33,19 +33,21 @@
   <navbar-component page="{{currentPage}}"></navbar-component>
   <main id="main-content" tabindex="-1">
     <div class="page-placeholder">
-      <h1>{{currentPage}}</h1> <!-- Plain inserts currentPage as text and updates it when the value changes. -->
-      <template data-if="signedIn">
-        <p>Signed in for this visit.</p>
-      </template>
-      <p>You’re viewing sample balance and spending data.</p>
-      <p>Sample spending target: 10.50 Dining Bucks per day.</p>
+      <page-heading-component title="{{currentPage}}"></page-heading-component>
+      <div class="balance-summary">
+        <template data-if="signedIn">
+          <p>Signed in for this visit.</p>
+        </template>
+        <p>You’re viewing sample balance and spending data.</p>
+        <p>Sample spending target: 10.50 Dining Bucks per day.</p>
+      </div>
       <div class="balance-charts">
-        <section class="balance-chart">
+        <section class="balance-chart panel panel-inset">
           <h2>Last Week</h2>
           <p id="last-week-summary"></p>
           <canvas id="last-week" role="img" aria-labelledby="last-week-summary"></canvas>
         </section>
-        <section class="balance-chart">
+        <section class="balance-chart panel panel-inset">
           <h2>This Week</h2>
           <p id="this-week-summary"></p>
           <canvas id="this-week" role="img" aria-labelledby="this-week-summary"></canvas>

@@ -1,18 +1,21 @@
 <section class="dining-info" aria-labelledby="dining-heading">
   <h1 id="dining-heading">Campus Dining Locations</h1>
-  <p role="status">
+  <p class="resource-status" role="status">
     <template data-if="dining.initialPending">Loading campus dining…</template>
     <template data-if="dining.error">Campus dining could not load.</template>
     <template data-if="dining.value && dining.value.stale">Some dining information may be out of date.</template>
     <template data-if="dining.value && locations.length === 0">No dining locations are listed.</template>
   </p>
+  <template data-if="dining.initialPending">
+    <loading-skeleton-component></loading-skeleton-component>
+  </template>
   <template data-if="dining.error">
-    <button type="button" data-on:click="retry">Retry dining locations</button>
+    <button class="button" type="button" data-on:click="retry">Retry dining locations</button>
   </template>
 
   <div class="dining-layout">
     <section class="dining-col-left" aria-label="Campus dining hours and menus">
-      <ul class="dining-locations-list" role="list">
+      <ul class="dining-locations-list panel" role="list">
         <template data-for="location in locations" data-key="location.id">
           <li class="dining-location-item">
             <button type="button" class="dining-pill-btn"
@@ -108,7 +111,7 @@
       </ul>
     </section>
 
-    <aside class="dining-col-right" aria-label="Dining location details">
+    <aside class="dining-col-right panel panel-inset" aria-label="Dining location details">
       <template data-if="selected">
         <section>
           <h2>{{selected.name}}</h2>

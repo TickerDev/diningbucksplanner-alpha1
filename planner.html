@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Planner | Your Dining Bucks Planner</title>
+    <link rel="stylesheet" href="css/styles.css" />
     <link rel="stylesheet" href="css/planner.css" />
     <link rel="stylesheet" href="css/navbar.css" />
     <link rel="stylesheet" href="css/footer.css" />
@@ -20,9 +21,10 @@
 
     <!-- Main Content: Planner & John's Section -->
     <main id="main-content" tabindex="-1">
+      <page-heading-component title="Planner" description="Set a budget, then track planned or actual spending by day."></page-heading-component>
       <div class="planner-container">
         <!-- LEFT COLUMN: Budget input, Averaging metrics, Key, and Day Details with Arrow -->
-        <section class="planner-left" aria-label="Planner Budget Controls">
+        <section class="planner-left panel panel-inset" aria-label="Planner Budget Controls">
           <!-- Enter Budget -->
           <div class="budget-input-group">
             <label for="planner-budget">Enter Budget: $</label>
@@ -30,7 +32,7 @@
               type="number"
               id="planner-budget"
               name="budget"
-              class="budget-input-field"
+              class="budget-input-field control"
               placeholder="0.00"
               value=""
               min="0"
@@ -81,7 +83,7 @@
                   type="text"
                   id="plan-location"
                   name="planLocation"
-                  class="underlined-input"
+                  class="underlined-input control"
                   placeholder="e.g. The Commons"
                   value=""
                 />
@@ -93,7 +95,7 @@
                   type="number"
                   id="plan-spend"
                   name="planSpend"
-                  class="underlined-input"
+                  class="underlined-input control"
                   placeholder="0.00"
                   value=""
                   min="0"
@@ -102,9 +104,9 @@
               </div>
 
               <div class="detail-actions">
-                <button type="button" id="btn-save-day" class="btn-save-day">Save Day</button>
-                <button type="button" id="btn-clear-day" class="btn-clear-day">Clear</button>
-                <span class="save-feedback" id="save-feedback">Saved!</span>
+                <button type="button" id="btn-save-day" class="btn-save-day button button-primary">Save Day</button>
+                <button type="button" id="btn-clear-day" class="btn-clear-day button">Clear</button>
+                <span class="save-feedback" id="save-feedback" role="status">Saved!</span>
               </div>
             </div>
 
@@ -121,11 +123,11 @@
 
         <!-- RIGHT COLUMN: Calendar Card & Overall Budget -->
         <section class="planner-right" aria-label="Interactive Calendar Planner">
-          <div class="calendar-card">
+          <div class="calendar-card panel panel-inset">
             <!-- Month & Year Selectors -->
             <div class="calendar-header">
               <div class="calendar-select-group">
-                <select id="calendar-month" class="calendar-select" aria-label="Select month">
+                <select id="calendar-month" class="calendar-select control" aria-label="Select month">
                   <option value="0">Jan</option>
                   <option value="1">Feb</option>
                   <option value="2">Mar</option>
@@ -140,7 +142,7 @@
                   <option value="11">Dec</option>
                 </select>
 
-                <select id="calendar-year" class="calendar-select" aria-label="Select year">
+                <select id="calendar-year" class="calendar-select control" aria-label="Select year">
                   <option value="2026" selected>2026</option>
                   <option value="2027">2027</option>
                 </select>
@@ -163,12 +165,12 @@
 
           <!-- Month Navigation Links -->
           <div class="calendar-footer-nav">
-            <button type="button" class="month-nav-link" id="btn-prev-month">&lt;&lt;&lt;Last Month</button>
-            <button type="button" class="month-nav-link" id="btn-next-month">Next Month&gt;&gt;&gt;</button>
+            <button type="button" class="month-nav-link button" id="btn-prev-month">&lt;&lt;&lt;Last Month</button>
+            <button type="button" class="month-nav-link button" id="btn-next-month">Next Month&gt;&gt;&gt;</button>
           </div>
 
           <!-- Overall Budget Callout -->
-          <div class="overall-budget-wrap">
+          <div class="overall-budget-wrap panel">
             <span>Overall budget =</span>
             <span class="overall-swatch neutral" id="overall-swatch" aria-label="Overall budget indicator"></span>
             <span class="overall-status-text" id="overall-status-text">Enter budget to track</span>

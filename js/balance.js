@@ -1,4 +1,7 @@
 {
+  const theme = getComputedStyle(document.documentElement);
+  const color = (token) => theme.getPropertyValue(token).trim();
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const dailyTarget = 10.50;
   const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   const weeks = [
@@ -32,18 +35,28 @@
             type: 'line',
             label: 'Daily target',
             data: weekdays.map(() => dailyTarget),
-            borderColor: '#222',
+            borderColor: color('--muted'),
+            borderDash: [5, 4],
+            borderWidth: 2,
             pointRadius: 0,
           },
           {
             label: 'Spent',
             data: spending,
-            backgroundColor: spending.map((amount) => amount > dailyTarget ? '#a00000' : '#287545'),
+            backgroundColor: spending.map((amount) => color(amount > dailyTarget ? '--negative' : '--positive')),
+            borderRadius: 4,
+            maxBarThickness: 40,
           },
         ],
       },
       options: {
-        scales: { y: { beginAtZero: true, title: { display: true, text: 'Dining Bucks' } } },
+        animation: reduceMotion ? false : { duration: 240 },
+        font: { family: 'Inter, system-ui, sans-serif' },
+        color: color('--muted-strong'),
+        scales: {
+          x: { grid: { display: false } },
+          y: { beginAtZero: true, grid: { color: color('--border') }, title: { display: true, text: 'Dining Bucks' } },
+        },
       },
     });
   }

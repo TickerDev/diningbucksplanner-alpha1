@@ -1,263 +1,44 @@
-/* Dining Info Page Styling — Follows Figma Class Oct. 5th frame 1:6 (Yajeeva) */
-
-.dining-page {
-  font-family: Inter, Arial, sans-serif;
-  color-scheme: light;
-  background-color: #ffffff;
-  color: #000000;
-}
-
-/* Page Main Container */
-.dining-main {
-  width: min(100% - 48px, 920px);
-  margin-inline: auto;
-  padding: 24px 0 48px;
-  min-height: 480px;
-}
-
-dining-info-component {
-  display: block;
-  width: 100%;
-}
-
-.dining-info {
-  width: 100%;
-}
-
-/* Two-column Layout */
-.dining-layout {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 32px;
-  width: 100%;
-}
-
-/* Left Column: Locations List */
-.dining-col-left {
-  flex: 1 1 55%;
-  max-width: 460px;
-  min-width: 0;
-}
-
-.dining-locations-list {
-  min-width: 0;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  flex: 1;
-}
-
-.dining-location-item {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-/* Location Header Button (Pill Shape) */
+.dining-info > h1 { margin-block-end: var(--space-6); }
+.dining-layout { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr); gap: var(--space-6); align-items: start; }
+.dining-locations-list { list-style: none; margin: 0; padding: 0; }
+.dining-location-item + .dining-location-item { border-block-start: 1px solid var(--border); }
 .dining-pill-btn {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--space-3);
+  min-height: 64px;
   width: 100%;
-  min-height: 34px;
-  background-color: #000000;
-  color: #ffffff;
-  border: 1px solid #000000;
-  border-radius: 17px;
-  padding: 4px 14px;
-  cursor: pointer;
   text-align: left;
-  font-family: inherit;
-  transition: background-color 0.15s ease, border-color 0.15s ease;
-}
-
-.dining-pill-btn:hover {
-  background-color: #1e1e1e;
-  border-color: #333333;
-}
-
-.dining-pill-btn:focus-visible {
-  outline: 2px solid #ff0000;
-  outline-offset: 2px;
-}
-
-.dining-pill-btn[aria-expanded="true"] {
-  background-color: #000000;
-  border-color: #ff0000;
-}
-
-.pill-arrow-wrap {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 10px;
-  height: 10px;
-  flex-shrink: 0;
-}
-
-.pill-arrow-icon {
-  display: block;
-}
-
-.pill-arrow-icon.arrow-down {
-  transform: rotate(180deg);
-}
-
-.pill-arrow-icon.arrow-right {
-  transform: rotate(90deg);
-}
-
-.pill-text-wrap {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.25;
-}
-
-.pill-location-name {
-  font-size: 10px;
-  font-weight: 600;
-  color: #ffffff;
-  letter-spacing: 0.2px;
-}
-
-.pill-building-name {
-  font-size: 8px;
-  color: #bbbbbb;
-}
-
-/* Hours Card (Expanded Schedule) */
-.dining-hours-card {
-  background-color: #000000;
-  color: #ffffff;
-  border: 1px solid #000000;
-  border-radius: 16px;
-  padding: 10px 14px 12px;
-  margin-top: 2px;
-}
-
-.hours-schedule-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.875rem;
-  text-align: left;
-  color: #ffffff;
-}
-
-.hours-schedule-table th,
-.hours-schedule-table td {
-  padding: 4px 5px;
-}
-
-.dining-hours-card a {
-  color: inherit;
-}
-
-.dining-menu-items {
-  max-block-size: 24rem;
-  overflow: auto;
-  padding-inline: 1.5rem 0.5rem;
-}
-
-.dining-menu-items li {
-  margin-block: 0.75rem;
-}
-
-.dining-menu-items span {
-  display: block;
-}
-
-.dining-menu-items a + a {
-  margin-inline-start: 0.5em;
-}
-
-/* Right Column: Location Image and Texas Tech Emblem */
-.dining-col-right {
-  flex: 1 1 45%;
-  max-width: 320px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 28px;
-}
-
-.dining-location-figure {
-  margin: 0;
-  width: 100%;
-  max-width: 220px;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-  border: 1px solid #d9d9d9;
-}
-
-.dining-location-figure figcaption {
-  padding: 8px;
-}
-
-.dining-location-img {
-  display: block;
-  width: 100%;
-  height: auto;
-  aspect-ratio: 161 / 134;
-  object-fit: cover;
-  border-radius: 16px;
-}
-
-.ttu-emblem-wrap {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding-top: 8px;
-}
-
-.ttu-double-t {
-  display: block;
-  width: 110px;
-  height: 100px;
-}
-
-/* Screen Reader Utility */
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
+  background: transparent;
   border: 0;
+  padding: .85rem var(--panel-padding);
+  border-radius: var(--control-radius);
 }
-
-/* Responsive Breakpoints */
-@media (max-width: 720px) {
-  .dining-layout {
-    gap: 20px;
-  }
-  .dining-main {
-    width: calc(100% - 24px);
-    padding: 16px 0 32px;
-  }
-}
-
-@media (max-width: 540px) {
-  .dining-layout {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  .dining-col-left,
-  .dining-col-right {
-    max-width: 100%;
-  }
-  .dining-col-right {
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
-  }
-  .dining-location-figure {
-    max-width: 180px;
-  }
-}
+.dining-pill-btn:hover { background: var(--background); }
+.dining-pill-btn[aria-expanded="true"] { background: var(--accent-soft); }
+.dining-pill-btn:focus-visible { outline-offset: -3px; }
+.pill-arrow-wrap { display: grid; place-items: center; width: 1.5rem; flex: none; }
+.pill-arrow-icon { width: .5rem; height: auto; }
+.pill-text-wrap { display: grid; gap: .15rem; min-width: 0; overflow-wrap: anywhere; }
+.pill-location-name { font-weight: 700; }
+.pill-building-name { color: var(--muted-strong); font-size: .875rem; }
+.dining-hours-card { display: grid; gap: var(--space-4); padding: var(--panel-padding); overflow-wrap: anywhere; }
+.dining-hours-card ul { margin: 0; padding-inline-start: 1.3rem; }
+.hours-schedule-table { border-collapse: collapse; width: 100%; font-size: .875rem; }
+.hours-schedule-table caption { font-weight: 700; text-align: left; padding-block: .4rem; }
+.hours-schedule-table th, .hours-schedule-table td { padding: .5rem .4rem; text-align: left; border-block-end: 1px solid var(--border); }
+.dining-hours-card details { border: 1px solid var(--border); border-radius: var(--control-radius); }
+.dining-hours-card summary { padding: .65rem .85rem; min-height: 44px; font-weight: 650; }
+.dining-hours-card summary:hover { background: var(--background); }
+.dining-hours-card .dining-menu-items { list-style: none; padding: 0 .85rem; }
+.dining-menu-items li { border-block-start: 1px solid var(--border); padding-block: .6rem; }
+.dining-menu-items span { display: block; color: var(--muted-strong); font-size: .875rem; }
+.dining-menu-items a { display: inline-block; margin-inline-end: .5rem; }
+.dining-col-right section { display: grid; gap: var(--space-3); overflow-wrap: anywhere; }
+.dining-location-img { display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: var(--control-radius); }
+.dining-location-figure figcaption { color: var(--muted-strong); font-size: .875rem; margin-block-start: .4rem; }
+.ttu-emblem-wrap { display: grid; place-items: center; }
+.dining-col-right section + .ttu-emblem-wrap { border-block-start: 1px solid var(--border); margin-block-start: 1rem; padding-block-start: 1rem; }
+.ttu-double-t { width: 70px; height: auto; }
+.dining-info > button { margin-block-end: var(--space-4); }
+@media (max-width: 760px) { .dining-layout { grid-template-columns: minmax(0, 1fr); } }

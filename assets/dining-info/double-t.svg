@@ -1,0 +1,18 @@
+<svg width="110" height="100" viewBox="0 0 110 100" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Texas Tech Double T">
+  <!-- Top Bar -->
+  <rect x="0" y="0" width="110" height="20" fill="#FF0000" />
+  <!-- Top Bar Left Hanging Serif -->
+  <rect x="0" y="20" width="14" height="10" fill="#FF0000" />
+  <!-- Top Bar Right Hanging Serif -->
+  <rect x="96" y="20" width="14" height="10" fill="#FF0000" />
+  <!-- Center Stem -->
+  <rect x="46" y="14" width="18" height="80" fill="#FF0000" />
+  <!-- Middle Crossbar -->
+  <rect x="15" y="37" width="80" height="14" fill="#FF0000" />
+  <!-- Middle Crossbar Left Hanging Serif -->
+  <rect x="15" y="49" width="14" height="10" fill="#FF0000" />
+  <!-- Middle Crossbar Right Hanging Serif -->
+  <rect x="81" y="49" width="14" height="10" fill="#FF0000" />
+  <!-- Bottom Base Serif -->
+  <rect x="35" y="86" width="40" height="14" fill="#FF0000" />
+</svg>

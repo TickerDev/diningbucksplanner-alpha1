@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="View Texas Tech University campus dining locations, operating hours, and location map." />
+    <meta name="description" content="View Texas Tech campus dining locations, operating hours, and a sample campus map." />
     <title>Dining Info | Your Dining Bucks Planner</title>
     <link rel="stylesheet" href="css/styles.css" />
     <link rel="stylesheet" href="css/dining-info.css" />
@@ -13,19 +13,16 @@
     <script src="js/app.js" defer></script>
     <!-- defer is standard HTML: these scripts run after parsing, in the order shown. -->
   </head>
-  <body class="dining-info-page">
+  <body class="dining-page">
     <a class="skip-link" href="#main-content">Skip to content</a>
     <!--
       Plain registers this tag using the native Web Components API,
       supported by all major modern browsers. The browser's connectedCallback()
       triggers initialization; Plain loads navbar.html and navbar.js, then
-      inserts the HTML and connects its bindings. File loading and bindings
-      are Plain features built on the browser standard.
+      inserts the HTML and connects its bindings.
     -->
-    <!-- The page attribute binds the app's currentPage value to the component's page prop. -->
-    <!-- Plain updates the prop automatically whenever currentPage changes. -->
     <navbar-component page="{{currentPage}}"></navbar-component>
-    <main id="main-content" class="dining-info-main" tabindex="-1">
+    <main id="main-content" class="dining-main" tabindex="-1">
       <dining-info-component></dining-info-component>
     </main>
     <!-- Loads components/footer.html and footer.js, passing the same current-page value. -->

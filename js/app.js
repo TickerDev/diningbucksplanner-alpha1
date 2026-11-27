@@ -82,6 +82,7 @@ Plain.createApp({
   preload: [
     'navbar-component',
     'footer-component',
+    ...(currentFile === 'dining-info.html' ? ['dining-info-component'] : []),
   ],
   settings: { // Shared configuration available as settings.navigation in components.
     dates: {

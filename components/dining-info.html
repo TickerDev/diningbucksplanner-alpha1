@@ -1,381 +1,102 @@
 <!--
   Plain loads this template when it finds <dining-info-component> on the page.
-  By convention, it also loads components/dining-info.js for this component's behavior.
+  By convention, it also loads components/dining-info.js for component state and actions.
 -->
-<link rel="stylesheet" href="css/dining-info.css" />
+<section class="dining-info" aria-labelledby="dining-heading">
+  <h1 id="dining-heading" class="sr-only">Campus Dining Locations & Operating Hours</h1>
 
-<div class="dining-info-layout">
-  <!-- Left column: Campus Dining Locations Accordion -->
-  <section class="dining-locations-col" aria-labelledby="dining-heading">
-    <h1 id="dining-heading" class="sr-only">Campus Dining Locations & Operating Hours</h1>
+  <p>Sample operating hours for campus dining locations.</p>
+  <div class="dining-layout">
+    <!-- Left Column: Locations List and Operating Hours -->
+    <section class="dining-col-left" aria-label="Campus Dining Locations List">
+      <div class="dining-list-container">
+        <ul class="dining-locations-list" role="list">
+          <template data-for="location in locations" data-key="location.id">
+            <li class="dining-location-item">
+              <!-- Location Toggle Button (Pill Header) -->
+              <button
+                type="button"
+                class="dining-pill-btn"
+                data-bind:aria-expanded="location.id === selectedLocationId ? 'true' : 'false'"
+                data-on:click="toggleLocation(location.id)"
+              >
+                <span class="pill-arrow-wrap" aria-hidden="true">
+                  <template data-if="location.id === selectedLocationId">
+                    <img class="pill-arrow-icon arrow-down" data-bind:src="arrowDownSrc" width="5" height="4" alt="" />
+                  </template>
+                  <template data-else>
+                    <img class="pill-arrow-icon arrow-right" data-bind:src="arrowRightSrc" width="5" height="4" alt="" />
+                  </template>
+                </span>
+                <span class="pill-text-wrap">
+                  <span class="pill-location-name">{{location.name}}</span>
+                  <span class="pill-building-name">{{location.building}}</span>
+                </span>
+              </button>
 
-    <!-- 1. 23 at Sneed (Expanded with Operating Hours) -->
-    <details class="dining-accordion" open>
-      <summary class="dining-accordion-summary">
-        <span class="accordion-arrow-wrap" aria-hidden="true">
-          <img src="assets/arrow-right.svg" class="accordion-arrow" alt="" />
-        </span>
-        <div class="dining-location-header">
-          <h2 class="dining-location-name">23 at Sneed</h2>
-          <p class="dining-location-hall">@Sneed Hall</p>
-        </div>
-      </summary>
-      <div class="dining-accordion-body">
-        <div class="hours-card">
-          <table class="hours-table" aria-label="Operating hours for 23 at Sneed">
-            <thead>
-              <tr>
-                <th scope="col" class="th-label"><span class="sr-only">Status</span></th>
-                <th scope="col">Mon</th>
-                <th scope="col">Tues</th>
-                <th scope="col">Wed</th>
-                <th scope="col">Thur</th>
-                <th scope="col">Fri</th>
-                <th scope="col">Sat</th>
-                <th scope="col">Sun</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th scope="row" class="row-label">OPEN</th>
-                <td>7am</td>
-                <td>7am</td>
-                <td>7am</td>
-                <td>7am</td>
-                <td>7am</td>
-                <td>10am</td>
-                <td>10am</td>
-              </tr>
-              <tr>
-                <th scope="row" class="row-label">CLOSE</th>
-                <td>9pm</td>
-                <td>9pm</td>
-                <td>9pm</td>
-                <td>9pm</td>
-                <td>9pm</td>
-                <td>8pm</td>
-                <td>8pm</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+              <!-- Operating Hours Table (Shown when location is expanded) -->
+              <template data-if="location.id === selectedLocationId">
+                <article class="dining-hours-card" aria-label="Hours for {{location.name}}">
+                  <div class="hours-table-wrap">
+                    <table class="hours-schedule-table">
+                      <caption class="sr-only">Operating schedule for {{location.name}}</caption>
+                      <thead>
+                        <tr>
+                          <th scope="col" class="th-corner"><span class="sr-only">Status</span></th>
+                          <template data-for="day in daysOfWeek" data-key="day">
+                            <th scope="col" class="th-day">{{day}}</th>
+                          </template>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr class="tr-open">
+                          <th scope="row" class="th-status">OPEN</th>
+                          <template data-for="time, idx in location.openHours" data-key="idx">
+                            <td class="td-time">{{time}}</td>
+                          </template>
+                        </tr>
+                        <tr class="tr-close">
+                          <th scope="row" class="th-status">CLOSE</th>
+                          <template data-for="time, idx in location.closeHours" data-key="idx">
+                            <td class="td-time">{{time}}</td>
+                          </template>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </article>
+              </template>
+            </li>
+          </template>
+        </ul>
+
       </div>
-    </details>
+    </section>
 
-    <!-- 2. Boar’s Head Deli -->
-    <details class="dining-accordion">
-      <summary class="dining-accordion-summary">
-        <span class="accordion-arrow-wrap" aria-hidden="true">
-          <img src="assets/arrow-right.svg" class="accordion-arrow" alt="" />
-        </span>
-        <div class="dining-location-header">
-          <h2 class="dining-location-name">Boar’s Head Deli</h2>
-          <p class="dining-location-hall">@Student Union Building</p>
-        </div>
-      </summary>
-      <div class="dining-accordion-body">
-        <div class="hours-card">
-          <table class="hours-table" aria-label="Operating hours for Boar’s Head Deli">
-            <thead>
-              <tr>
-                <th scope="col" class="th-label"><span class="sr-only">Status</span></th>
-                <th scope="col">Mon</th>
-                <th scope="col">Tues</th>
-                <th scope="col">Wed</th>
-                <th scope="col">Thur</th>
-                <th scope="col">Fri</th>
-                <th scope="col">Sat</th>
-                <th scope="col">Sun</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th scope="row" class="row-label">OPEN</th>
-                <td>8am</td>
-                <td>8am</td>
-                <td>8am</td>
-                <td>8am</td>
-                <td>8am</td>
-                <td>11am</td>
-                <td>11am</td>
-              </tr>
-              <tr>
-                <th scope="row" class="row-label">CLOSE</th>
-                <td>8pm</td>
-                <td>8pm</td>
-                <td>8pm</td>
-                <td>8pm</td>
-                <td>6pm</td>
-                <td>6pm</td>
-                <td>6pm</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </details>
+    <!-- Right Column: Sample Campus Map and Texas Tech Double T -->
+    <aside class="dining-col-right" aria-label="Dining Map and Texas Tech Branding">
+      <!-- Location Map Figure -->
+      <figure class="dining-map-figure">
+        <img
+          class="dining-map-img"
+          src="assets/dining-map.png"
+          alt="Sample walking route to 23 at Sneed"
+          width="161"
+          height="134"
+        />
+        <figcaption>Sample route to 23 at Sneed</figcaption>
+      </figure>
 
-    <!-- 3. The Break -->
-    <details class="dining-accordion">
-      <summary class="dining-accordion-summary">
-        <span class="accordion-arrow-wrap" aria-hidden="true">
-          <img src="assets/arrow-right.svg" class="accordion-arrow" alt="" />
-        </span>
-        <div class="dining-location-header">
-          <h2 class="dining-location-name">The Break</h2>
-          <p class="dining-location-hall">@Student Union Building</p>
-        </div>
-      </summary>
-      <div class="dining-accordion-body">
-        <div class="hours-card">
-          <table class="hours-table" aria-label="Operating hours for The Break">
-            <thead>
-              <tr>
-                <th scope="col" class="th-label"><span class="sr-only">Status</span></th>
-                <th scope="col">Mon</th>
-                <th scope="col">Tues</th>
-                <th scope="col">Wed</th>
-                <th scope="col">Thur</th>
-                <th scope="col">Fri</th>
-                <th scope="col">Sat</th>
-                <th scope="col">Sun</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th scope="row" class="row-label">OPEN</th>
-                <td>7am</td>
-                <td>7am</td>
-                <td>7am</td>
-                <td>7am</td>
-                <td>7am</td>
-                <td>Closed</td>
-                <td>Closed</td>
-              </tr>
-              <tr>
-                <th scope="row" class="row-label">CLOSE</th>
-                <td>5pm</td>
-                <td>5pm</td>
-                <td>5pm</td>
-                <td>5pm</td>
-                <td>3pm</td>
-                <td>Closed</td>
-                <td>Closed</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+      <!-- Texas Tech Double T Emblem -->
+      <div class="ttu-emblem-wrap" aria-label="Texas Tech University">
+        <img
+          src="assets/dining-info/double-t.svg"
+          class="ttu-double-t"
+          alt="Texas Tech Red Raiders Double T logo"
+          width="110"
+          height="100"
+        />
       </div>
-    </details>
-
-    <!-- 4. Burkhart Cafe -->
-    <details class="dining-accordion">
-      <summary class="dining-accordion-summary">
-        <span class="accordion-arrow-wrap" aria-hidden="true">
-          <img src="assets/arrow-right.svg" class="accordion-arrow" alt="" />
-        </span>
-        <div class="dining-location-header">
-          <h2 class="dining-location-name">Burkhart Cafe</h2>
-          <p class="dining-location-hall">@Burkhart Center</p>
-        </div>
-      </summary>
-      <div class="dining-accordion-body">
-        <div class="hours-card">
-          <table class="hours-table" aria-label="Operating hours for Burkhart Cafe">
-            <thead>
-              <tr>
-                <th scope="col" class="th-label"><span class="sr-only">Status</span></th>
-                <th scope="col">Mon</th>
-                <th scope="col">Tues</th>
-                <th scope="col">Wed</th>
-                <th scope="col">Thur</th>
-                <th scope="col">Fri</th>
-                <th scope="col">Sat</th>
-                <th scope="col">Sun</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th scope="row" class="row-label">OPEN</th>
-                <td>7:30am</td>
-                <td>7:30am</td>
-                <td>7:30am</td>
-                <td>7:30am</td>
-                <td>7:30am</td>
-                <td>Closed</td>
-                <td>Closed</td>
-              </tr>
-              <tr>
-                <th scope="row" class="row-label">CLOSE</th>
-                <td>3pm</td>
-                <td>3pm</td>
-                <td>3pm</td>
-                <td>3pm</td>
-                <td>2pm</td>
-                <td>Closed</td>
-                <td>Closed</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </details>
-
-    <!-- 5. Chick-fil-A (Student Union Building) -->
-    <details class="dining-accordion">
-      <summary class="dining-accordion-summary">
-        <span class="accordion-arrow-wrap" aria-hidden="true">
-          <img src="assets/arrow-right.svg" class="accordion-arrow" alt="" />
-        </span>
-        <div class="dining-location-header">
-          <h2 class="dining-location-name">Chick-fil-A</h2>
-          <p class="dining-location-hall">@Student Union Building</p>
-        </div>
-      </summary>
-      <div class="dining-accordion-body">
-        <div class="hours-card">
-          <table class="hours-table" aria-label="Operating hours for Chick-fil-A at Student Union Building">
-            <thead>
-              <tr>
-                <th scope="col" class="th-label"><span class="sr-only">Status</span></th>
-                <th scope="col">Mon</th>
-                <th scope="col">Tues</th>
-                <th scope="col">Wed</th>
-                <th scope="col">Thur</th>
-                <th scope="col">Fri</th>
-                <th scope="col">Sat</th>
-                <th scope="col">Sun</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th scope="row" class="row-label">OPEN</th>
-                <td>7:30am</td>
-                <td>7:30am</td>
-                <td>7:30am</td>
-                <td>7:30am</td>
-                <td>7:30am</td>
-                <td>10am</td>
-                <td>Closed</td>
-              </tr>
-              <tr>
-                <th scope="row" class="row-label">CLOSE</th>
-                <td>8pm</td>
-                <td>8pm</td>
-                <td>8pm</td>
-                <td>8pm</td>
-                <td>8pm</td>
-                <td>7pm</td>
-                <td>Closed</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </details>
-
-    <!-- 6. Chick-fil-A (Rawls College of Business) -->
-    <details class="dining-accordion">
-      <summary class="dining-accordion-summary">
-        <span class="accordion-arrow-wrap" aria-hidden="true">
-          <img src="assets/arrow-right.svg" class="accordion-arrow" alt="" />
-        </span>
-        <div class="dining-location-header">
-          <h2 class="dining-location-name">Chick-fil-A</h2>
-          <p class="dining-location-hall">@Rawls CoB</p>
-        </div>
-      </summary>
-      <div class="dining-accordion-body">
-        <div class="hours-card">
-          <table class="hours-table" aria-label="Operating hours for Chick-fil-A at Rawls College of Business">
-            <thead>
-              <tr>
-                <th scope="col" class="th-label"><span class="sr-only">Status</span></th>
-                <th scope="col">Mon</th>
-                <th scope="col">Tues</th>
-                <th scope="col">Wed</th>
-                <th scope="col">Thur</th>
-                <th scope="col">Fri</th>
-                <th scope="col">Sat</th>
-                <th scope="col">Sun</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th scope="row" class="row-label">OPEN</th>
-                <td>7:30am</td>
-                <td>7:30am</td>
-                <td>7:30am</td>
-                <td>7:30am</td>
-                <td>7:30am</td>
-                <td>Closed</td>
-                <td>Closed</td>
-              </tr>
-              <tr>
-                <th scope="row" class="row-label">CLOSE</th>
-                <td>5pm</td>
-                <td>5pm</td>
-                <td>5pm</td>
-                <td>5pm</td>
-                <td>3pm</td>
-                <td>Closed</td>
-                <td>Closed</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </details>
-  </section>
-
-  <!-- Center Scrollbar Divider -->
-  <div class="dining-vertical-divider" aria-hidden="true">
-    <div class="scroll-track">
-      <div class="scroll-thumb">
-        <span class="thumb-tick"></span>
-        <span class="thumb-tick"></span>
-        <span class="thumb-tick"></span>
-        <span class="thumb-tick"></span>
-        <span class="thumb-tick"></span>
-        <span class="thumb-tick"></span>
-        <span class="thumb-tick"></span>
-        <span class="thumb-tick"></span>
-      </div>
-    </div>
+    </aside>
   </div>
-
-  <!-- Right column: Campus Map Preview & TTU Double T Logo -->
-  <aside class="dining-preview-col" aria-label="Location preview and map">
-    <figure class="dining-map-figure">
-      <img
-        src="assets/dining-map.png"
-        alt="Campus walking map route to 23 at Sneed at Sneed Hall"
-        class="dining-map-image"
-        width="322"
-        height="268"
-      />
-      <figcaption class="sr-only">Campus map with walking directions to Sneed Hall (4–6 min walk)</figcaption>
-    </figure>
-
-    <div class="ttu-logo-container">
-      <svg class="ttu-double-t" viewBox="209 213 110 100" fill="#FF0000" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Texas Tech University Double T logo">
-        <!-- Top horizontal crossbar of primary T -->
-        <rect x="209" y="213" width="110" height="20" />
-        <!-- Left upper serif -->
-        <rect x="209" y="233" width="14" height="10" />
-        <!-- Right upper serif -->
-        <rect x="305" y="233" width="14" height="10" />
-        <!-- Secondary lower crossbar -->
-        <rect x="224" y="250" width="80" height="14" />
-        <!-- Left middle serif -->
-        <rect x="224" y="262" width="14" height="10" />
-        <!-- Right middle serif -->
-        <rect x="290" y="262" width="14" height="10" />
-        <!-- Vertical center stem -->
-        <rect x="255" y="227" width="18" height="80" />
-        <!-- Bottom base crossbar -->
-        <rect x="244" y="299" width="40" height="14" />
-      </svg>
-    </div>
-  </aside>
-</div>
+</section>

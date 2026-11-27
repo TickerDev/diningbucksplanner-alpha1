@@ -6,6 +6,8 @@
     <meta name="description" content="Log in to Your Dining Bucks Planner." />
     <title>Login | Your Dining Bucks Planner</title>
     <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/navbar.css" />
+    <link rel="preload" href="components/navbar.html" as="fetch" crossorigin />
     <link rel="stylesheet" href="css/login.css" />
     <script src="vendor/plain.js" defer></script>
     <script src="js/app.js" defer></script>
@@ -16,8 +18,19 @@
     <main id="main-content" class="login-main" tabindex="-1">
       <section class="login-content" aria-labelledby="login-heading">
         <h1 id="login-heading">Login</h1>
-        <p class="login-status">Opening the sample Balance page…</p>
-        <a href="balance.html">Continue to Balance</a>
+        <p class="login-status" id="login-help">Enter an email address and password.</p>
+        <form id="login-form" class="login-form" action="balance.html" aria-describedby="login-help" autocomplete="off">
+          <!-- The fields intentionally have no names, so the browser never submits their values. -->
+          <div class="login-field">
+            <label for="login-email">Email address</label>
+            <input id="login-email" type="email" pattern="[^@\s]+@[^@\s]+\.[^@\s]+" title="Use the format name@example.com" required />
+          </div>
+          <div class="login-field">
+            <label for="login-password">Password</label>
+            <input id="login-password" type="password" required />
+          </div>
+          <button class="login-button login-submit" type="submit">Log in</button>
+        </form>
       </section>
     </main>
   </body>

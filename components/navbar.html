@@ -3,8 +3,6 @@
   By convention, it also loads components/navbar.js for this component's behavior.
   The header, nav, links, and CSS classes below are ordinary HTML.
 -->
-<!-- Plain uses light DOM here, so the stylesheet applies to the page rather than being isolated to this component. -->
-<link rel="stylesheet" href="css/navbar.css" />
 <header class="site-header" id="page-top">
   <div class="shell-width header-inner">
     <p class="header-breadcrumb">
@@ -29,9 +27,21 @@
         </a>
       </template>
     </nav>
-    <a class="profile-link" href="login.html" aria-label="Go to login">
-      <img src="assets/profile-placeholder.svg" width="38" height="39" alt="" />
-    </a>
+    <template data-if="shared.signedIn">
+      <details class="profile-link profile-menu">
+        <summary aria-label="Profile options">
+          <img src="assets/pfp.jpeg" width="38" height="38" alt="" />
+        </summary>
+        <div class="profile-menu-panel">
+          <button type="button" data-log-out>Log out</button>
+        </div>
+      </details>
+    </template>
+    <template data-else>
+      <a class="profile-link" href="login.html" aria-label="Go to login">
+        <img src="assets/profile-placeholder.svg" width="38" height="39" alt="" />
+      </a>
+    </template>
   </div>
   <hr class="header-divider" aria-hidden="true" />
 </header>

@@ -6,6 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Balance | Your Dining Bucks Planner</title>
   <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/navbar.css" />
+  <link rel="stylesheet" href="css/footer.css" />
+  <link rel="preload" href="components/navbar.html" as="fetch" crossorigin />
   <link rel="stylesheet" href="css/balance.css" />
   <!-- Loads the Plain runtime, which exposes the global Plain object. -->
   <script src="vendor/plain.js" defer></script>
@@ -32,7 +35,7 @@
     <div class="page-placeholder">
       <h1>{{currentPage}}</h1> <!-- Plain inserts currentPage as text and updates it when the value changes. -->
       <template data-if="signedIn">
-        <p>Demo mode is active for this visit.</p>
+        <p>Signed in for this visit.</p>
       </template>
       <p>You’re viewing sample balance and spending data.</p>
       <p>Sample spending target: 10.50 Dining Bucks per day.</p>
@@ -48,23 +51,7 @@
           <canvas id="this-week" role="img" aria-labelledby="this-week-summary"></canvas>
         </section>
       </div>
-      <section>
-        <h2>Dining Suggestions</h2>
-        <div class="balance-suggestions">
-          <figure>
-            <img src="assets/grilledcheese.jpg" alt="" />
-            <figcaption>Grilled Cheese at 23 at Sneed</figcaption>
-          </figure>
-          <figure>
-            <img src="assets/macandcheese.jpg" alt="" />
-            <figcaption>Mac &amp; Cheese at The Commons</figcaption>
-          </figure>
-          <figure>
-            <img src="assets/quesadilla.jpg" alt="" />
-            <figcaption>Quesadilla at Sam’s Place</figcaption>
-          </figure>
-        </div>
-      </section>
+      <dining-suggestions-component></dining-suggestions-component>
     </div>
   </main>
   <!-- Loads components/footer.html and footer.js, passing the same current-page value. -->

@@ -1,5 +1,21 @@
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+
+  ::view-transition-group(root) {
+    animation-duration: 160ms;
+  }
+}
+
 navbar-component {
   display: block;
+}
+
+/* Keep the header space painted while Plain loads the navigation template. */
+navbar-component:empty {
+  min-block-size: 110px;
+  background: var(--shell-black);
 }
 
 .site-header a:focus-visible {
@@ -72,6 +88,46 @@ navbar-component {
 .profile-link img {
   display: block;
 }
+.profile-menu {
+  position: relative;
+}
+.profile-menu summary {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  min-height: inherit;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.profile-menu img {
+  border-radius: 50%;
+  object-fit: cover;
+}
+.profile-menu-panel {
+  position: absolute;
+  z-index: 2;
+  inset-block-start: calc(100% + 8px);
+  inset-inline-end: 0;
+  min-width: 8rem;
+  padding: 4px;
+  border: 1px solid var(--shell-line);
+  background: var(--shell-white);
+  color: var(--shell-black);
+}
+.profile-menu-panel button {
+  width: 100%;
+  min-height: 44px;
+  padding-inline: 12px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+.profile-menu-panel button:hover {
+  background: var(--shell-line);
+}
 .header-divider {
   height: 0;
   margin: 0;
@@ -81,6 +137,9 @@ navbar-component {
 }
 
 @media (max-width: 640px) {
+  navbar-component:empty {
+    min-block-size: 133px;
+  }
   .header-inner {
     grid-template-columns: 1fr 44px;
     gap: 12px 8px;

@@ -1,4 +1,4 @@
-# Plain 0.1.1: guide for AI coding agents
+# Plain 0.1.2: guide for AI coding agents
 
 Read this before changing a Plain application. This reference describes the
 vendored runtime; application requirements and project instructions take precedence.

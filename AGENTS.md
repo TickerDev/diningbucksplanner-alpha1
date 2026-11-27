@@ -25,7 +25,7 @@ without modifying the runtime. Do not invent APIs to fill gaps.
 
 - This is an ENGR 1340 student project: Your Dining Bucks Planner for Texas Tech
   students. Preserve its name, Dining Bucks terminology, and existing visual identity.
-- The app uses HTML, CSS, browser JavaScript, and the vendored Plain 0.1.1 runtime.
+- The app uses HTML, CSS, browser JavaScript, and the vendored Plain 0.1.2 runtime.
   Confirm the version in `vendor/PLAIN.md` before depending on version details.
 - It is a static multipage application. Navigation loads separate `.html`
   documents; it is not a single-page application.

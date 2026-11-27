@@ -30,29 +30,60 @@ const navigation = [
 // Read the actual HTML filename; a directory URL opens index.html (Home).
 const currentFile = location.pathname.split('/').pop() || 'index.html';
 const activePage = navigation.find((item) => item.href === currentFile);
+const appBase = new URL('../', document.currentScript.src);
 
-// This flag only controls sign-in status in the interface.
-const signInKey = 'dining-bucks-demo';
-let signedIn = false;
-try {
-  if (currentFile === 'login.html') {
-    sessionStorage.setItem(signInKey, 'active');
+// This client-set cookie only controls the prototype's interface.
+const signInCookie = 'dining-bucks-authenticated=true';
+const secure = appBase.protocol === 'https:' ? '; Secure' : '';
+const signInCookieOptions = `Path=${appBase.pathname}; SameSite=Lax${secure}`;
+
+function isSignedIn() {
+  try {
+    return document.cookie.split(';').some((cookie) => cookie.trim() === signInCookie);
+  } catch {
+    return false;
   }
-  signedIn = sessionStorage.getItem(signInKey) === 'active';
-} catch {
-  // The sample pages are still usable when browser storage is unavailable.
 }
 
-if (currentFile === 'login.html') {
-  location.replace('balance.html');
-}
+const loginForm = document.getElementById('login-form');
+loginForm?.addEventListener('submit', () => {
+  try {
+    document.cookie = `${signInCookie}; ${signInCookieOptions}`;
+  } catch {
+    // Let the form open Balance even when cookies are unavailable.
+  }
+  loginForm.reset();
+});
 
 // Plain keeps the page label available to reactive bindings and component props.
 const state = Plain.reactive({
   currentPage: activePage
     ? activePage.label
     : (currentFile === 'signup.html' ? 'Sign Up' : 'Home'),
-  signedIn,
+  signedIn: isSignedIn(),
+});
+
+document.addEventListener('click', (event) => {
+  if (event.target.closest('[data-log-out]')) {
+    document.cookie = `${signInCookie}; ${signInCookieOptions}; Max-Age=0`;
+    location.assign(new URL('login.html', appBase));
+    return;
+  }
+
+  const openMenu = document.querySelector('.profile-menu[open]');
+  if (openMenu && !openMenu.contains(event.target)) openMenu.open = false;
+});
+
+document.addEventListener('keydown', (event) => {
+  if (event.key !== 'Escape') return;
+  const openMenu = event.target.closest('.profile-menu[open]');
+  if (!openMenu) return;
+  openMenu.open = false;
+  openMenu.querySelector('summary').focus();
+});
+
+window.addEventListener('pageshow', (event) => {
+  if (event.persisted) state.signedIn = isSignedIn();
 });
 
 document.title = `${state.currentPage} | Your Dining Bucks Planner`;
@@ -60,10 +91,19 @@ document.title = `${state.currentPage} | Your Dining Bucks Planner`;
 // Each HTML page starts its own Plain app; ordinary links load a new document.
 Plain.createApp({
   state,
-  // Warm shared component files early; mounting reuses the HTML and behavior loads.
+  // Known modules can load directly without a discovery request.
+  components: {
+    'navbar-component': { behavior: './navbar.js' },
+    'footer-component': { behavior: './footer.js' },
+    'dining-comparison-component': { behavior: './dining-comparison.js' },
+    'dining-suggestions-component': { behavior: './dining-suggestions.js' },
+    'dining-info-component': { behavior: './dining-info.js' },
+    'dining-signup-component': { behavior: false },
+  },
+  // Warm the components used by this page.
   preload: [
     'navbar-component',
-    'footer-component',
+    ...(currentFile === 'login.html' || currentFile === 'signup.html' ? [] : ['footer-component']),
     ...(currentFile === 'dining-info.html' ? ['dining-info-component'] : []),
   ],
   settings: { // Shared configuration available as settings.navigation in components.
@@ -73,42 +113,10 @@ Plain.createApp({
     },
     navigation,
   },
-  base: new URL('../', document.currentScript.src).href, // Resolve component files from the project root.
+  base: appBase.href, // Resolve component files from the project root.
   development: // Enable Plain's development diagnostics when running locally.
     location.hostname === 'localhost' || location.hostname === '127.0.0.1',
 });
-
-// --- Table Sorting Helper ---
-function sortDiningTable(button) {
-  const table = button.closest('table');
-  const tbody = table.tBodies[0];
-  const colIndex = Number(button.dataset.sortColumn);
-  const isNumeric = button.dataset.sortNumeric === 'true';
-  if (!tbody) return;
-
-  const isAscending = tbody.dataset.sortCol === String(colIndex) && tbody.dataset.sortDir === 'asc';
-  tbody.dataset.sortCol = colIndex;
-  tbody.dataset.sortDir = isAscending ? 'desc' : 'asc';
-
-  const rows = Array.from(tbody.rows);
-
-  rows.sort((rowA, rowB) => {
-    const rawA = rowA.cells[colIndex]?.innerText.trim() || '';
-    const rawB = rowB.cells[colIndex]?.innerText.trim() || '';
-
-    if (isNumeric) {
-      const valA = parseFloat(rawA.replace(/[^0-9.-]+/g, '')) || 0;
-      const valB = parseFloat(rawB.replace(/[^0-9.-]+/g, '')) || 0;
-      return isAscending ? valB - valA : valA - valB;
-    }
-
-    return isAscending ? rawB.localeCompare(rawA) : rawA.localeCompare(rawB);
-  });
-
-  tbody.append(...rows);
-  table.querySelector('[aria-sort]')?.removeAttribute('aria-sort');
-  button.closest('th').setAttribute('aria-sort', isAscending ? 'descending' : 'ascending');
-}
 
 // --- Interactive Burn-Up Chart Engine ---
 function updateSpendingGraph() {
@@ -212,9 +220,6 @@ function updateSpendingGraph() {
 
 // Bind live events
 document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('#t [data-sort-column]').forEach((button) => {
-    button.addEventListener('click', () => sortDiningTable(button));
-  });
   const bInput = document.getElementById('dining-budget');
   const sInput = document.getElementById('planned-spending');
 

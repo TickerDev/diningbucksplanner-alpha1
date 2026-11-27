@@ -1,63 +1,66 @@
-/**
- * Dining Info Component
- * Provides state and actions for campus dining locations, operating hours,
- * route maps, and campus identity for Texas Tech University.
- */
-export default () => ({
-  state: {
-    selectedLocationId: '23-at-sneed',
-    arrowDownSrc: 'assets/arrow-down.svg',
-    arrowRightSrc: 'assets/arrow-right.svg',
-    daysOfWeek: ['Mon', 'Tues', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'],
-    locations: [
-      {
-        id: '23-at-sneed',
-        name: '23 at Sneed',
-        building: '@Sneed Hall',
-        openHours: ['7am', '7am', '7am', '7am', '7am', '10am', '10am'],
-        closeHours: ['9pm', '9pm', '9pm', '9pm', '9pm', '8pm', '8pm'],
-      },
-      {
-        id: 'boars-head-deli',
-        name: "Boar's Head Deli",
-        building: '@Student Union Building',
-        openHours: ['8am', '8am', '8am', '8am', '8am', '11am', 'Closed'],
-        closeHours: ['8pm', '8pm', '8pm', '8pm', '5pm', '4pm', 'Closed'],
-      },
-      {
-        id: 'the-break',
-        name: 'The Break',
-        building: '@Student Union Building',
-        openHours: ['7:30am', '7:30am', '7:30am', '7:30am', '7:30am', '10am', '11am'],
-        closeHours: ['9pm', '9pm', '9pm', '9pm', '7pm', '6pm', '6pm'],
-      },
-      {
-        id: 'burkhart-cafe',
-        name: 'Burkhart Cafe',
-        building: '@Burkhart Center',
-        openHours: ['8am', '8am', '8am', '8am', '8am', 'Closed', 'Closed'],
-        closeHours: ['3pm', '3pm', '3pm', '3pm', '2pm', 'Closed', 'Closed'],
-      },
-      {
-        id: 'chick-fil-a-sub',
-        name: 'Chick-fil-A',
-        building: '@Student Union Building',
-        openHours: ['7:30am', '7:30am', '7:30am', '7:30am', '7:30am', '10am', 'Closed'],
-        closeHours: ['8pm', '8pm', '8pm', '8pm', '7pm', '6pm', 'Closed'],
-      },
-      {
-        id: 'chick-fil-a-rawls',
-        name: 'Chick-fil-A',
-        building: '@Rawls CoB',
-        openHours: ['7:30am', '7:30am', '7:30am', '7:30am', '7:30am', 'Closed', 'Closed'],
-        closeHours: ['5pm', '5pm', '5pm', '5pm', '2pm', 'Closed', 'Closed'],
-      },
-    ],
-  },
-  actions: {
-    toggleLocation(locationId) {
-      this.selectedLocationId =
-        this.selectedLocationId === locationId ? null : locationId;
+import { availabilityLabel, diningResource } from '../js/dining-data.js';
+
+const weekdayFormat = new Intl.DateTimeFormat('en-US', { dateStyle: 'medium', timeZone: 'UTC' });
+
+function hoursLabel(intervals) {
+  if (!intervals) return 'Unavailable';
+  if (!intervals.length) return 'Closed';
+  return intervals.map(({ type, open, close }) =>
+    `${type === 'regular' ? '' : `${type}: `}${open}–${close}`).join(' · ');
+}
+
+export default ({ resource, state }) => {
+  state.selectedLocationId = new URLSearchParams(location.search).get('location');
+  const dining = diningResource(resource);
+
+  return {
+    state: {
+      dining,
+      arrowDownSrc: 'assets/arrow-down.svg',
+      arrowRightSrc: 'assets/arrow-right.svg',
     },
-  },
-});
+    computed: {
+      locations() {
+        return this.dining.value?.locations ?? [];
+      },
+      selected() {
+        const location = this.locations.find(item => item.id === this.selectedLocationId);
+        if (!location) return null;
+        return {
+          ...location,
+          status: availabilityLabel(location),
+          image: location.images?.[0],
+          menus: location.menus?.map(menu => ({
+            ...menu,
+            items: menu.items.map(item => ({
+              ...item,
+              links: item.nutritionMatches?.map((match, index) => ({
+                key: `${match.url}#${match.itemId}`,
+                label: match.rotation ?? (item.nutritionMatches.length === 1 ? 'Nutrition' : `Nutrition record ${index + 1}`),
+                href: `index.html?nutrition=${encodeURIComponent(`${match.url}#${match.itemId}`)}#campus-menu-nutrition`,
+              })) ?? [],
+            })),
+          })),
+          weeklyHours: Object.entries(location.hours ?? {}).map(([day, intervals]) => ({
+            day: day[0].toUpperCase() + day.slice(1),
+            label: hoursLabel(intervals),
+          })),
+          upcomingHours: (location.exceptions ?? []).filter(record => record.date >= location.availability?.date)
+            .sort((a, b) => a.date.localeCompare(b.date))
+            .map(record => ({
+              ...record, label: hoursLabel(record.hours),
+              formattedDate: weekdayFormat.format(new Date(`${record.date}T00:00:00Z`)),
+            })),
+        };
+      },
+    },
+    actions: {
+      toggleLocation(id) {
+        this.selectedLocationId = this.selectedLocationId === id ? null : id;
+      },
+      retry() {
+        dining.retry();
+      },
+    },
+  };
+};

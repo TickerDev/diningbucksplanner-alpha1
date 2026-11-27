@@ -1,0 +1,25 @@
+<section>
+  <h2>Dining Suggestions</h2>
+  <p role="status">
+    <template data-if="dining.initialPending">Loading published menu items…</template>
+    <template data-if="dining.error">Dining suggestions could not load.</template>
+    <template data-if="dining.value && dining.value.stale">Some menu prices may be out of date.</template>
+    <template data-if="dining.value && suggestions.length === 0">No priced menu items are listed.</template>
+  </p>
+  <template data-if="dining.error">
+    <button type="button" data-on:click="retry">Retry dining suggestions</button>
+  </template>
+  <div class="balance-suggestions">
+    <template data-for="suggestion in suggestions" data-key="suggestion.id">
+      <figure>
+        <template data-if="suggestion.image">
+          <img data-bind:src="suggestion.image" alt="" loading="lazy" />
+        </template>
+        <figcaption>
+          <a data-bind:href="suggestion.href">{{suggestion.name}}</a>
+          <br>{{suggestion.building}}<br>{{suggestion.item}} · {{suggestion.price}}
+        </figcaption>
+      </figure>
+    </template>
+  </div>
+</section>

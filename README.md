@@ -17,13 +17,13 @@ Statuses describe the current source code. Partially implemented pages have an i
 | Page 2 — Name & Description | **Balance — [balance.html](balance.html). Partially implemented:** displays placeholder balance text and a Chart.js bar chart of hardcoded daily spending for “Last Week.” Users can inspect values through Chart.js hover tooltips; account balance retrieval and transaction entry are not implemented. |
 | Page 3 — Name & Description | **Planner — [planner.html](planner.html). Implemented prototype:** uses the shared Plain navbar and footer with budget metrics, day selection, and in-memory spending entry. Its calendar layout and month handling remain a prototype; entries are not saved across page loads. |
 | Page 4 — Name & Description | **Dining Info — [dining-info.html](dining-info.html). Partially implemented:** users expand or collapse six campus dining entries to read hardcoded weekly hours. A static map image shows 23 at Sneed; expanding another entry does not update the map or provide routing. |
-| Page 5 — Name & Description | **Login — [login.html](login.html). Partially implemented:** users fill in email and password fields. Submitting a valid form clears the password and displays a message explaining that authentication is not connected. The eRaider and Sign Up buttons display similar unavailable-service messages. |
+| Page 5 — Name & Description | **Login — [login.html](login.html). Implemented prototype:** anyone who opens the page is signed in automatically and taken to the sample Balance page. |
 | Page 6 — Name & Description (if applicable) | **Sign Up — [signup.html](signup.html). Partially implemented:** provides required email and password fields, Sign Up and eRaider buttons, and a working link back to Login. No registration handler or eRaider integration exists; submission uses the browser's default form behavior and does not create an account. |
 | Key Interactive Feature 1 | **Dining table sorting — Implemented.** On Home, users click Location, Distance, or Price headers. JavaScript reorders existing rows alphabetically or numerically; clicking the same header again reverses the order. Data remains the hardcoded comparison data. |
 | Key Interactive Feature 2 | **Live spending projection — Implemented for positive budget inputs.** Users enter a budget and planned daily spending on Home. The SVG line, endpoint, spending gauge, and budget label update immediately for a fixed 112-day semester; a status message reports projected leftover funds or the day the budget runs out. An empty or zero budget falls back to $2,200, and input validation is incomplete. |
 | Key Interactive Feature 3 | **Dining hours accordion — Implemented.** Users activate a dining location's summary on Dining Info. Native HTML details elements expand or collapse its weekly opening and closing hours; multiple entries can remain open. Hours are static content, not a live university feed. |
 | Key Interactive Feature 4 | **Page navigation — Implemented.** Users select Login, Home, Balance, Planner, or Dining Info in the shared header, or use footer links where present. The browser loads the corresponding HTML document, and Plain marks the current navigation link and updates the breadcrumb. Sign Up has a separate URL and currently displays the Login navigation state. |
-| Key Interactive Feature 5 | **Login form feedback — Partially implemented.** Users submit email and password after native required-field/email validation. The interface prevents normal submission, clears the password, and announces that sign-in needs an authentication service. Clicking eRaider or Sign Up shows the corresponding unavailable-service message; no account or session is created, and Sign Up does not navigate to registration. |
+| Key Interactive Feature 5 | **Automatic login — Implemented.** Login stores a sign-in flag in the browser tab’s session storage and opens Balance without asking for credentials. The flag controls the status message on Balance. |
 
 ## Project Overview
 
@@ -60,8 +60,6 @@ Application and documentation files in the current checkout are shown below. Git
 ├── components/
 │   ├── dining-info.html
 │   ├── dining-info.js
-│   ├── dining-login.html
-│   ├── dining-login.js
 │   ├── dining-signup.html
 │   ├── footer.html
 │   ├── footer.js

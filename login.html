@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Log in to Your Dining Bucks Planner with your email or eRaider account." />
+    <meta name="description" content="Log in to Your Dining Bucks Planner." />
     <title>Login | Your Dining Bucks Planner</title>
     <link rel="stylesheet" href="css/styles.css" />
     <link rel="stylesheet" href="css/login.css" />
@@ -14,7 +14,11 @@
     <a class="skip-link" href="#main-content">Skip to content</a>
     <navbar-component page="{{currentPage}}"></navbar-component>
     <main id="main-content" class="login-main" tabindex="-1">
-      <dining-login-component></dining-login-component>
+      <section class="login-content" aria-labelledby="login-heading">
+        <h1 id="login-heading">Login</h1>
+        <p class="login-status">Signing you in automatically…</p>
+        <a href="balance.html">Continue to Balance</a>
+      </section>
     </main>
   </body>
 </html>

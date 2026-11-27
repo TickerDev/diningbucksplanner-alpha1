@@ -31,11 +31,28 @@ const navigation = [
 const currentFile = location.pathname.split('/').pop() || 'index.html';
 const activePage = navigation.find((item) => item.href === currentFile);
 
+// This flag only controls sign-in status in the interface.
+const signInKey = 'dining-bucks-demo';
+let signedIn = false;
+try {
+  if (currentFile === 'login.html') {
+    sessionStorage.setItem(signInKey, 'active');
+  }
+  signedIn = sessionStorage.getItem(signInKey) === 'active';
+} catch {
+  // The sample pages are still usable when browser storage is unavailable.
+}
+
+if (currentFile === 'login.html') {
+  location.replace('balance.html');
+}
+
 // Plain keeps the page label available to reactive bindings and component props.
 const state = Plain.reactive({
   currentPage: activePage
     ? activePage.label
     : (currentFile === 'signup.html' ? 'Sign Up' : 'Home'),
+  signedIn,
   email: '',
   password: '',
   budget: '',
@@ -52,9 +69,6 @@ Plain.createApp({
   state,
   actions: {
     signUp() {
-      // Form action placeholder for Plain data-on:submit
-    },
-    login() {
       // Form action placeholder for Plain data-on:submit
     },
     prevMonth() {

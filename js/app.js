@@ -96,8 +96,11 @@ Plain.createApp({
 });
 
 // --- Table Sorting Helper ---
-window.sort = function (colIndex, isNumeric) {
-  const tbody = document.querySelector('#t tbody') || document.querySelector('table tbody');
+function sortDiningTable(button) {
+  const table = button.closest('table');
+  const tbody = table.tBodies[0];
+  const colIndex = Number(button.dataset.sortColumn);
+  const isNumeric = button.dataset.sortNumeric === 'true';
   if (!tbody) return;
 
   const isAscending = tbody.dataset.sortCol === String(colIndex) && tbody.dataset.sortDir === 'asc';
@@ -120,7 +123,9 @@ window.sort = function (colIndex, isNumeric) {
   });
 
   tbody.append(...rows);
-};
+  table.querySelector('[aria-sort]')?.removeAttribute('aria-sort');
+  button.closest('th').setAttribute('aria-sort', isAscending ? 'descending' : 'ascending');
+}
 
 // --- Interactive Burn-Up Chart Engine ---
 function updateSpendingGraph() {
@@ -149,13 +154,16 @@ function updateSpendingGraph() {
   const gaugeTotalHeight = 170.0;
 
   // Retrieve user inputs
-  const budget = parseFloat(budgetInput.value) || 2200;
-  const dailySpend = parseFloat(spendingInput.value) || 0;
+  const budget = budgetInput.value === '' ? 2200 : budgetInput.valueAsNumber;
+  const dailySpend = spendingInput.value === '' ? 0 : spendingInput.valueAsNumber;
+  const projectedTotal = dailySpend * totalDays;
+  if (!budgetInput.validity.valid || !spendingInput.validity.valid ||
+      !Number.isFinite(budget) || !Number.isFinite(projectedTotal)) {
+    statusText.textContent = 'Enter valid, nonnegative amounts';
+    return;
+  }
 
   if (labelBudget) labelBudget.textContent = `$${budget.toLocaleString()}`;
-
-  const targetRate = budget / totalDays;
-  const projectedTotal = dailySpend * totalDays;
 
   // 1. Calculate trajectory line and intersection
   let xTarget = xMax;
@@ -194,7 +202,7 @@ function updateSpendingGraph() {
   pointFinish.setAttribute('fill', themeColor);
 
   // 2. Update Y-Axis Vertical Balance Bar
-  const fillFraction = Math.min(1, projectedTotal / budget);
+  const fillFraction = budget > 0 ? Math.min(1, projectedTotal / budget) : Number(dailySpend > 0);
   const fillHeight = gaugeTotalHeight * fillFraction;
   const fillY = (gaugeTop + gaugeTotalHeight) - fillHeight;
 
@@ -221,6 +229,9 @@ function updateSpendingGraph() {
 
 // Bind live events
 document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('#t [data-sort-column]').forEach((button) => {
+    button.addEventListener('click', () => sortDiningTable(button));
+  });
   const bInput = document.getElementById('dining-budget');
   const sInput = document.getElementById('planned-spending');
 

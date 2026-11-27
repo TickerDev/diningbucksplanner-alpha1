@@ -1,5 +1,21 @@
+.balance-charts,
+.balance-suggestions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  gap: 24px;
+}
+
 .balance-chart {
+  min-width: 0;
+}
+
+.balance-suggestions figure {
+  margin: 0;
+}
+
+.balance-suggestions img {
+  display: block;
   width: 100%;
-  max-width: 400px;
-  height: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
 }

@@ -1,10 +1,13 @@
 // Page-specific planner controls; the shared Plain app owns the navbar and footer.
 (function() {
-  const TOTAL_DAYS = 30; // October active days in calendar grid
   let selectedDay = 7;
 
   // Blank by default; user enters their own budget & expenses
-  const dayData = {};
+  const monthlyEntries = new Map();
+  let dayData;
+  let dayButtons;
+  let daysInMonth;
+  let monthLabel;
 
   // DOM Elements
   const budgetInput = document.getElementById('planner-budget');
@@ -24,7 +27,9 @@
   const overallSwatch = document.getElementById('overall-swatch');
   const overallStatusText = document.getElementById('overall-status-text');
   const monthSelect = document.getElementById('calendar-month');
-  const dayButtons = document.querySelectorAll('.calendar-day[data-day]');
+  const yearSelect = document.getElementById('calendar-year');
+  const calendarGrid = document.getElementById('calendar-grid');
+  if (!budgetInput || !monthSelect || !yearSelect || !calendarGrid) return;
 
   function getSuffix(d) {
     const n = parseInt(d, 10);
@@ -37,10 +42,15 @@
     }
   }
 
+  function readBudget() {
+    const budget = budgetInput.valueAsNumber;
+    return budgetInput.validity.valid && Number.isFinite(budget) ? budget : 0;
+  }
+
   // Calculate and re-render entire state
   function recalculate() {
-    const totalBudget = parseFloat(budgetInput.value) || 0;
-    const dailyAvg = totalBudget > 0 ? (totalBudget / TOTAL_DAYS) : 0;
+    const totalBudget = readBudget();
+    const dailyAvg = totalBudget > 0 ? (totalBudget / daysInMonth) : 0;
 
     // Update header metric
     valDailyAvg.textContent = totalBudget > 0 ? `$${dailyAvg.toFixed(2)} / day` : '$0.00 / day';
@@ -63,24 +73,24 @@
           // If spent > daily allowance -> RED; if spent <= daily allowance -> GREEN
           if (amount > dailyAvg) {
             btn.classList.add('day-over');
-            btn.setAttribute('aria-label', `Oct ${day}: $${amount.toFixed(2)} at ${data.location || 'Dining'} (Over Budget)`);
+            btn.setAttribute('aria-label', `${monthLabel} ${day}: $${amount.toFixed(2)} at ${data.location || 'Dining'} (Over Budget)`);
           } else {
             btn.classList.add('day-on');
-            btn.setAttribute('aria-label', `Oct ${day}: $${amount.toFixed(2)} at ${data.location || 'Dining'} (On Budget)`);
+            btn.setAttribute('aria-label', `${monthLabel} ${day}: $${amount.toFixed(2)} at ${data.location || 'Dining'} (On Budget)`);
           }
         } else {
           // Budget not set yet: any spending > 0 is over budget
           if (amount > 0) {
             btn.classList.add('day-over');
-            btn.setAttribute('aria-label', `Oct ${day}: $${amount.toFixed(2)} at ${data.location || 'Dining'} (Over Budget)`);
+            btn.setAttribute('aria-label', `${monthLabel} ${day}: $${amount.toFixed(2)} at ${data.location || 'Dining'} (Over Budget)`);
           } else {
             btn.classList.add('day-on');
-            btn.setAttribute('aria-label', `Oct ${day}: $0.00 (On Budget)`);
+            btn.setAttribute('aria-label', `${monthLabel} ${day}: $0.00 (On Budget)`);
           }
         }
       } else {
         // Blank by default: unlogged days stay clean/neutral
-        btn.setAttribute('aria-label', `Oct ${day}: No spend logged`);
+        btn.setAttribute('aria-label', `${monthLabel} ${day}: No spend logged`);
       }
     });
 
@@ -134,10 +144,9 @@
   }
 
   function updateDetailCard(dailyAvg) {
-    const month = monthSelect ? monthSelect.value : 'Oct';
-    detailHeading.textContent = `For ${month} ${selectedDay}${getSuffix(selectedDay)}:`;
+    detailHeading.textContent = `For ${monthLabel} ${selectedDay}${getSuffix(selectedDay)}:`;
 
-    const totalBudget = parseFloat(budgetInput.value) || 0;
+    const totalBudget = readBudget();
     const data = dayData[selectedDay];
     const hasData = data && data.amount !== undefined && data.amount !== '' && !isNaN(parseFloat(data.amount));
 
@@ -190,8 +199,8 @@
     planLocationInput.value = (currentData && currentData.location) ? currentData.location : '';
     planSpendInput.value = (currentData && currentData.amount !== undefined && currentData.amount !== '') ? currentData.amount : '';
 
-    const totalBudget = parseFloat(budgetInput.value) || 0;
-    const dailyAvg = totalBudget > 0 ? (totalBudget / TOTAL_DAYS) : 0;
+    const totalBudget = readBudget();
+    const dailyAvg = totalBudget > 0 ? (totalBudget / daysInMonth) : 0;
     updateDetailCard(dailyAvg);
     updateArrowPosition();
   }
@@ -200,6 +209,8 @@
   function saveCurrentDay() {
     const loc = planLocationInput.value.trim();
     const rawAmt = planSpendInput.value.trim();
+
+    if (!planSpendInput.validity.valid) return;
 
     if (loc === '' && rawAmt === '') {
       delete dayData[selectedDay];
@@ -235,14 +246,6 @@
     }
   }
 
-  // Attach Event Listeners
-  dayButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const day = parseInt(btn.dataset.day, 10);
-      selectDay(day);
-    });
-  });
-
   if (budgetInput) {
     budgetInput.addEventListener('input', recalculate);
   }
@@ -267,8 +270,8 @@
       if (raw === '' && (!planLocationInput.value || planLocationInput.value.trim() === '')) {
         delete dayData[selectedDay];
       } else if (raw !== '') {
-        const amt = parseFloat(raw);
-        if (!isNaN(amt)) {
+        const amt = planSpendInput.valueAsNumber;
+        if (planSpendInput.validity.valid && Number.isFinite(amt)) {
           if (!dayData[selectedDay]) dayData[selectedDay] = { location: '', amount: '' };
           dayData[selectedDay].amount = amt;
           dayData[selectedDay].location = planLocationInput.value.trim();
@@ -288,44 +291,61 @@
     btnClearDay.addEventListener('click', clearCurrentDay);
   }
 
-  // Month selector change
-  if (monthSelect) {
-    monthSelect.addEventListener('change', () => {
-      const totalBudget = parseFloat(budgetInput.value) || 0;
-      const dailyAvg = totalBudget > 0 ? (totalBudget / TOTAL_DAYS) : 0;
-      updateDetailCard(dailyAvg);
-    });
-  }
-
-  // Month Navigation Buttons
   const prevBtn = document.getElementById('btn-prev-month');
   const nextBtn = document.getElementById('btn-next-month');
-  const months = ['Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May'];
+  const firstYear = Number(yearSelect.options[0].value);
+  const lastYear = Number(yearSelect.options[yearSelect.options.length - 1].value);
 
-  if (monthSelect) {
-    if (prevBtn) {
-      prevBtn.addEventListener('click', () => {
-        const currentIdx = months.indexOf(monthSelect.value);
-        if (currentIdx > 0) {
-          monthSelect.value = months[currentIdx - 1];
-          recalculate();
-        }
-      });
+  function renderMonth() {
+    const month = Number(monthSelect.value);
+    const year = Number(yearSelect.value);
+    const firstDay = new Date(year, month, 1);
+    monthLabel = firstDay.toLocaleDateString('en-US', { month: 'short' });
+    daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    const key = `${year}-${month}`;
+    if (!monthlyEntries.has(key)) monthlyEntries.set(key, {});
+    dayData = monthlyEntries.get(key);
+
+    const cells = document.createDocumentFragment();
+    for (let offset = 0; offset < firstDay.getDay(); offset++) {
+      const spacer = document.createElement('span');
+      spacer.setAttribute('aria-hidden', 'true');
+      cells.append(spacer);
     }
-    if (nextBtn) {
-      nextBtn.addEventListener('click', () => {
-        const currentIdx = months.indexOf(monthSelect.value);
-        if (currentIdx < months.length - 1) {
-          monthSelect.value = months[currentIdx + 1];
-          recalculate();
-        }
-      });
+    dayButtons = [];
+    for (let day = 1; day <= daysInMonth; day++) {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'calendar-day';
+      button.dataset.day = String(day);
+      button.textContent = String(day);
+      button.addEventListener('click', () => selectDay(day));
+      dayButtons.push(button);
+      cells.append(button);
     }
+
+    calendarGrid.replaceChildren(cells);
+    calendarGrid.setAttribute('aria-label', `${monthLabel} ${year} calendar`);
+    prevBtn.disabled = year === firstYear && month === 0;
+    nextBtn.disabled = year === lastYear && month === 11;
+    selectDay(Math.min(selectedDay, daysInMonth));
+    recalculate();
   }
 
-  window.addEventListener('resize', updateArrowPosition);
+  function changeMonth(offset) {
+    const date = new Date(Number(yearSelect.value), Number(monthSelect.value) + offset, 1);
+    const year = date.getFullYear();
+    if (year < firstYear || year > lastYear) return;
+    monthSelect.value = String(date.getMonth());
+    yearSelect.value = String(year);
+    renderMonth();
+  }
 
-  // Initial run - selects default day 7 with clean/blank form
-  selectDay(7);
-  recalculate();
+  monthSelect.addEventListener('change', renderMonth);
+  yearSelect.addEventListener('change', renderMonth);
+  prevBtn.addEventListener('click', () => changeMonth(-1));
+  nextBtn.addEventListener('click', () => changeMonth(1));
+  window.addEventListener('resize', updateArrowPosition);
+  renderMonth();
 })();

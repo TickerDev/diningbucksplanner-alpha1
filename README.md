@@ -14,22 +14,22 @@ Statuses describe the current source code. Partially implemented pages have an i
 | App Type | Dining budget planner / budget tracker |
 | Problem It Solves | Texas Tech students using Dining Bucks need to judge whether their spending pace will make their budget last through the semester. This application helps them explore spending scenarios and compare campus dining options while planning how to use their funds. |
 | Page 1 — Name & Description | **Home — [index.html](index.html). Implemented prototype:** users compare seven hardcoded dining locations by sorting location, walking time (labeled “Distance”), or price. Entering a budget and planned daily spending updates a semester spending projection. These are hypothetical inputs, not an imported account balance. |
-| Page 2 — Name & Description | **Balance — [balance.html](balance.html). Partially implemented:** displays placeholder balance text and a Chart.js bar chart of hardcoded daily spending for “Last Week.” Users can inspect values through Chart.js hover tooltips; account balance retrieval and transaction entry are not implemented. |
-| Page 3 — Name & Description | **Planner — [planner.html](planner.html). Implemented prototype:** uses the shared Plain navbar and footer with budget metrics, day selection, and in-memory spending entry. Its calendar layout and month handling remain a prototype; entries are not saved across page loads. |
-| Page 4 — Name & Description | **Dining Info — [dining-info.html](dining-info.html). Partially implemented:** users expand or collapse six campus dining entries to read hardcoded weekly hours. A static map image shows 23 at Sneed; expanding another entry does not update the map or provide routing. |
-| Page 5 — Name & Description | **Login — [login.html](login.html). Implemented prototype:** anyone who opens the page is signed in automatically and taken to the sample Balance page. |
-| Page 6 — Name & Description (if applicable) | **Sign Up — [signup.html](signup.html). Partially implemented:** provides required email and password fields, Sign Up and eRaider buttons, and a working link back to Login. No registration handler or eRaider integration exists; submission uses the browser's default form behavior and does not create an account. |
+| Page 2 — Name & Description | **Balance — [balance.html](balance.html). Partially implemented:** displays Chart.js charts of sample daily spending. The charts compare last week and this week against a daily target, with text summaries and sample dining suggestions. Account balance retrieval and transaction entry remain unavailable. |
+| Page 3 — Name & Description | **Planner — [planner.html](planner.html). Implemented prototype:** uses the shared Plain navbar and footer with budget metrics, day selection, and in-memory spending entry. The calendar follows the selected month and year, and entries are tracked separately by month until the page reloads. |
+| Page 4 — Name & Description | **Dining Info — [dining-info.html](dining-info.html). Partially implemented:** users expand or collapse six campus dining entries to read sample weekly hours. The page shows a sample route to 23 at Sneed. |
+| Page 5 — Name & Description | **Login — [login.html](login.html). Implemented prototype:** opening the page activates a demo flag for the browser session and opens the sample Balance page. |
+| Page 6 — Name & Description (if applicable) | **Sign Up — [signup.html](signup.html). Partially implemented:** shows disabled registration and eRaider controls with a link back to the demo login. |
 | Key Interactive Feature 1 | **Dining table sorting — Implemented.** On Home, users click Location, Distance, or Price headers. JavaScript reorders existing rows alphabetically or numerically; clicking the same header again reverses the order. Data remains the hardcoded comparison data. |
-| Key Interactive Feature 2 | **Live spending projection — Implemented for positive budget inputs.** Users enter a budget and planned daily spending on Home. The SVG line, endpoint, spending gauge, and budget label update immediately for a fixed 112-day semester; a status message reports projected leftover funds or the day the budget runs out. An empty or zero budget falls back to $2,200, and input validation is incomplete. |
-| Key Interactive Feature 3 | **Dining hours accordion — Implemented.** Users activate a dining location's summary on Dining Info. Native HTML details elements expand or collapse its weekly opening and closing hours; multiple entries can remain open. Hours are static content, not a live university feed. |
+| Key Interactive Feature 2 | **Live spending projection — Implemented for positive budget inputs.** Users enter a budget and planned daily spending on Home. The SVG line, endpoint, spending gauge, and budget label update immediately for a fixed 112-day semester; a status message reports projected leftover funds or the day the budget runs out. An empty budget uses $2,200 as the sample default. Zero is a valid budget. |
+| Key Interactive Feature 3 | **Dining hours accordion — Implemented.** Users activate a dining location's summary on Dining Info. Plain expands one weekly schedule at a time. Hours are static content, not a live university feed. |
 | Key Interactive Feature 4 | **Page navigation — Implemented.** Users select Login, Home, Balance, Planner, or Dining Info in the shared header, or use footer links where present. The browser loads the corresponding HTML document, and Plain marks the current navigation link and updates the breadcrumb. Sign Up has a separate URL and currently displays the Login navigation state. |
-| Key Interactive Feature 5 | **Automatic login — Implemented.** Login stores a sign-in flag in the browser tab’s session storage and opens Balance without asking for credentials. The flag controls the status message on Balance. |
+| Key Interactive Feature 5 | **Demo login — Implemented.** Login stores a demo flag in the browser tab’s session storage and opens Balance. The flag controls the demo status message. |
 
 ## Project Overview
 
-Your Dining Bucks Planner is a multipage web application for Texas Tech students managing campus dining budgets. Its current core is a Home dashboard for comparing dining options and modeling daily spending over 16 weeks, with a separate dining-hours reference page. Account access, personal balance tracking, and the dedicated Planner workflow remain incomplete.
+Your Dining Bucks Planner is a multipage web application for Texas Tech students managing campus dining budgets. Its current core is a Home dashboard for comparing dining options and modeling daily spending over 16 weeks, with a separate dining-hours reference page. The Planner supports monthly spending scenarios in memory. University account access and personal balance retrieval remain unavailable.
 
-Home prices and walking times, Dining Info hours, and Balance chart values are hardcoded examples rather than verified current campus or account data. Budget inputs are not saved across page loads. The application has no backend, database, or university account connection.
+Home prices and walking times, Dining Info hours, and Balance chart values are hardcoded examples rather than verified current campus or account data. Budget inputs are not saved across page loads. The application has no backend, database, or university account connection. The included dining API client is available for a future integration.
 
 ## Project Structure
 
@@ -66,7 +66,10 @@ Application and documentation files in the current checkout are shown below. Git
 │   ├── navbar.html
 │   └── navbar.js
 ├── css/
+│   ├── balance.css
 │   ├── dining-info.css
+│   ├── index.css
+│   ├── planner.css
 │   ├── footer.css
 │   ├── login.css
 │   ├── navbar.css
@@ -74,6 +77,9 @@ Application and documentation files in the current checkout are shown below. Git
 │   └── styles.css
 ├── js/
 │   ├── app.js
+│   ├── balance.js
+│   ├── dining-api.js
+│   ├── dining-api.md
 │   └── planner.js
 └── vendor/
     ├── LICENSE
@@ -91,7 +97,7 @@ Shared HTML components and optional sibling JavaScript modules live in `componen
 - **HTML, CSS, and JavaScript:** separate HTML documents, responsive CSS, native form validation, and standard browser navigation.
 - **Plain frontend framework:** the vendored classic runtime [vendor/plain.js](vendor/plain.js) exposes global `Plain`. The included [Plain 0.1.1 guide](vendor/PLAIN.md) documents reactive bindings and HTML component discovery. Component behaviors use JavaScript modules; there is no application build step.
 - **SVG:** the Home spending chart and local interface graphics.
-- **Chart.js 4.5.1:** loaded from jsDelivr by `balance.html` for its sample weekly bar chart.
+- **Chart.js 4.5.1:** loaded from jsDelivr by `balance.html` for its sample weekly spending charts.
 - **Inter font:** imported from Google Fonts by [css/styles.css](css/styles.css), with Arial and sans-serif fallbacks.
 
 There is no package manifest or dependency installation required to run the app. Internet access is needed for the externally hosted Chart.js library and Google font; Plain is included locally. Preserve [vendor/LICENSE](vendor/LICENSE) and [vendor/THIRD_PARTY_NOTICES.md](vendor/THIRD_PARTY_NOTICES.md) when distributing the original files together.

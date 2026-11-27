@@ -53,13 +53,6 @@ const state = Plain.reactive({
     ? activePage.label
     : (currentFile === 'signup.html' ? 'Sign Up' : 'Home'),
   signedIn,
-  email: '',
-  password: '',
-  budget: '',
-  planLocation: '',
-  planSpend: '',
-  selectedMonth: 'Oct',
-  selectedYear: '2026',
 });
 
 document.title = `${state.currentPage} | Your Dining Bucks Planner`;
@@ -67,17 +60,6 @@ document.title = `${state.currentPage} | Your Dining Bucks Planner`;
 // Each HTML page starts its own Plain app; ordinary links load a new document.
 Plain.createApp({
   state,
-  actions: {
-    signUp() {
-      // Form action placeholder for Plain data-on:submit
-    },
-    prevMonth() {
-      // Previous month navigation
-    },
-    nextMonth() {
-      // Next month navigation
-    },
-  },
   // Warm shared component files early; mounting reuses the HTML and behavior loads.
   preload: [
     'navbar-component',

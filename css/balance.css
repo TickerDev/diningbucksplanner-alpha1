@@ -1,12 +1,12 @@
 .balance-charts, .balance-suggestions { display: grid; gap: var(--space-6); }
-.balance-charts { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-block-end: var(--space-8); }
+.balance-charts { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--section-gap); margin-block-end: var(--space-12); }
 .balance-charts p { margin-block: .5rem var(--space-4); color: var(--muted-strong); font-size: .875rem; }
 .balance-chart { min-width: 0; }
 .balance-chart canvas { max-width: 100%; }
 .balance-suggestions { grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); margin-block-start: var(--space-4); }
 .balance-suggestions figure { overflow: hidden; }
-.balance-suggestions figcaption { padding: var(--space-4); font-size: .875rem; }
+.balance-suggestions figcaption { padding-block: var(--space-3); font-size: .875rem; }
 .balance-suggestions img { width: 100%; aspect-ratio: 2 / 1; object-fit: cover; display: block; }
 .balance-suggestions a { font-weight: 700; }
-.balance-summary { display: grid; gap: .35rem; margin-block: -1rem 1.5rem; color: var(--muted-strong); }
+.balance-summary { display: flex; flex-wrap: wrap; gap: .25rem 1.5rem; margin-block: -1rem 1.75rem; color: var(--muted-strong); }
 @media (max-width: 750px) { .balance-charts { grid-template-columns: minmax(0, 1fr); } }

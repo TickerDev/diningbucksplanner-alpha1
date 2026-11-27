@@ -51,7 +51,7 @@
       },
       options: {
         animation: reduceMotion ? false : { duration: 240 },
-        font: { family: 'Inter, system-ui, sans-serif' },
+        font: { family: theme.fontFamily },
         color: color('--muted-strong'),
         scales: {
           x: { grid: { display: false } },

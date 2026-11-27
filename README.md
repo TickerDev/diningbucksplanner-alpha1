@@ -103,9 +103,9 @@ Shared HTML components and optional sibling JavaScript modules live in `componen
 - **Plain frontend framework:** the vendored classic runtime [vendor/plain.js](vendor/plain.js) exposes global `Plain`. The included [Plain 0.1.2 guide](vendor/PLAIN.md) documents reactive bindings and HTML component discovery. Component behaviors use JavaScript modules; there is no application build step.
 - **SVG:** the Home spending chart and local interface graphics.
 - **Chart.js 4.5.1:** loaded from jsDelivr by `balance.html` for its sample weekly spending charts.
-- **Inter font:** imported from Google Fonts by [css/styles.css](css/styles.css), with Arial and sans-serif fallbacks.
+- **Manrope font:** served locally with a system sans-serif fallback.
 
-There is no package manifest or dependency installation required to run the app. Internet access is needed for the externally hosted Chart.js library and Google font; Plain is included locally. Preserve [vendor/LICENSE](vendor/LICENSE) and [vendor/THIRD_PARTY_NOTICES.md](vendor/THIRD_PARTY_NOTICES.md) when distributing the original files together.
+There is no package manifest or dependency installation required to run the app. Internet access is needed for the externally hosted Chart.js library and dining API; Plain is included locally. Preserve [vendor/LICENSE](vendor/LICENSE) and [vendor/THIRD_PARTY_NOTICES.md](vendor/THIRD_PARTY_NOTICES.md) when distributing the original files together.
 
 ## Getting Started
 

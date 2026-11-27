@@ -15,7 +15,7 @@
 
   <div class="dining-layout">
     <section class="dining-col-left" aria-label="Campus dining hours and menus">
-      <ul class="dining-locations-list panel" role="list">
+      <ul class="dining-locations-list rule-section" role="list">
         <template data-for="location in locations" data-key="location.id">
           <li class="dining-location-item">
             <button type="button" class="dining-pill-btn"
@@ -111,7 +111,7 @@
       </ul>
     </section>
 
-    <aside class="dining-col-right panel panel-inset" aria-label="Dining location details">
+    <aside class="dining-col-right rule-section" aria-label="Dining location details">
       <template data-if="selected">
         <section>
           <h2>{{selected.name}}</h2>

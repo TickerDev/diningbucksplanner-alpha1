@@ -1,4 +1,4 @@
-.site-footer { border-top: 1px solid var(--border); background: var(--surface); }
+.site-footer { border-top: 1px solid var(--rule); background: var(--soft); }
 .footer-inner { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .5rem 1rem; padding-block: 1rem; }
 .footer-brand { font-weight: 750; color: var(--ink); text-decoration: none; }
 .footer-nav a { display: grid; align-items: center; min-height: 44px; padding-inline: .6rem; color: var(--muted-strong); font-size: .875rem; text-decoration: none; }

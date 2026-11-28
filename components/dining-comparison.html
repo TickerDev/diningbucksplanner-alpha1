@@ -31,7 +31,7 @@
             <template data-for="row in rows" data-key="row.id">
               <tr>
                 <td><a data-bind:href="row.href">{{row.name}}</a><br><span class="location-building">{{row.building}}</span></td>
-                <td>{{row.status}}</td>
+                <td><span class="dining-status" data-bind:data-status="row.status.state">{{row.status.label}}</span></td>
                 <td>{{row.price}}</td>
               </tr>
             </template>

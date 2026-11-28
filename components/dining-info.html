@@ -21,19 +21,51 @@
   </template>
 
   <template data-if="props.view === 'directory'">
-    <ul class="dining-locations-list rule-section" role="list">
-      <template data-for="location in locations" data-key="location.id">
-        <li class="dining-location-item">
-          <a class="dining-location-link" data-bind:href="location.href">
-            <span class="pill-text-wrap">
-              <span class="pill-location-name">{{location.name}}</span>
-              <span class="pill-building-name">{{location.building}}</span>
-            </span>
-            <img class="icon" src="assets/lucide/chevron-right.svg" alt="" />
-          </a>
-        </li>
+    <template data-if="locations.length">
+      <div class="dining-filters" role="group" aria-label="Filter dining locations">
+        <form-field-component>
+          <label for="dining-search">Search locations</label>
+          <input id="dining-search" class="control" type="search" placeholder="Restaurant or building" data-model="search" />
+        </form-field-component>
+        <form-field-component>
+          <label for="dining-building">Campus building</label>
+          <select id="dining-building" class="control" data-model="buildingFilter">
+            <option value="">All buildings</option>
+            <template data-for="building in buildings" data-key="building">
+              <option data-bind:value="building">{{building}}</option>
+            </template>
+          </select>
+        </form-field-component>
+        <label class="dining-open-filter"><input type="checkbox" data-model="openOnly" /> Scheduled open now</label>
+      </div>
+      <p class="resource-status dining-result-count" role="status">((filteredLocations.length === 1 ? '1 location' : filteredLocations.length + ' locations'))</p>
+      <template data-if="!filteredLocations.length">
+        <p class="dining-no-results">No locations match these filters. <button class="button" type="button" data-on:click="clearFilters">Clear filters</button></p>
       </template>
-    </ul>
+      <ul class="dining-locations-list rule-section" role="list">
+        <template data-for="location in filteredLocations" data-key="location.id">
+          <li class="dining-location-item">
+            <a class="dining-location-link" data-bind:href="location.href">
+              <span class="dining-thumbnail" aria-hidden="true">
+                <img class="dining-image-fallback" src="assets/lucide/wallet.svg" alt="" />
+                <template data-if="location.image">
+                  <img class="dining-thumbnail-photo" data-bind:src="location.image" data-on:error="hideFailedImage" alt="" loading="lazy" width="80" height="56" />
+                </template>
+              </span>
+              <span class="pill-text-wrap">
+                <span class="pill-location-name">{{location.name}}</span>
+                <span class="pill-building-name">{{location.building}}</span>
+                <span class="dining-directory-meta">
+                  <span class="dining-status" data-bind:data-status="location.status.state">{{location.status.label}}</span>
+                  <span class="dining-directory-price">((location.price === 'Price unavailable' ? location.price : 'Lowest listed item ' + location.price))</span>
+                </span>
+              </span>
+              <img class="icon dining-directory-arrow" src="assets/lucide/chevron-right.svg" alt="" />
+            </a>
+          </li>
+        </template>
+      </ul>
+    </template>
     <div class="ttu-emblem-wrap">
       <img src="assets/dbl__T.svg" class="ttu-double-t" alt="Texas Tech Red Raiders Double T logo" width="859" height="1007" />
     </div>
@@ -42,7 +74,7 @@
   <template data-if="props.view === 'location' && selected">
     <div class="dining-layout">
       <article class="dining-hours-card" aria-label="Hours and menus for {{selected.name}}">
-        <p><strong>{{selected.status}}</strong></p>
+        <p><span class="dining-status dining-status-current" data-bind:data-status="selected.status.state">{{selected.status.label}}</span></p>
         <template data-if="selected.weeklyHours.length">
           <table class="hours-schedule-table">
             <caption>Regular hours (Central Time)</caption>
@@ -69,8 +101,10 @@
             </thead>
             <tbody>
               <template data-for="record in selected.upcomingHours" data-key="record.date">
-                <tr>
-                  <th scope="row"><time data-bind:datetime="record.date">{{record.formattedDate}}</time></th>
+                <tr data-bind:data-today="record.isToday ? 'true' : null">
+                  <th scope="row"><time data-bind:datetime="record.date">{{record.formattedDate}}</time>
+                    <template data-if="record.isToday"><span class="dining-today-label">Today</span></template>
+                  </th>
                   <td>{{record.title}}</td>
                   <td>{{record.label}}</td>
                 </tr>
@@ -140,8 +174,8 @@
               <a class="dining-description-toggle" href="#location-description"
                 aria-controls="location-description"
                 data-bind:aria-expanded="descriptionExpanded ? 'true' : 'false'"
-                data-bind:aria-label="descriptionExpanded ? 'Show less description' : 'Show full description'"
-                data-on:click.prevent="toggleDescription">((descriptionExpanded ? 'Show less' : '…'))</a>
+                data-bind:aria-label="descriptionExpanded ? 'Read less about this location' : 'Read more about this location'"
+                data-on:click.prevent="toggleDescription">((descriptionExpanded ? 'Read Less' : 'Read More'))</a>
             </template></p>
           </template>
           <iframe class="dining-map" data-bind:src="selected.mapEmbedUrl"

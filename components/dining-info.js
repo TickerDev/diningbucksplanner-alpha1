@@ -1,4 +1,4 @@
-import { availabilityLabel, diningInfoLink, diningResource } from '../js/dining-data.js';
+import { diningAvailability, diningInfoLink, diningResource, formatPrice, lowestListedPrice } from '../js/dining-data.js';
 
 const weekdayFormat = new Intl.DateTimeFormat('en-US', { dateStyle: 'medium', timeZone: 'UTC' });
 
@@ -15,12 +15,30 @@ export default ({ resource }) => {
 
   return {
     props: { view: { type: 'string', default: 'directory' } },
-    state: { dining, descriptionExpanded: false },
+    state: { dining, descriptionExpanded: false, search: '', buildingFilter: '', openOnly: false },
     computed: {
       locations() {
-        return (this.dining.value?.locations ?? []).map(({ id, name, building }) => ({
-          id, name, building, href: diningInfoLink(id),
-        }));
+        return (this.dining.value?.locations ?? []).map(location => {
+          const { id, name, building } = location;
+          const cents = lowestListedPrice(location);
+          return {
+            id, name, building, href: diningInfoLink(id),
+            image: location.images?.[0],
+            status: diningAvailability(location),
+            price: cents === null ? 'Price unavailable' : formatPrice(cents),
+          };
+        });
+      },
+      buildings() {
+        return [...new Set(this.locations.map(row => row.building).filter(Boolean))]
+          .sort((a, b) => a.localeCompare(b));
+      },
+      filteredLocations() {
+        const search = this.search.trim().toLocaleLowerCase();
+        return this.locations.filter(row =>
+          (!this.buildingFilter || row.building === this.buildingFilter) &&
+          (!this.openOnly || row.status.state === 'open') &&
+          `${row.name} ${row.building ?? ''}`.toLocaleLowerCase().includes(search));
       },
       selected() {
         const location = this.dining.value?.locations.find(item => item.id === locationId);
@@ -47,7 +65,7 @@ export default ({ resource }) => {
           hasMoreDescription: preview.length < description.length,
           mapsUrl: maps.href,
           mapEmbedUrl: mapEmbed.href,
-          status: availabilityLabel(location),
+          status: diningAvailability(location),
           image: location.images?.[0],
           menus: location.menus?.map(menu => ({
             ...menu,
@@ -70,6 +88,7 @@ export default ({ resource }) => {
               ...record,
               // Separate the schedule reason from the published hours heading.
               title: record.title?.replace(/([a-z\d])\s*(Dining Hours)\s*$/i, '$1 | $2'),
+              isToday: record.date === location.availability?.date,
               label: hoursLabel(record.hours),
               formattedDate: weekdayFormat.format(new Date(`${record.date}T00:00:00Z`)),
             })),
@@ -77,6 +96,14 @@ export default ({ resource }) => {
       },
     },
     actions: {
+      clearFilters() {
+        this.search = '';
+        this.buildingFilter = '';
+        this.openOnly = false;
+      },
+      hideFailedImage(event) {
+        event.target.hidden = true;
+      },
       toggleDescription() {
         this.descriptionExpanded = !this.descriptionExpanded;
       },

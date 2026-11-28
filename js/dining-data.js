@@ -22,15 +22,22 @@ export function pricedItems(location) {
     Number.isSafeInteger(item.priceCents) && item.priceCents >= 0 && !item.priceUnit);
 }
 
-export function availabilityLabel(location) {
+export function lowestListedPrice(location) {
+  const prices = pricedItems(location).map(item => item.priceCents);
+  return prices.length ? Math.min(...prices) : null;
+}
+
+export function diningAvailability(location) {
   const availability = location.availability;
-  if (availability?.open === true) return 'Scheduled open';
-  if (availability?.open !== false) return 'Hours unconfirmed';
+  if (availability?.open === true) return { state: 'open', label: 'Scheduled open' };
+  if (availability?.open !== false) return { state: 'unavailable', label: 'Hours unconfirmed' };
 
   const holidayClosure = availability.basis === 'holiday' && location.exceptions?.some(exception =>
     exception.date === availability.date && exception.kind === 'holiday' &&
     (exception.allClosed === true || exception.hours?.length === 0));
-  return holidayClosure ? 'Closed for the holiday' : 'Scheduled closed';
+  return holidayClosure
+    ? { state: 'holiday', label: 'Closed for the holiday' }
+    : { state: 'closed', label: 'Scheduled closed' };
 }
 
 export function diningInfoLink(id) {

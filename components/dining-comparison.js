@@ -1,4 +1,4 @@
-import { availabilityLabel, diningInfoLink, diningResource, formatPrice, pricedItems } from '../js/dining-data.js';
+import { diningAvailability, diningInfoLink, diningResource, formatPrice, lowestListedPrice } from '../js/dining-data.js';
 
 const nutrients = [
   ['calories', 'Calories', 'kcal'],
@@ -23,11 +23,10 @@ export default ({ resource, state }) => {
       rows() {
         const direction = this.sortDirection === 'ascending' ? 1 : -1;
         return (this.dining.value?.locations ?? []).map(location => {
-          const prices = pricedItems(location).map(item => item.priceCents);
-          const cents = prices.length ? Math.min(...prices) : null;
+          const cents = lowestListedPrice(location);
           return {
             id: location.id, name: location.name, building: location.building,
-            status: availabilityLabel(location), cents,
+            status: diningAvailability(location), cents,
             price: cents === null ? 'Unavailable' : formatPrice(cents),
             href: diningInfoLink(location.id),
           };

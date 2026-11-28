@@ -14,6 +14,7 @@ export default ({ resource, state }) => {
   state.sortColumn = 'name';
   state.sortDirection = 'ascending';
   state.nutritionId = new URLSearchParams(location.search).get('nutrition') ?? '';
+  state.nutritionLocation = null;
   const dining = diningResource(resource);
   const nutrition = diningResource(resource, (api, signal) => api.getNutrition({ signal }));
 
@@ -42,11 +43,35 @@ export default ({ resource, state }) => {
       },
       nutritionOptions() {
         return (this.nutrition.value?.documents ?? []).flatMap(document => document.items.map(item => ({
-          ...item, key: `${document.url}#${item.id}`, label: `${item.name} — ${document.title}`,
+          ...item, sourceUrl: document.url, key: `${document.url}#${item.id}`, label: `${item.name} — ${document.title}`,
         })));
       },
+      nutritionGroups() {
+        if (!this.dining.value && !this.dining.error) return [];
+        const options = this.nutritionOptions;
+        const assigned = new Set();
+        const groups = (this.dining.value?.locations ?? []).flatMap(location => {
+          const sources = new Set(location.nutritionSources?.map(source => source.url));
+          const matches = new Set((location.menus ?? []).flatMap(menu =>
+            menu.items.flatMap(item => (item.nutritionMatches ?? []).map(match => `${match.url}#${match.itemId}`))));
+          const items = options.filter(item => sources.has(item.sourceUrl) || matches.has(item.key));
+          if (!items.length) return [];
+          items.forEach(item => assigned.add(item.key));
+          return [{ id: location.id, label: location.building ? `${location.name} — ${location.building}` : location.name, items }];
+        });
+        const other = options.filter(item => !assigned.has(item.key));
+        if (other.length) groups.push({ id: '__other', label: 'Other published nutrition', items: other });
+        return groups;
+      },
+      activeNutritionLocation() {
+        if (this.nutritionLocation !== null) return this.nutritionLocation;
+        return this.nutritionGroups.find(group => group.items.some(item => item.key === this.nutritionId))?.id ?? '';
+      },
+      locationNutritionOptions() {
+        return this.nutritionGroups.find(group => group.id === this.activeNutritionLocation)?.items ?? [];
+      },
       nutritionItem() {
-        return this.nutritionOptions.find(item => item.key === this.nutritionId) ?? null;
+        return this.locationNutritionOptions.find(item => item.key === this.nutritionId) ?? null;
       },
       nutrientRows() {
         const item = this.nutritionItem;
@@ -57,6 +82,10 @@ export default ({ resource, state }) => {
       },
     },
     actions: {
+      chooseNutritionLocation(event) {
+        this.nutritionLocation = event.target.value;
+        this.nutritionId = '';
+      },
       sort(column) {
         this.sortDirection = this.sortColumn === column && this.sortDirection === 'ascending' ? 'descending' : 'ascending';
         this.sortColumn = column;

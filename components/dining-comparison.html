@@ -57,11 +57,21 @@
   <template data-if="nutrition.error">
     <button class="button" type="button" data-on:click="retryNutrition">Retry nutrition</button>
   </template>
-  <template data-if="nutritionOptions.length">
+  <template data-if="nutritionOptions.length && dining.initialPending">
+    <p class="resource-status" role="status">Loading dining locations for nutrition…</p>
+  </template>
+  <template data-if="nutritionGroups.length">
+    <label for="dining-nutrition-location">Dining location</label>
+    <select class="control" id="dining-nutrition-location" data-on:change="chooseNutritionLocation">
+      <option value="" data-bind:selected="!activeNutritionLocation">Choose a dining location</option>
+      <template data-for="group in nutritionGroups" data-key="group.id">
+        <option data-bind:value="group.id" data-bind:selected="group.id === activeNutritionLocation">{{group.label}}</option>
+      </template>
+    </select>
     <label for="dining-nutrition-item">Menu item</label>
-    <select class="control" id="dining-nutrition-item" data-model="nutritionId">
-      <option value="">Choose an item</option>
-      <template data-for="item in nutritionOptions" data-key="item.key">
+    <select class="control" id="dining-nutrition-item" data-model="nutritionId" data-bind:disabled="!activeNutritionLocation">
+      <option value="">((activeNutritionLocation ? 'Choose an item' : 'Choose a dining location first'))</option>
+      <template data-for="item in locationNutritionOptions" data-key="item.key">
         <option data-bind:value="item.key">{{item.label}}</option>
       </template>
     </select>

@@ -19,6 +19,9 @@ export default ({ resource }) => {
       },
     },
     actions: {
+      hideFailedImage(event) {
+        event.target.hidden = true;
+      },
       retry() {
         dining.retry();
       },

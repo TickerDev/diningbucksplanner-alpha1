@@ -4,9 +4,16 @@
 .balance-chart { min-width: 0; }
 .balance-chart canvas { max-width: 100%; }
 .balance-suggestions { grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); margin-block-start: var(--space-4); }
-.balance-suggestions figure { overflow: hidden; }
 .balance-suggestions figcaption { padding-block: var(--space-2); font-size: .875rem; }
-.balance-suggestions img { width: 100%; aspect-ratio: 2 / 1; object-fit: cover; display: block; }
+.suggestion-media {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 2 / 1;
+  background: var(--soft);
+  border-radius: var(--control-radius);
+}
+.suggestion-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .balance-suggestions a { font-weight: 700; }
 .balance-summary { display: flex; flex-wrap: wrap; gap: .25rem 1.5rem; margin-block: -1rem 1.75rem; color: var(--muted-strong); }
 @media (max-width: 750px) { .balance-charts { grid-template-columns: minmax(0, 1fr); } }
@@ -14,7 +21,6 @@
 .weekly-spent { color: var(--ink); font-size: 1rem; font-variant-numeric: tabular-nums; }
 .weekly-target { color: var(--ink); font-weight: 700; }
 .weekly-breakdown { display: block; margin-block-start: var(--space-2); }
-.balance-suggestions figure { overflow: visible; }
 .balance-suggestions img { border-radius: var(--control-radius); }
-.balance-suggestions figure:has(a:hover, a:focus-visible) img { outline: 1px solid var(--control-border); outline-offset: 2px; }
+.balance-suggestions figure:has(a:hover, a:focus-visible) .suggestion-media { outline: 1px solid var(--control-border); outline-offset: 2px; }
 .balance-suggestions a:hover { color: var(--scarlet); }

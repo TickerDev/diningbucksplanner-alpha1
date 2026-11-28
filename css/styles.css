@@ -174,3 +174,4 @@ input::placeholder { color: var(--muted-strong); opacity: 1; }
 .dining-status[data-status="closed"] { color: var(--negative); }
 .dining-status[data-status="holiday"] { color: #795119; }
 .dining-status[data-status="unavailable"] { color: var(--muted); font-weight: 600; }
+.dining-image-fallback { color: var(--muted); font-size: .75rem; text-align: center; }

@@ -15,9 +15,12 @@
   <div class="balance-suggestions">
     <template data-for="suggestion in suggestions" data-key="suggestion.id">
       <figure class="rule-section">
-        <template data-if="suggestion.image">
-          <img data-bind:src="suggestion.image" alt="" loading="lazy" />
-        </template>
+        <div class="suggestion-media" aria-hidden="true">
+          <span class="dining-image-fallback">Image unavailable</span>
+          <template data-if="suggestion.image">
+            <img data-bind:src="suggestion.image" data-on:error="hideFailedImage" alt="" loading="lazy" />
+          </template>
+        </div>
         <figcaption>
           <a data-bind:href="suggestion.href">{{suggestion.name}}</a>
           <br>{{suggestion.building}}<br>{{suggestion.item}} · {{suggestion.price}}

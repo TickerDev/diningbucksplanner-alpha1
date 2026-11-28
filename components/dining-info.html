@@ -47,7 +47,7 @@
           <li class="dining-location-item">
             <a class="dining-location-link" data-bind:href="location.href">
               <span class="dining-thumbnail" aria-hidden="true">
-                <img class="dining-image-fallback" src="assets/lucide/wallet.svg" alt="" />
+                <span class="dining-image-fallback">No image</span>
                 <template data-if="location.image">
                   <img class="dining-thumbnail-photo" data-bind:src="location.image" data-on:error="hideFailedImage" alt="" loading="lazy" width="80" height="56" />
                 </template>
@@ -132,7 +132,10 @@
               <ul class="dining-menu-items">
                 <template data-for="item in menu.items" data-key="item.id">
                   <li>
-                    <strong>{{item.name}}</strong> · ((item.price ?? 'Price unavailable'))
+                    <div class="dining-menu-item-heading">
+                      <strong>{{item.name}}</strong>
+                      <span class="dining-menu-price">((item.price ?? 'Price unavailable'))</span>
+                    </div>
                     <span>((item.section ? item.section + ' · ' : '')){{item.category}}</span>
                     <template data-if="item.days"><span>{{item.days}}</span></template>
                     <template data-if="item.rotation"><span>{{item.rotation}}</span></template>
@@ -162,7 +165,10 @@
           <h2>About this location</h2>
           <template data-if="selected.image">
             <figure class="dining-location-figure">
-              <img class="dining-location-img" data-bind:src="selected.image" alt="" />
+              <div class="dining-location-media">
+                <span class="dining-image-fallback" aria-hidden="true">Image unavailable</span>
+                <img class="dining-location-img" data-bind:src="selected.image" data-on:error="hideFailedImage" alt="" />
+              </div>
               <figcaption>{{selected.building}}</figcaption>
             </figure>
           </template>

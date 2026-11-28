@@ -34,7 +34,8 @@
 .dining-menu-items span { display: block; color: var(--muted-strong); font-size: .875rem; }
 .dining-menu-items a { display: inline-block; margin-inline-end: .5rem; }
 .dining-col-right section { display: grid; gap: var(--space-2); overflow-wrap: anywhere; }
-.dining-location-img { display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover;  }
+.dining-location-media { position: relative; display: grid; place-items: center; aspect-ratio: 16 / 10; background: var(--soft); }
+.dining-location-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .dining-location-figure figcaption { color: var(--muted-strong); font-size: .875rem; margin-block-start: .4rem; }
 .ttu-emblem-wrap { display: grid; justify-items: start; padding-block: .75rem; }
 .dining-col-right section + .ttu-emblem-wrap { border-block-start: 1px solid var(--border); margin-block-start: 1rem; padding-block-start: 1rem; }
@@ -80,7 +81,6 @@
   border-radius: var(--control-radius);
   background: var(--soft);
 }
-.dining-image-fallback { width: 24px; height: 24px; opacity: .5; }
 .dining-thumbnail-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .dining-directory-arrow { margin-inline-start: auto; }
 .dining-directory-meta { display: flex; flex-wrap: wrap; gap: 4px var(--space-4); font-size: .875rem; }
@@ -98,3 +98,6 @@
   .dining-thumbnail { flex-basis: 56px; }
   .dining-location-link { gap: var(--space-2); }
 }
+
+.dining-menu-item-heading { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px var(--space-4); }
+.dining-menu-items .dining-menu-price { color: var(--ink); font-variant-numeric: tabular-nums; }

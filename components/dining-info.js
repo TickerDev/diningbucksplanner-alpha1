@@ -33,8 +33,12 @@ export default ({ resource }) => {
           : description;
         const maps = new URL('https://www.google.com/maps/search/');
         maps.searchParams.set('api', '1');
-        maps.searchParams.set('query', [location.name, location.building, 'Texas Tech University, Lubbock, TX']
-          .filter(Boolean).join(', '));
+        const mapQuery = [location.name, location.building, 'Texas Tech University, Lubbock, TX']
+          .filter(Boolean).join(', ');
+        maps.searchParams.set('query', mapQuery);
+        const mapEmbed = new URL('https://www.google.com/maps');
+        mapEmbed.searchParams.set('q', mapQuery);
+        mapEmbed.searchParams.set('output', 'embed');
 
         return {
           ...location,
@@ -42,6 +46,7 @@ export default ({ resource }) => {
           descriptionPreview: preview,
           hasMoreDescription: preview.length < description.length,
           mapsUrl: maps.href,
+          mapEmbedUrl: mapEmbed.href,
           status: availabilityLabel(location),
           image: location.images?.[0],
           menus: location.menus?.map(menu => ({

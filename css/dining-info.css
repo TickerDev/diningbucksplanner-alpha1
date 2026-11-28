@@ -59,3 +59,11 @@
   font-weight: 750;
 }
 .dining-description-toggle:hover { background: var(--soft); }
+
+.dining-map {
+  display: block;
+  width: 100%;
+  height: 264px;
+  border: 1px solid var(--border);
+  border-radius: var(--control-radius);
+}

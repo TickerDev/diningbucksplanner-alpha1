@@ -147,6 +147,9 @@
               </template>
             </div>
           </template>
+          <iframe class="dining-map" data-bind:src="selected.mapEmbedUrl"
+            title="Google Maps for {{selected.name}}" loading="lazy"
+            width="400" height="264" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
           <p><a data-bind:href="selected.mapsUrl" target="_blank" rel="noopener noreferrer">Open in Google Maps</a></p>
           <template data-if="selected.page">
             <p><a data-bind:href="selected.page">TTU location information</a></p>

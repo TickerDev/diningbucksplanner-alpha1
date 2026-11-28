@@ -19,7 +19,7 @@
   line-height: 1.15;
 }
 .header-breadcrumb a:hover { text-decoration: underline; }
-.brand-icon { width: 1.65rem; height: 1.65rem; object-fit: contain; }
+.brand-icon { width: auto; height: 2.375rem; }
 .header-breadcrumb > .icon { width: .7rem; height: .7rem; }
 .header-breadcrumb > span { color: var(--muted-strong); }
 .header-breadcrumb > span:last-child { white-space: nowrap; }
@@ -84,6 +84,7 @@
   navbar-component { min-height: 6.75rem; }
 }
 @media (max-width: 480px) {
+  .brand-icon { height: 1.875rem; }
   .header-breadcrumb { gap: .35rem; }
   .header-breadcrumb a { font-size: .8125rem; gap: .4rem; }
   .nav-link { padding-inline: .45rem; font-size: .8125rem; }

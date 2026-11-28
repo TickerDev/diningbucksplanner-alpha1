@@ -48,8 +48,8 @@ export default ({ resource }) => {
             .sort((a, b) => a.date.localeCompare(b.date))
             .map(record => ({
               ...record,
-              // The published heading can join its title and “Dining Hours” without a space.
-              title: record.title?.replace(/([a-z])Dining Hours\b/g, '$1 Dining Hours'),
+              // Separate the schedule reason from the published hours heading.
+              title: record.title?.replace(/([a-z\d])\s*(Dining Hours)\s*$/i, '$1 | $2'),
               label: hoursLabel(record.hours),
               formattedDate: weekdayFormat.format(new Date(`${record.date}T00:00:00Z`)),
             })),

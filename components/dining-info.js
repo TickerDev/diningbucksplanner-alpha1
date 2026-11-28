@@ -47,7 +47,10 @@ export default ({ resource }) => {
           upcomingHours: (location.exceptions ?? []).filter(record => record.date >= location.availability?.date)
             .sort((a, b) => a.date.localeCompare(b.date))
             .map(record => ({
-              ...record, label: hoursLabel(record.hours),
+              ...record,
+              // The published heading can join its title and “Dining Hours” without a space.
+              title: record.title?.replace(/([a-z])Dining Hours\b/g, '$1 Dining Hours'),
+              label: hoursLabel(record.hours),
               formattedDate: weekdayFormat.format(new Date(`${record.date}T00:00:00Z`)),
             })),
         };

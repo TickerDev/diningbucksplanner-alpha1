@@ -136,16 +136,13 @@
             <p class="pill-building-name">{{selected.building}}</p>
           </template>
           <template data-if="selected.description">
-            <div class="dining-description">
-              <p id="location-description">((descriptionExpanded ? selected.description : selected.descriptionPreview))</p>
-              <template data-if="selected.hasMoreDescription">
-                <button class="dining-description-toggle" type="button"
-                  aria-controls="location-description"
-                  data-bind:aria-expanded="descriptionExpanded ? 'true' : 'false'"
-                  data-bind:aria-label="descriptionExpanded ? 'Show less description' : 'Show full description'"
-                  data-on:click="toggleDescription">((descriptionExpanded ? 'Show less' : '…'))</button>
-              </template>
-            </div>
+            <p><span id="location-description">((descriptionExpanded ? selected.description : selected.descriptionPreview))</span><template data-if="selected.hasMoreDescription">
+              <a class="dining-description-toggle" href="#location-description"
+                aria-controls="location-description"
+                data-bind:aria-expanded="descriptionExpanded ? 'true' : 'false'"
+                data-bind:aria-label="descriptionExpanded ? 'Show less description' : 'Show full description'"
+                data-on:click.prevent="toggleDescription">((descriptionExpanded ? 'Show less' : '…'))</a>
+            </template></p>
           </template>
           <iframe class="dining-map" data-bind:src="selected.mapEmbedUrl"
             title="Google Maps for {{selected.name}}" loading="lazy"

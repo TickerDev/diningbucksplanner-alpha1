@@ -58,12 +58,25 @@
         </template>
 
         <template data-if="selected.upcomingHours.length">
-          <h2>Dated hours</h2>
-          <ul>
-            <template data-for="record in selected.upcomingHours" data-key="record.date">
-              <li><time data-bind:datetime="record.date">{{record.formattedDate}}</time> · {{record.title}} · {{record.label}}</li>
-            </template>
-          </ul>
+          <h2 id="dated-hours-heading">Dated hours</h2>
+          <table class="hours-schedule-table dated-hours-table" aria-labelledby="dated-hours-heading">
+            <thead>
+              <tr>
+                <th scope="col">Date</th>
+                <th scope="col">Schedule</th>
+                <th scope="col">Hours</th>
+              </tr>
+            </thead>
+            <tbody>
+              <template data-for="record in selected.upcomingHours" data-key="record.date">
+                <tr>
+                  <th scope="row"><time data-bind:datetime="record.date">{{record.formattedDate}}</time></th>
+                  <td>{{record.title}}</td>
+                  <td>{{record.label}}</td>
+                </tr>
+              </template>
+            </tbody>
+          </table>
         </template>
         <template data-if="selected.hoursSource">
           <p><a data-bind:href="selected.hoursSource.url">TTU dining hours</a></p>

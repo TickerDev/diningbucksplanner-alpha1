@@ -24,6 +24,9 @@
 .hours-schedule-table { border-collapse: collapse; width: 100%; font-size: .875rem; }
 .hours-schedule-table caption { font-weight: 700; text-align: left; padding-block: .4rem; }
 .hours-schedule-table th, .hours-schedule-table td { padding: .5rem .4rem; text-align: left; border-block-end: 1px solid var(--border); }
+.dated-hours-table thead { background: var(--soft); }
+.dated-hours-table tr > * { vertical-align: top; }
+.dated-hours-table td:last-child { font-variant-numeric: tabular-nums; }
 .dining-hours-card details { border-block: 1px solid var(--border); }
 .dining-hours-card summary { padding: .65rem .85rem; min-height: 44px; font-weight: 650; }
 .dining-hours-card summary:hover { background: var(--soft); }

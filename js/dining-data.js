@@ -23,8 +23,14 @@ export function pricedItems(location) {
 }
 
 export function availabilityLabel(location) {
-  return location.availability?.open === true ? 'Scheduled open' :
-    location.availability?.open === false ? 'Scheduled closed' : 'Hours unconfirmed';
+  const availability = location.availability;
+  if (availability?.open === true) return 'Scheduled open';
+  if (availability?.open !== false) return 'Hours unconfirmed';
+
+  const holidayClosure = availability.basis === 'holiday' && location.exceptions?.some(exception =>
+    exception.date === availability.date && exception.kind === 'holiday' &&
+    (exception.allClosed === true || exception.hours?.length === 0));
+  return holidayClosure ? 'Closed for the holiday' : 'Scheduled closed';
 }
 
 export function diningInfoLink(id) {

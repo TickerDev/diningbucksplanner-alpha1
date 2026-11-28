@@ -217,10 +217,9 @@ function updateSpendingGraph(animate = true) {
   // Retrieve user inputs
   const budget = budgetInput.value === '' ? 2200 : budgetInput.valueAsNumber;
   const dailySpend = spendingInput.value === '' ? 0 : spendingInput.valueAsNumber;
-  const projectedTotal = dailySpend * totalDays;
+  const projectedSpend = dailySpend * totalDays;
   if (!budgetInput.validity.valid || !spendingInput.validity.valid ||
-      !Number.isFinite(budget) || !Number.isFinite(projectedTotal)) {
-    cancelAnimationFrame(projectionFrame);
+      !Number.isFinite(budget) || !Number.isFinite(projectedSpend)) {
     showProjectionStatus('invalid', 'Enter valid, nonnegative amounts');
     return;
   }
@@ -228,6 +227,15 @@ function updateSpendingGraph(animate = true) {
   if (labelBudget) labelBudget.textContent = projectionAxisMoney.format(budget);
   document.getElementById('budget-axis-max').textContent = formatProjectionTick(budget);
   document.getElementById('budget-axis-mid').textContent = formatProjectionTick(budget / 2);
+  document.getElementById('line-target').setAttribute('y2', budget > 0 ? yCeil : yBase);
+
+  // Compare in cents when the values fit, so exact-budget projections stay exact.
+  const budgetCents = Math.round(budget * 100);
+  const dailyCents = Math.round(dailySpend * 100);
+  const useCents = Number.isSafeInteger(budgetCents) && Number.isSafeInteger(dailyCents * totalDays);
+  const available = useCents ? budgetCents : budget;
+  const daily = useCents ? dailyCents : dailySpend;
+  const projectedTotal = daily * totalDays;
 
   // 1. Calculate trajectory line and intersection
   let xTarget = xMax;
@@ -238,22 +246,22 @@ function updateSpendingGraph(animate = true) {
     // Zero spending: flat line at $0
     xTarget = xMax;
     yTarget = yBase;
-  } else if (projectedTotal > budget) {
+  } else if (projectedTotal > available) {
     // Budget is exceeded before the end of semester
     isOverBudget = true;
-    const daysUntilEmpty = budget / dailySpend;
+    const daysUntilEmpty = available / daily;
     const progress = Math.max(0, Math.min(1, daysUntilEmpty / totalDays));
     xTarget = xOrigin + (plotWidth * progress);
     yTarget = yCeil; // Reaches full budget ceiling early
   } else {
     // Budget survives the full semester
-    const spendFraction = projectedTotal / budget;
+    const spendFraction = projectedTotal / available;
     xTarget = xMax;
     yTarget = yBase - (plotHeight * spendFraction);
   }
 
   // The displayed trajectory, endpoint and gauge share one animation.
-  const fillFraction = budget > 0 ? Math.min(1, projectedTotal / budget) : Number(dailySpend > 0);
+  const fillFraction = budget > 0 ? Math.min(1, projectedTotal / available) : Number(dailySpend > 0);
   drawProjection(lineProj, pointFinish, gaugeFill, xTarget, yTarget,
     gaugeTotalHeight * fillFraction, gaugeTop + gaugeTotalHeight, animate);
   chartCard.classList.toggle('is-over-budget', isOverBudget);
@@ -261,10 +269,10 @@ function updateSpendingGraph(animate = true) {
   if (dailySpend <= 0) {
     showProjectionStatus('neutral', 'Enter daily spend to project');
   } else if (isOverBudget) {
-    const daysLeft = Math.floor(budget / dailySpend);
+    const daysLeft = Math.floor(available / daily);
     showProjectionStatus('over', 'Projected budget depletion', `Day ${daysLeft}`);
   } else {
-    const surplus = budget - projectedTotal;
+    const surplus = (available - projectedTotal) / (useCents ? 100 : 1);
     showProjectionStatus('on', 'Projected balance after 112 days', projectionBalanceMoney.format(surplus));
   }
 }

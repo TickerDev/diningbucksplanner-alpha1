@@ -73,8 +73,8 @@ app.ready().then(() => {
     // Metrics Banner
     valTotalSpent.textContent = `$${totalSpent.toFixed(2)}`;
 
+    const remaining = Number((totalBudget - totalSpent).toFixed(2));
     if (totalBudget > 0) {
-      const remaining = totalBudget - totalSpent;
       valRemaining.textContent = `$${Math.abs(remaining).toFixed(2)}${remaining < 0 ? ' over' : ''}`;
       if (remaining >= 0) {
         valRemaining.className = 'metric-value highlight-green';
@@ -101,8 +101,7 @@ app.ready().then(() => {
           overallStatusText.textContent = 'Enter budget to track';
         }
       } else {
-        const remaining = totalBudget - totalSpent;
-        if (totalSpent <= totalBudget) {
+        if (remaining >= 0) {
           overallSwatch.classList.add('on-budget');
           overallStatusText.classList.add('text-green');
           overallStatusText.textContent = `On Budget ($${remaining.toFixed(2)} remaining)`;

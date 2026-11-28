@@ -33,7 +33,7 @@ Use locally served Manrope. Page headings run from 28 to 32px, section headings 
 - Directory search matches venue names or buildings. Building and scheduled-open filters combine with search and run on the existing dining response. A clear-filters action restores the full directory. Thumbnails come from the API and keep their footprint if an image is missing or fails.
 - Availability uses distinct, labeled open, closed, holiday, and unconfirmed states. The API determines schedule precedence. On detail pages, highlight the dated operating-hours row matching the API’s Central Time date.
 - Weekly charts use a common Y-axis maximum and interval. Summaries distinguish sample totals, the difference from the daily target across recorded days, and the full daily breakdown. Missing days stay unrecorded.
-- Planner selection is independent of an entry’s budget state. Keep the full location name in the editor and accessible day label when the cell truncates it. Entries survive month navigation for the current page visit and reset on reload.
+- Planner opens on the browser’s current local date. An underline marks today independently of the selected date outline and budget state. Keep the full location name in the editor and accessible day label when the cell truncates it. Entries survive month navigation for the current page visit and reset on reload.
 
 ## Plain components
 

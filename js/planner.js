@@ -1,6 +1,9 @@
 // Initialize after Plain mounts the planner fields and calendar slots.
 app.ready().then(() => {
-  let selectedDay = 7;
+  const today = new Date();
+  const currentYear = today.getFullYear();
+  const currentMonth = today.getMonth();
+  let selectedDay = today.getDate();
 
   // Blank by default; user enters their own budget & expenses
   const monthlyEntries = new Map();
@@ -159,10 +162,10 @@ app.ready().then(() => {
     dayButtons.forEach(btn => {
       if (parseInt(btn.dataset.day, 10) === day) {
         btn.classList.add('day-selected');
-        btn.setAttribute('aria-current', 'date');
+        btn.setAttribute('aria-pressed', 'true');
       } else {
         btn.classList.remove('day-selected');
-        btn.removeAttribute('aria-current');
+        btn.setAttribute('aria-pressed', 'false');
       }
     });
 
@@ -262,8 +265,13 @@ app.ready().then(() => {
 
   const prevBtn = document.getElementById('btn-prev-month');
   const nextBtn = document.getElementById('btn-next-month');
-  const firstYear = Number(yearSelect.options[0].value);
-  const lastYear = Number(yearSelect.options[yearSelect.options.length - 1].value);
+  const firstYear = Math.min(2026, currentYear);
+  const lastYear = Math.max(2027, currentYear + 1);
+  for (let year = firstYear; year <= lastYear; year++) {
+    yearSelect.add(new Option(String(year), String(year)));
+  }
+  yearSelect.value = String(currentYear);
+  monthSelect.value = String(currentMonth);
 
   function renderMonth() {
     const month = Number(monthSelect.value);
@@ -288,6 +296,9 @@ app.ready().then(() => {
       button.type = 'button';
       button.className = 'calendar-day';
       button.dataset.day = String(day);
+      if (year === currentYear && month === currentMonth && day === today.getDate()) {
+        button.setAttribute('aria-current', 'date');
+      }
       const number = document.createElement('span');
       number.className = 'calendar-date';
       number.textContent = String(day);

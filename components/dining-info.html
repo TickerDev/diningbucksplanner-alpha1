@@ -135,7 +135,19 @@
           <template data-else>
             <p class="pill-building-name">{{selected.building}}</p>
           </template>
-          <p>{{selected.description}}</p>
+          <template data-if="selected.description">
+            <div class="dining-description">
+              <p id="location-description">((descriptionExpanded ? selected.description : selected.descriptionPreview))</p>
+              <template data-if="selected.hasMoreDescription">
+                <button class="dining-description-toggle" type="button"
+                  aria-controls="location-description"
+                  data-bind:aria-expanded="descriptionExpanded ? 'true' : 'false'"
+                  data-bind:aria-label="descriptionExpanded ? 'Show less description' : 'Show full description'"
+                  data-on:click="toggleDescription">((descriptionExpanded ? 'Show less' : '…'))</button>
+              </template>
+            </div>
+          </template>
+          <p><a data-bind:href="selected.mapsUrl" target="_blank" rel="noopener noreferrer">Open in Google Maps</a></p>
           <template data-if="selected.page">
             <p><a data-bind:href="selected.page">TTU location information</a></p>
           </template>

@@ -15,7 +15,7 @@ export default ({ resource }) => {
 
   return {
     props: { view: { type: 'string', default: 'directory' } },
-    state: { dining },
+    state: { dining, descriptionExpanded: false },
     computed: {
       locations() {
         return (this.dining.value?.locations ?? []).map(({ id, name, building }) => ({
@@ -25,8 +25,23 @@ export default ({ resource }) => {
       selected() {
         const location = this.dining.value?.locations.find(item => item.id === locationId);
         if (!location) return null;
+
+        const description = location.description?.trim() ?? '';
+        const previewLimit = 180;
+        const preview = description.length > previewLimit
+          ? description.slice(0, previewLimit).replace(/\s+\S*$/, '')
+          : description;
+        const maps = new URL('https://www.google.com/maps/search/');
+        maps.searchParams.set('api', '1');
+        maps.searchParams.set('query', [location.name, location.building, 'Texas Tech University, Lubbock, TX']
+          .filter(Boolean).join(', '));
+
         return {
           ...location,
+          description,
+          descriptionPreview: preview,
+          hasMoreDescription: preview.length < description.length,
+          mapsUrl: maps.href,
           status: availabilityLabel(location),
           image: location.images?.[0],
           menus: location.menus?.map(menu => ({
@@ -57,6 +72,9 @@ export default ({ resource }) => {
       },
     },
     actions: {
+      toggleDescription() {
+        this.descriptionExpanded = !this.descriptionExpanded;
+      },
       retry() {
         dining.retry();
       },

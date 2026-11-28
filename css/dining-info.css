@@ -47,3 +47,15 @@
 @media (prefers-reduced-motion: no-preference) {
   .dining-hours-card { animation: editorial-in 240ms var(--ease) both; }
 }
+
+.dining-description-toggle {
+  min-width: 44px;
+  min-height: 44px;
+  padding-inline: var(--space-2);
+  border: 0;
+  border-radius: var(--control-radius);
+  background: transparent;
+  color: var(--negative);
+  font-weight: 750;
+}
+.dining-description-toggle:hover { background: var(--soft); }

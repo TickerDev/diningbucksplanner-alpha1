@@ -9,6 +9,11 @@ app.ready().then(() => {
     { id: 'this-week', spending: [11, 8, 6, 12, null, null, null] },
   ];
 
+  const scaleStep = 5;
+  const largestAmount = Math.max(dailyTarget, ...weeks.flatMap(week => week.spending));
+  const scaleMax = (Math.floor(largestAmount / scaleStep) + 1) * scaleStep;
+  const formatAmount = amount => `${amount.toFixed(2)} Dining Bucks`;
+
   for (const { id, spending } of weeks) {
     const canvas = document.getElementById(id);
     const summary = document.getElementById(`${id}-summary`);
@@ -19,7 +24,16 @@ app.ready().then(() => {
     const difference = dailyTarget * recorded.length - total;
     const status = difference === 0 ? 'on target' : `${Math.abs(difference).toFixed(2)} ${difference > 0 ? 'under' : 'over'} target`;
     const dailyTotals = spending.map((amount, day) => `${weekdays[day]}: ${amount === null ? 'no spending recorded' : amount.toFixed(2)}`);
-    summary.textContent = `${total.toFixed(2)} Dining Bucks spent, ${status}. ${dailyTotals.join(', ')}.`;
+    const spent = document.createElement('strong');
+    spent.className = 'weekly-spent';
+    spent.textContent = `${formatAmount(total)} spent`;
+    const comparison = document.createElement('span');
+    comparison.className = 'weekly-target';
+    comparison.textContent = status;
+    const breakdown = document.createElement('span');
+    breakdown.className = 'weekly-breakdown';
+    breakdown.textContent = `${dailyTotals.join(', ')}.`;
+    summary.replaceChildren(spent, ' · ', comparison, '. ', breakdown);
 
     if (typeof Chart !== 'function') {
       canvas.hidden = true;
@@ -41,7 +55,7 @@ app.ready().then(() => {
             pointRadius: 0,
           },
           {
-            label: 'Spent',
+            label: 'Sample spending',
             data: spending,
             backgroundColor: spending.map((amount) => color(amount > dailyTarget ? '--negative' : '--positive')),
             borderRadius: 4,
@@ -53,9 +67,27 @@ app.ready().then(() => {
         animation: reduceMotion ? false : { duration: 240 },
         font: { family: theme.fontFamily },
         color: color('--muted-strong'),
+        interaction: { mode: 'index', intersect: false },
+        plugins: {
+          legend: { labels: { color: color('--ink'), boxWidth: 16, boxHeight: 8 } },
+          tooltip: {
+            callbacks: {
+              label: ({ dataset, parsed }) => `${dataset.label}: ${formatAmount(parsed.y)}`,
+              afterBody: items => spending[items[0]?.dataIndex] === null ? 'No spending recorded' : '',
+            },
+          },
+        },
         scales: {
-          x: { grid: { display: false } },
-          y: { beginAtZero: true, grid: { color: color('--border') }, title: { display: true, text: 'Dining Bucks' } },
+          x: {
+            grid: { display: false },
+            ticks: { autoSkip: false, maxRotation: 0, callback: index => weekdays[index].slice(0, 3) },
+          },
+          y: {
+            min: 0, max: scaleMax,
+            ticks: { stepSize: scaleStep },
+            grid: { color: color('--border') },
+            title: { display: true, text: 'Dining Bucks' },
+          },
         },
       },
     });

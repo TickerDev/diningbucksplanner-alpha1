@@ -35,6 +35,7 @@
   font-family: Manrope, system-ui, sans-serif;
   color: var(--ink);
   color-scheme: light;
+  scrollbar-gutter: stable;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -167,3 +168,9 @@ input::placeholder { color: var(--muted-strong); opacity: 1; }
 
 .button:active:not(:disabled) { background: var(--border); }
 .button-primary:active:not(:disabled) { background: #890000; border-color: #890000; }
+
+.dining-status { display: inline-block; font-weight: 750; line-height: 1.4; }
+.dining-status[data-status="open"] { color: var(--positive); }
+.dining-status[data-status="closed"] { color: var(--negative); }
+.dining-status[data-status="holiday"] { color: #795119; }
+.dining-status[data-status="unavailable"] { color: var(--muted); font-weight: 600; }

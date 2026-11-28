@@ -178,6 +178,17 @@ function formatProjectionTick(amount) {
     : amount >= 1e15 ? `$${amount.toExponential(1)}` : projectionAxisMoney.format(amount);
 }
 
+const projectionBalanceMoney = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
+
+function showProjectionStatus(state, label, value = '') {
+  const status = document.getElementById('status-tag-text');
+  const amount = document.getElementById('projection-status-value');
+  status.dataset.state = state;
+  document.getElementById('projection-status-label').textContent = label;
+  amount.textContent = value;
+  amount.hidden = !value;
+}
+
 function updateSpendingGraph(animate = true) {
   const budgetInput = document.getElementById('dining-budget');
   const spendingInput = document.getElementById('planned-spending');
@@ -209,8 +220,8 @@ function updateSpendingGraph(animate = true) {
   const projectedTotal = dailySpend * totalDays;
   if (!budgetInput.validity.valid || !spendingInput.validity.valid ||
       !Number.isFinite(budget) || !Number.isFinite(projectedTotal)) {
-    statusText.dataset.state = 'invalid';
-    statusText.textContent = 'Enter valid, nonnegative amounts';
+    cancelAnimationFrame(projectionFrame);
+    showProjectionStatus('invalid', 'Enter valid, nonnegative amounts');
     return;
   }
 
@@ -248,16 +259,13 @@ function updateSpendingGraph(animate = true) {
   chartCard.classList.toggle('is-over-budget', isOverBudget);
 
   if (dailySpend <= 0) {
-    statusText.dataset.state = 'neutral';
-    statusText.textContent = 'Enter daily spend to project';
+    showProjectionStatus('neutral', 'Enter daily spend to project');
   } else if (isOverBudget) {
     const daysLeft = Math.floor(budget / dailySpend);
-    statusText.dataset.state = 'over';
-    statusText.textContent = `Alert: Budget empty on Day ${daysLeft}!`;
+    showProjectionStatus('over', 'Projected budget depletion', `Day ${daysLeft}`);
   } else {
     const surplus = budget - projectedTotal;
-    statusText.dataset.state = 'on';
-    statusText.textContent = `On Track! +$${surplus.toFixed(0)} leftover`;
+    showProjectionStatus('on', 'Projected balance after 112 days', projectionBalanceMoney.format(surplus));
   }
 }
 

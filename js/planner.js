@@ -67,6 +67,7 @@ app.ready().then(() => {
         ? `$${amount.toFixed(2)} at ${location || 'Dining'} (${over ? 'Over Budget' : 'On Budget'})`
         : location ? `${location}, no spend logged` : 'No spend logged';
       btn.setAttribute('aria-label', `${monthLabel} ${day}: ${name}`);
+      btn.title = name;
     });
 
     // Metrics Banner

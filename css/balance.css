@@ -10,3 +10,11 @@
 .balance-suggestions a { font-weight: 700; }
 .balance-summary { display: flex; flex-wrap: wrap; gap: .25rem 1.5rem; margin-block: -1rem 1.75rem; color: var(--muted-strong); }
 @media (max-width: 750px) { .balance-charts { grid-template-columns: minmax(0, 1fr); } }
+
+.weekly-spent { color: var(--ink); font-size: 1rem; font-variant-numeric: tabular-nums; }
+.weekly-target { color: var(--ink); font-weight: 700; }
+.weekly-breakdown { display: block; margin-block-start: var(--space-2); }
+.balance-suggestions figure { overflow: visible; }
+.balance-suggestions img { border-radius: var(--control-radius); }
+.balance-suggestions figure:has(a:hover, a:focus-visible) img { outline: 1px solid var(--control-border); outline-offset: 2px; }
+.balance-suggestions a:hover { color: var(--scarlet); }

@@ -137,3 +137,12 @@ th[aria-sort] .sort-button, .sort-button:hover { color: var(--negative); }
   .sort-button { gap: 4px; }
 }
 @media (max-width: 355px) { .chart-field-grid { grid-template-columns: minmax(0, 1fr); } }
+
+.chart-status { min-block-size: 3.5rem; }
+.chart-status strong:not([hidden]) {
+  display: block;
+  font-size: clamp(1.375rem, 3vw, 1.75rem);
+  line-height: 1.25;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}

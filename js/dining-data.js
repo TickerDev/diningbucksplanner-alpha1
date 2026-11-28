@@ -28,5 +28,5 @@ export function availabilityLabel(location) {
 }
 
 export function diningInfoLink(id) {
-  return `dining-info.html?location=${encodeURIComponent(id)}`;
+  return `dining-location.html?location=${encodeURIComponent(id)}`;
 }

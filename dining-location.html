@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="View Texas Tech campus dining locations, operating hours, and published menus." />
+    <title>Dining Location | Your Dining Bucks Planner</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/navbar.css" />
+    <link rel="stylesheet" href="css/footer.css" />
+    <link rel="preload" href="components/navbar.html" as="fetch" crossorigin />
+    <link rel="preload" href="components/dining-info.html" as="fetch" crossorigin />
+    <link rel="stylesheet" href="css/dining-info.css" />
+    <script src="vendor/plain.js" defer></script>
+    <script src="js/app.js" defer></script>
+  </head>
+  <body class="dining-page">
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <navbar-component page="{{currentPage}}"></navbar-component>
+    <main id="main-content" class="dining-main" tabindex="-1">
+      <dining-info-component view="location"></dining-info-component>
+    </main>
+    <footer-component page="{{currentPage}}"></footer-component>
+  </body>
+</html>

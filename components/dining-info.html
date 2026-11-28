@@ -1,10 +1,17 @@
 <section class="dining-info" aria-labelledby="dining-heading">
-  <h1 id="dining-heading">Campus Dining Locations</h1>
+  <template data-if="props.view === 'location'">
+    <a class="dining-back" href="dining-info.html">All dining locations</a>
+    <h1 id="dining-heading">((selected ? selected.name : 'Dining Location'))</h1>
+  </template>
+  <template data-else>
+    <h1 id="dining-heading">Campus Dining Locations</h1>
+  </template>
   <p class="resource-status" role="status">
     <template data-if="dining.initialPending">Loading campus dining…</template>
     <template data-if="dining.error">Campus dining could not load.</template>
     <template data-if="dining.value && dining.value.stale">Some dining information may be out of date.</template>
-    <template data-if="dining.value && locations.length === 0">No dining locations are listed.</template>
+    <template data-if="dining.value && props.view === 'directory' && locations.length === 0">No dining locations are listed.</template>
+    <template data-if="dining.value && props.view === 'location' && !selected">This dining location could not be found.</template>
   </p>
   <template data-if="dining.initialPending">
     <loading-skeleton-component></loading-skeleton-component>
@@ -13,123 +20,117 @@
     <button class="button" type="button" data-on:click="retry">Retry dining locations</button>
   </template>
 
-  <div class="dining-layout">
-    <section class="dining-col-left" aria-label="Campus dining hours and menus">
-      <ul class="dining-locations-list rule-section" role="list">
-        <template data-for="location in locations" data-key="location.id">
-          <li class="dining-location-item">
-            <button type="button" class="dining-pill-btn"
-              data-bind:aria-expanded="location.id === selectedLocationId ? 'true' : 'false'"
-              data-on:click="toggleLocation(location.id)">
-              <span class="pill-arrow-wrap" aria-hidden="true">
-                <template data-if="location.id === selectedLocationId">
-                  <img class="pill-arrow-icon arrow-down" data-bind:src="arrowDownSrc" width="5" height="4" alt="" />
-                </template>
-                <template data-else>
-                  <img class="pill-arrow-icon arrow-right" data-bind:src="arrowRightSrc" width="5" height="4" alt="" />
-                </template>
-              </span>
-              <span class="pill-text-wrap">
-                <span class="pill-location-name">{{location.name}}</span>
-                <span class="pill-building-name">{{location.building}}</span>
-              </span>
-            </button>
+  <template data-if="props.view === 'directory'">
+    <ul class="dining-locations-list rule-section" role="list">
+      <template data-for="location in locations" data-key="location.id">
+        <li class="dining-location-item">
+          <a class="dining-location-link" data-bind:href="location.href">
+            <span class="pill-text-wrap">
+              <span class="pill-location-name">{{location.name}}</span>
+              <span class="pill-building-name">{{location.building}}</span>
+            </span>
+            <img class="icon" src="assets/lucide/chevron-right.svg" alt="" />
+          </a>
+        </li>
+      </template>
+    </ul>
+    <div class="ttu-emblem-wrap">
+      <img src="assets/ttu.png" class="ttu-double-t" alt="Texas Tech Red Raiders Double T logo" width="225" height="246" />
+    </div>
+  </template>
 
-            <template data-if="selected && location.id === selected.id">
-              <article class="dining-hours-card" aria-label="Hours and menus for {{location.name}}">
-                <p><strong>{{selected.status}}</strong></p>
-                <template data-if="selected.weeklyHours.length">
-                  <table class="hours-schedule-table">
-                    <caption>Regular hours (Central Time)</caption>
-                    <tbody>
-                      <template data-for="day in selected.weeklyHours" data-key="day.day">
-                        <tr><th scope="row">{{day.day}}</th><td>{{day.label}}</td></tr>
-                      </template>
-                    </tbody>
-                  </table>
-                </template>
-                <template data-else>
-                  <p>Regular hours are unavailable.</p>
-                </template>
-
-                <template data-if="selected.upcomingHours.length">
-                  <h2>Dated hours</h2>
-                  <ul>
-                    <template data-for="record in selected.upcomingHours" data-key="record.date">
-                      <li><time data-bind:datetime="record.date">{{record.formattedDate}}</time> · {{record.title}} · {{record.label}}</li>
-                    </template>
-                  </ul>
-                </template>
-                <template data-if="selected.hoursSource">
-                  <p><a data-bind:href="selected.hoursSource.url">TTU dining hours</a></p>
-                </template>
-
-                <template data-if="selected.mealRates">
-                  <h2>Published meal rates</h2>
-                  <ul>
-                    <template data-for="rate, index in selected.mealRates" data-key="index">
-                      <li>{{rate.service}} · {{rate.diningBucks}} · Guest {{rate.guestRate}}</li>
-                    </template>
-                  </ul>
-                </template>
-                <template data-if="selected.menus">
-                  <h2>Menus</h2>
-                  <template data-for="menu in selected.menus" data-key="menu.url">
-                    <details>
-                      <summary>((menu.title ?? 'Published menu'))</summary>
-                      <ul class="dining-menu-items">
-                        <template data-for="item in menu.items" data-key="item.id">
-                          <li>
-                            <strong>{{item.name}}</strong> · ((item.price ?? 'Price unavailable'))
-                            <span>((item.section ? item.section + ' · ' : '')){{item.category}}</span>
-                            <template data-if="item.days"><span>{{item.days}}</span></template>
-                            <template data-if="item.rotation"><span>{{item.rotation}}</span></template>
-                            <template data-if="item.allergens"><span>Published allergen or dietary information: {{item.allergens}}</span></template>
-                            <template data-for="link in item.links" data-key="link.key">
-                              <a data-bind:href="link.href">{{link.label}}</a>
-                            </template>
-                          </li>
-                        </template>
-                      </ul>
-                    </details>
-                  </template>
-                </template>
-                <template data-else>
-                  <p>Menu items and prices are unavailable.</p>
-                </template>
-                <template data-if="selected.externalLinks">
-                  <ul>
-                    <template data-for="link in selected.externalLinks" data-key="link.url">
-                      <li><a data-bind:href="link.url">{{link.label}}</a></li>
-                    </template>
-                  </ul>
-                </template>
-              </article>
-            </template>
-          </li>
+  <template data-if="props.view === 'location' && selected">
+    <div class="dining-layout">
+      <article class="dining-hours-card" aria-label="Hours and menus for {{selected.name}}">
+        <p><strong>{{selected.status}}</strong></p>
+        <template data-if="selected.weeklyHours.length">
+          <table class="hours-schedule-table">
+            <caption>Regular hours (Central Time)</caption>
+            <tbody>
+              <template data-for="day in selected.weeklyHours" data-key="day.day">
+                <tr><th scope="row">{{day.day}}</th><td>{{day.label}}</td></tr>
+              </template>
+            </tbody>
+          </table>
         </template>
-      </ul>
-    </section>
+        <template data-else>
+          <p>Regular hours are unavailable.</p>
+        </template>
 
-    <aside class="dining-col-right rule-section" aria-label="Dining location details">
-      <template data-if="selected">
+        <template data-if="selected.upcomingHours.length">
+          <h2>Dated hours</h2>
+          <ul>
+            <template data-for="record in selected.upcomingHours" data-key="record.date">
+              <li><time data-bind:datetime="record.date">{{record.formattedDate}}</time> · {{record.title}} · {{record.label}}</li>
+            </template>
+          </ul>
+        </template>
+        <template data-if="selected.hoursSource">
+          <p><a data-bind:href="selected.hoursSource.url">TTU dining hours</a></p>
+        </template>
+
+        <template data-if="selected.mealRates">
+          <h2>Published meal rates</h2>
+          <ul>
+            <template data-for="rate, index in selected.mealRates" data-key="index">
+              <li>{{rate.service}} · {{rate.diningBucks}} · Guest {{rate.guestRate}}</li>
+            </template>
+          </ul>
+        </template>
+        <template data-if="selected.menus">
+          <h2>Menus</h2>
+          <template data-for="menu in selected.menus" data-key="menu.url">
+            <details>
+              <summary>((menu.title ?? 'Published menu'))</summary>
+              <ul class="dining-menu-items">
+                <template data-for="item in menu.items" data-key="item.id">
+                  <li>
+                    <strong>{{item.name}}</strong> · ((item.price ?? 'Price unavailable'))
+                    <span>((item.section ? item.section + ' · ' : '')){{item.category}}</span>
+                    <template data-if="item.days"><span>{{item.days}}</span></template>
+                    <template data-if="item.rotation"><span>{{item.rotation}}</span></template>
+                    <template data-if="item.allergens"><span>Published allergen or dietary information: {{item.allergens}}</span></template>
+                    <template data-for="link in item.links" data-key="link.key">
+                      <a data-bind:href="link.href">{{link.label}}</a>
+                    </template>
+                  </li>
+                </template>
+              </ul>
+            </details>
+          </template>
+        </template>
+        <template data-else>
+          <p>Menu items and prices are unavailable.</p>
+        </template>
+        <template data-if="selected.externalLinks">
+          <ul>
+            <template data-for="link in selected.externalLinks" data-key="link.url">
+              <li><a data-bind:href="link.url">{{link.label}}</a></li>
+            </template>
+          </ul>
+        </template>
+      </article>
+      <aside class="dining-col-right rule-section" aria-label="Dining location details">
         <section>
-          <h2>{{selected.name}}</h2>
+          <h2>About this location</h2>
           <template data-if="selected.image">
             <figure class="dining-location-figure">
               <img class="dining-location-img" data-bind:src="selected.image" alt="" />
               <figcaption>{{selected.building}}</figcaption>
             </figure>
           </template>
+          <template data-else>
+            <p class="pill-building-name">{{selected.building}}</p>
+          </template>
           <p>{{selected.description}}</p>
           <template data-if="selected.page">
             <p><a data-bind:href="selected.page">TTU location information</a></p>
           </template>
         </section>
-      </template>
-      <div class="ttu-emblem-wrap">
-        <img src="assets/ttu.png" class="ttu-double-t" alt="Texas Tech Red Raiders Double T logo" width="225" height="246" />
-      </div>
-    </aside>
-  </div>
+        <div class="ttu-emblem-wrap">
+          <img src="assets/ttu.png" class="ttu-double-t" alt="Texas Tech Red Raiders Double T logo" width="225" height="246" />
+        </div>
+      </aside>
+    </div>
+  </template>
 </section>

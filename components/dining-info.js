@@ -1,4 +1,4 @@
-import { availabilityLabel, diningResource } from '../js/dining-data.js';
+import { availabilityLabel, diningInfoLink, diningResource } from '../js/dining-data.js';
 
 const weekdayFormat = new Intl.DateTimeFormat('en-US', { dateStyle: 'medium', timeZone: 'UTC' });
 
@@ -9,22 +9,21 @@ function hoursLabel(intervals) {
     `${type === 'regular' ? '' : `${type}: `}${open}–${close}`).join(' · ');
 }
 
-export default ({ resource, state }) => {
-  state.selectedLocationId = new URLSearchParams(location.search).get('location');
+export default ({ resource }) => {
+  const locationId = new URLSearchParams(location.search).get('location');
   const dining = diningResource(resource);
 
   return {
-    state: {
-      dining,
-      arrowDownSrc: 'assets/arrow-down.svg',
-      arrowRightSrc: 'assets/arrow-right.svg',
-    },
+    props: { view: { type: 'string', default: 'directory' } },
+    state: { dining },
     computed: {
       locations() {
-        return this.dining.value?.locations ?? [];
+        return (this.dining.value?.locations ?? []).map(({ id, name, building }) => ({
+          id, name, building, href: diningInfoLink(id),
+        }));
       },
       selected() {
-        const location = this.locations.find(item => item.id === this.selectedLocationId);
+        const location = this.dining.value?.locations.find(item => item.id === locationId);
         if (!location) return null;
         return {
           ...location,
@@ -55,9 +54,6 @@ export default ({ resource, state }) => {
       },
     },
     actions: {
-      toggleLocation(id) {
-        this.selectedLocationId = this.selectedLocationId === id ? null : id;
-      },
       retry() {
         dining.retry();
       },

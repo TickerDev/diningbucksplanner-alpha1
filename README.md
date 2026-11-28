@@ -16,12 +16,12 @@ Statuses describe the current source code. Partially implemented pages have an i
 | Page 1 — Name & Description | **Home — [index.html](index.html).** Compare campus dining locations by name or lowest published fixed item price, see scheduled availability, look up published nutrition, and project spending from user-entered amounts. |
 | Page 2 — Name & Description | **Balance — [balance.html](balance.html). Partially implemented:** displays Chart.js charts of sample daily spending. The charts compare last week and this week against a daily target, with text summaries and sample dining suggestions. Account balance retrieval and transaction entry remain unavailable. |
 | Page 3 — Name & Description | **Planner — [planner.html](planner.html). Implemented prototype:** uses the shared Plain navbar and footer with budget metrics, day selection, and in-memory spending entry. The calendar follows the selected month and year, and entries are tracked separately by month until the page reloads. |
-| Page 4 — Name & Description | **Dining Info — [dining-info.html](dining-info.html).** Expand a location to see published regular and dated hours, menus, item prices, and meal rates where TTU provides them. |
+| Page 4 — Name & Description | **Dining Info — [dining-info.html](dining-info.html).** Open a location’s [detail page](dining-location.html) to see published regular and dated hours, menus, item prices, and meal rates where TTU provides them. |
 | Page 5 — Name & Description | **Login — [login.html](login.html). Implemented prototype:** users enter a correctly formatted email address and any non-empty password, then submit the form to open the sample Balance page. |
 | Page 6 — Name & Description (if applicable) | **Sign Up — [signup.html](signup.html). Partially implemented:** shows disabled registration and eRaider controls with a link back to Login. |
 | Key Interactive Feature 1 | **Dining table sorting — Implemented.** Sort by location name or lowest published fixed item price. Locations without a comparable published price are listed last when sorting by price. |
 | Key Interactive Feature 2 | **Live spending projection — Implemented for positive budget inputs.** Users enter a budget and planned daily spending on Home. The SVG line, endpoint, spending gauge, and budget label update immediately for a fixed 112-day semester; a status message reports projected leftover funds or the day the budget runs out. The fields start at an editable sample budget of $2,200 and daily spending of $8. Clearing the budget uses $2,200, and clearing daily spending plots zero. Zero is a valid budget. |
-| Key Interactive Feature 3 | **Dining hours accordion — Implemented.** Expand any location to view its hours and menu data from the dining API. |
+| Key Interactive Feature 3 | **Dining location pages — Implemented.** Open any location from the directory, Home comparison, or Balance suggestions to view its hours and menus. Existing Dining Info location links redirect to the detail page. |
 | Key Interactive Feature 4 | **Page navigation — Implemented.** Users select Login, Home, Balance, Planner, or Dining Info in the shared header, or use footer links where present. The browser loads the corresponding HTML document, and Plain marks the current navigation link and updates the breadcrumb. Sign Up has a separate URL and currently displays the Login navigation state. |
 | Key Interactive Feature 5 | **Login — Implemented.** Submitting the form sets a browser-session cookie and opens Balance. The profile picture opens a menu with a Log out action that clears the cookie. The entered values are discarded. |
 
@@ -43,6 +43,7 @@ Application and documentation files in the current checkout are shown below. Git
 ├── balance.html
 ├── planner.html
 ├── dining-info.html
+├── dining-location.html
 ├── login.html
 ├── signup.html
 ├── plain.check.json
@@ -93,7 +94,7 @@ Application and documentation files in the current checkout are shown below. Git
     └── plain.js
 ```
 
-Every page loads the shared Plain runtime and app script and uses the navbar component. Home, Balance, Planner, and Dining Info also use the footer component; Login and Sign Up retain their existing compact layout. Planner-specific native controls live in [js/planner.js](js/planner.js), without duplicate Plain event bindings.
+Every page loads the shared Plain runtime and app script and uses the navbar component. Home, Balance, Planner, Dining Info, and location details also use the footer component; Login and Sign Up retain their existing compact layout. Planner-specific native controls live in [js/planner.js](js/planner.js), without duplicate Plain event bindings.
 
 Shared HTML components and optional sibling JavaScript modules live in `components/`. [js/app.js](js/app.js) initializes Plain, defines navigation, sorts the Home table, and updates the SVG projection. [plain.check.json](plain.check.json) supplies binding metadata for the Plain checker.
 

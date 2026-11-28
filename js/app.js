@@ -29,8 +29,16 @@ const navigation = [
 
 // Read the actual HTML filename; a directory URL opens index.html (Home).
 const currentFile = location.pathname.split('/').pop() || 'index.html';
-const activePage = navigation.find((item) => item.href === currentFile);
+const navigationFile = currentFile === 'dining-location.html' ? 'dining-info.html' : currentFile;
+const activePage = navigation.find((item) => item.href === navigationFile);
 const appBase = new URL('../', document.currentScript.src);
+
+if (currentFile === 'dining-info.html' && new URLSearchParams(location.search).has('location')) {
+  const detail = new URL('dining-location.html', appBase);
+  detail.search = location.search;
+  detail.hash = location.hash;
+  location.replace(detail.href);
+}
 
 // This client-set cookie only controls the prototype's interface.
 const signInCookie = 'dining-bucks-authenticated=true';
@@ -76,7 +84,8 @@ window.addEventListener('pageshow', (event) => {
   if (event.persisted) state.signedIn = isSignedIn();
 });
 
-document.title = `${state.currentPage} | Your Dining Bucks Planner`;
+const pageTitle = currentFile === 'dining-location.html' ? 'Dining Location' : state.currentPage;
+document.title = `${pageTitle} | Your Dining Bucks Planner`;
 
 // Each HTML page starts its own Plain app; ordinary links load a new document.
 const app = Plain.createApp({
@@ -101,7 +110,7 @@ const app = Plain.createApp({
   preload: [
     'navbar-component',
     ...(currentFile === 'login.html' || currentFile === 'signup.html' ? [] : ['footer-component']),
-    ...(currentFile === 'dining-info.html' ? ['dining-info-component'] : []),
+    ...(activePage?.id === 'dining-info' ? ['dining-info-component'] : []),
   ],
   settings: { // Shared configuration available as settings.navigation in components.
     dates: {
